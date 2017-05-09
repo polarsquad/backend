@@ -1,4 +1,6 @@
-/data
-/node_modules
-/config
-.dpd
+dpd/data
+node_modules
+config/*
+dpd/.dpd
+
+!config/.gitkeep 
