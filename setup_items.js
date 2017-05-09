@@ -1,6 +1,8 @@
-var icItemConfig 	= require('./public/item_config.js'),
-	fs				= require('fs')
+var icItemConfig 	= require('./config/ic-item-config.js'),
+	fs				= require('fs-extra')
 
+
+fs.copy('config/ic-item-config.js', 'dpd/public/ic-item-config.js')
 
 //checking soundness of item config
 icItemConfig.properties.forEach(function(property, index){
@@ -31,5 +33,5 @@ var content = 	{
 									},{})
 				}
 
-if(!fs.existsSync('resources/'+icItemConfig.collectionName)) fs.mkdir('resources/'+icItemConfig.collectionName)
-fs.writeFileSync('resources/'+icItemConfig.collectionName+'/config.json', JSON.stringify(content, null, 4))
+if(!fs.existsSync('dpd/resources/'+icItemConfig.collectionName)) fs.mkdir('dpd/resources/'+icItemConfig.collectionName)
+fs.writeFileSync('dpd/resources/'+icItemConfig.collectionName+'/config.json', JSON.stringify(content, null, 4))

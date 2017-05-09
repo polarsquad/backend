@@ -1,0 +1,24 @@
+{
+  "name": "infocompass-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "setup_items.js",
+  "dependencies": {
+    "dpd": "^0.3.0-beta",
+    "fs-extra": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "install": "node setup_items.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InfoCompass/backend.git"
+  },
+  "author": "Andreas Pittrich",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/InfoCompass/backend/issues"
+  },
+  "homepage": "https://github.com/InfoCompass/backend#readme"
+}

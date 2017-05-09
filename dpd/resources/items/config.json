@@ -1,0 +1,77 @@
+{
+    "type": "Collection",
+    "properties": {
+        "title": {
+            "name": "title",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "title",
+            "order": 0
+        },
+        "state": {
+            "name": "state",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "state",
+            "order": 1
+        },
+        "tags": {
+            "name": "tags",
+            "type": "array",
+            "typeLabel": "array",
+            "required": false,
+            "id": "tags",
+            "order": 2
+        },
+        "brief": {
+            "name": "brief",
+            "type": "object",
+            "typeLabel": "object",
+            "required": false,
+            "id": "brief",
+            "order": 3
+        },
+        "proposalFor": {
+            "name": "proposalFor",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "proposalFor",
+            "order": 4
+        },
+        "creationDate": {
+            "name": "creationDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "creationDate",
+            "order": 5
+        },
+        "creator": {
+            "name": "creator",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "creator",
+            "order": 6
+        },
+        "lastEditDate": {
+            "name": "lastEditDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "lastEditDate",
+            "order": 7
+        },
+        "lastEditor": {
+            "name": "lastEditor",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "lastEditor",
+            "order": 8
+        }
+    }
+}
