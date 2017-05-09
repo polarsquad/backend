@@ -1,0 +1,61 @@
+{
+    "type": "Collection",
+    "properties": {
+        "title": {
+            "name": "title",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "title",
+            "order": 0
+        },
+        "tags": {
+            "name": "tags",
+            "type": "array",
+            "typeLabel": "array",
+            "required": false,
+            "id": "tags",
+            "order": 1
+        },
+        "brief": {
+            "name": "brief",
+            "type": "object",
+            "typeLabel": "object",
+            "required": false,
+            "id": "brief",
+            "order": 2
+        },
+        "creationDate": {
+            "name": "creationDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "creationDate",
+            "order": 3
+        },
+        "creator": {
+            "name": "creator",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "creator",
+            "order": 4
+        },
+        "lastEditDate": {
+            "name": "lastEditDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "lastEditDate",
+            "order": 5
+        },
+        "lastEditor": {
+            "name": "lastEditor",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "lastEditor",
+            "order": 6
+        }
+    }
+}
