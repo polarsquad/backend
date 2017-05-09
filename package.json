@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "install": "node setup_items.js"
+    "setup": "node setup_items.js"
   },
   "repository": {
     "type": "git",
