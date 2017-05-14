@@ -2,5 +2,6 @@ dpd/data
 node_modules
 config/*
 dpd/.dpd
+npm-debug.log
 
 !config/.gitkeep 

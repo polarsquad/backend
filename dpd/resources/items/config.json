@@ -33,13 +33,141 @@
             "id": "brief",
             "order": 3
         },
+        "description": {
+            "name": "description",
+            "type": "object",
+            "typeLabel": "object",
+            "required": false,
+            "id": "description",
+            "order": 4
+        },
+        "location": {
+            "name": "location",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "location",
+            "order": 5
+        },
+        "address": {
+            "name": "address",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "address",
+            "order": 6
+        },
+        "zip": {
+            "name": "zip",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "zip",
+            "order": 7
+        },
+        "city": {
+            "name": "city",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "city",
+            "order": 8
+        },
+        "website": {
+            "name": "website",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "website",
+            "order": 9
+        },
+        "email": {
+            "name": "email",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "email",
+            "order": 10
+        },
+        "facebook": {
+            "name": "facebook",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "facebook",
+            "order": 11
+        },
+        "twitter": {
+            "name": "twitter",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "twitter",
+            "order": 12
+        },
+        "whatsapp": {
+            "name": "whatsapp",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "whatsapp",
+            "order": 13
+        },
+        "contact": {
+            "name": "contact",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "contact",
+            "order": 14
+        },
+        "phone": {
+            "name": "phone",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "phone",
+            "order": 15
+        },
+        "mobile": {
+            "name": "mobile",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "mobile",
+            "order": 16
+        },
+        "startDate": {
+            "name": "startDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "startDate",
+            "order": 17
+        },
+        "endDate": {
+            "name": "endDate",
+            "type": "number",
+            "typeLabel": "number",
+            "required": false,
+            "id": "endDate",
+            "order": 18
+        },
+        "hours": {
+            "name": "hours",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "hours",
+            "order": 19
+        },
         "proposalFor": {
             "name": "proposalFor",
             "type": "string",
             "typeLabel": "string",
             "required": false,
             "id": "proposalFor",
-            "order": 4
+            "order": 20
         },
         "creationDate": {
             "name": "creationDate",
@@ -47,7 +175,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "creationDate",
-            "order": 5
+            "order": 21
         },
         "creator": {
             "name": "creator",
@@ -55,7 +183,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "creator",
-            "order": 6
+            "order": 22
         },
         "lastEditDate": {
             "name": "lastEditDate",
@@ -63,7 +191,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "lastEditDate",
-            "order": 7
+            "order": 23
         },
         "lastEditor": {
             "name": "lastEditor",
@@ -71,7 +199,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "lastEditor",
-            "order": 8
+            "order": 24
         }
     }
 }
