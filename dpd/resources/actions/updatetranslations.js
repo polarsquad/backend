@@ -1,12 +1,11 @@
-var config 			= require('../../config/config.json'),
-	utils			= require('../../utils.js'),
-	fs				= require('fs'),
+var fs				= require('fs'),
 	parsingErrors 	= []
 
 
 $addCallback()
 
-utils.get(config.translationSpreadsheetUrl)
+
+icUtils.get(icConfig.translationSpreadsheetUrl)
 .then(
 	function(data){
 
