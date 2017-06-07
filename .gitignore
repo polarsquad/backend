@@ -1,7 +1,11 @@
-dpd/data
 node_modules
+
 config/*
-dpd/.dpd
 npm-debug.log
 
 !config/.gitkeep 
+
+dpd/data
+dpd/.dpd
+dpd/public/translations.json
+!dpd/node_modules/ic-actions
