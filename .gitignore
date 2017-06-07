@@ -9,4 +9,4 @@
 /dpd/.dpd
 /dpd/public
 /dpd/node_modules/*
-!/dpd/node_modules/ic-actions
+!/dpd/node_modules/ic-actions.js
