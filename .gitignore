@@ -1,12 +1,12 @@
-node_modules
+/node_modules
 
-config/*
-npm-debug.log
+/config/*
+/npm-debug.log
 
-!config/.gitkeep 
+!/config/.gitkeep 
 
-dpd/data
-dpd/.dpd
-dpd/public
-dpd/node_modules
-!dpd/node_modules/ic-actions
+/dpd/data
+/dpd/.dpd
+/dpd/public
+/dpd/node_modules
+!/dpd/node_modules/ic-actions
