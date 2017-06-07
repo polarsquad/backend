@@ -7,5 +7,6 @@ npm-debug.log
 
 dpd/data
 dpd/.dpd
-dpd/public/translations.json
+dpd/public
+dpd/node_modules
 !dpd/node_modules/ic-actions
