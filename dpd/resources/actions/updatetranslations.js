@@ -39,7 +39,7 @@ icUtils.get(icConfig.translationSpreadsheetUrl)
 		console.log('sheets:', sheets.length)
 
 		sheets.forEach( sheet => {
-			var	section	= (sheet.title || '').toUpperCase()
+			var	section	= (sheet.title || '').toUpperCase().replace(/\s/g, "_")
 			if(!section) return null
 
 			sheet.data.forEach( (row, row_index) => {

@@ -4,6 +4,7 @@
 /npm-debug.log
 
 !/config/.gitkeep 
+!/config/ic-item-config.js
 
 /dpd/data
 /dpd/.dpd
