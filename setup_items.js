@@ -12,8 +12,8 @@ icItemConfig.properties.forEach(function(property, index){
 	if(['number', 'string', 'object', 'array', 'boolean'].indexOf(icItemConfig.utils.getType(property.defaultValue)) == -1)	
 		console.error('item_config: missing or bad defaultValue for '+property.name)
 
-	if(icItemConfig.utils.getType(property.validate) != 'function')
-		console.warn('item_config: missing validation function for '+property.name)
+	if(icItemConfig.utils.getType(property.getErrors) != 'function')
+		console.warn('item_config: missing validation (getErrors) function for '+property.name)
 
 })
 
