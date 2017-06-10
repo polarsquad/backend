@@ -199,6 +199,16 @@
 			searchable:		true,
 		}),		
 		new Property({
+			name: 			"image",
+			getErrors:		function(value){
+								if(value.replace(/\s/, '').length < 3) return {
+									message: 	"Invalid length. Min length for "+ this.name +" is 3.",
+									code:		"INVALID_LENGTH_MIN"
+								}
+							},	
+			defaultValue:	"",
+		}),	
+		new Property({
 			name: 			"state",
 			getErrors:		function(values){
 								var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
