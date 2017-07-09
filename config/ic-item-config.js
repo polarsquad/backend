@@ -22,16 +22,6 @@
 					}									
 	}
 
-
-	//states
-
-	exports.states = [
-		'public',
-		'draft',
-		'archived'
-	]
-
-
 	exports.collectionName = "items"
 
 
@@ -49,136 +39,20 @@
 		
 		this.getErrors		= 	function(value){
 
-									if(this.internal) return 	value === undefined
-																?	null
-																:	{
-																		message: 	this.name + " may be modified manually.",
-																		code:		"INTERNAL_PROPERTY"
-																	}
+									if(this.internal) return 	{
+																	message: 	this.name + " cannot be modified manually.",
+																	code:		"INTERNAL_PROPERTY"
+																}
 
-									var error = exports.utils.getTypeError(this, value)
+									var type_error = exports.utils.getTypeError(this, value)
 									
-									if(error) return error
-									return (data.getErrors || noop).call(this)
+									console.log(value)
+									return	type_error
+											?	type_error
+											:	(data.getErrors || noop).call(this, value)
 								}
 
 	}
-
-	exports.tags = [
-				'information',
-				"helpdesk",
-				"visiting",
-				"counseling",
-				"care",
-				"provision",
-				"will",
-				'goods',
-				"chemist",
-				"store",
-				"delivery",
-				"market",
-				"health_food",
-				"pharmacy",
-				"physician",
-				"doctors_office",
-				"nutrition_counseling",
-				"discussion_group",
-				"alternative_practitioner",
-				"hospital",
-				"health_food",
-				"rehabilitation",
-				"medical_service",
-				"self_help",
-				'culture_leisure',
-				"handicraft",
-				"library",
-				"learning_opportunity",
-				"festival",
-				"commitment",
-				"needlework",
-				"mobile_cinema",
-				"music",
-				"travel",
-				"senior_leisure_center",
-				"games",
-				"language_course",
-				"city_culture",
-				"dancing",
-				'mv',
-				"mailbox",
-				"coffee shop",
-				"guest_apartment",
-				"atm",
-				"hotel",
-				"church",
-				"neighborhood_floor",
-				"break_point",
-				"post_office",
-				"restaurant",
-				"meeting_places",
-				"wifi_hotspot",
-				'mobility',
-				"accompanying_service",
-				"benches",
-				"resting_place",
-				"public_transport",
-				"taxi_stand",
-				'care',
-				"health_care",
-				"visiting_service",
-				"neighborhood_assistance",
-				"meals_on_wheels",
-				"therapists",
-				"utilities",
-				"medical_supplies",
-				"emergency_call",
-				"chiropody",
-				"cosmetics",
-				"pigeons",
-				"cleaning",
-				"computer",
-				"funeral",
-				"food_delivery",
-				"craftsperson",
-				"optician",
-				"sanitary",
-				"vet",
-				"dog_care",
-				"pets",
-				"animal_care",
-				"finances",
-				"locksmith",
-				"disposal",
-				"hairdresser",
-				"cabs",
-				"lavatory",
-				"memento_mori",
-				"burglary_protection",
-				'sports',
-				"indoor_swimming",
-				"sports_club",
-				"sports_course",
-				"public_toilets",
-				"nordic_walking", 
-				"chair_gymnastics",
-				"seniors_playground",
-				"rehabilitation",
-				"community_college",
-				"dancing",
-				"craftsmen",
-				"relocation_assistance",
-				"burglary protection",
-				"gesobau",
-				"household_help",
-				"nursing home",
-				"guest_apartment",
-				"disposal",
-				"senior_accomodation",
-				'location',
-				'event',
-				'service',
-				'information',
-	]
 
 	exports.properties = [
 		new Property({
@@ -219,7 +93,11 @@
 
 							},	
 			defaultValue:	"draft",
-			options:		exports.states
+			options:		[
+								'public',
+								'draft',
+								'archived'
+							]
 		}),
 		new Property({
 			name: 			"tags",
