@@ -22,16 +22,6 @@
 					}									
 	}
 
-
-	//states
-
-	exports.states = [
-		'public',
-		'draft',
-		'archived'
-	]
-
-
 	exports.collectionName = "items"
 
 
@@ -47,138 +37,21 @@
 		this.options		=	data.options
 		this.searchable		=	data.searchable
 		
-		this.getErrors		= 	function(value){
+		this.getErrors		= 	function(value, key){
 
-									if(this.internal) return 	value === undefined
-																?	null
-																:	{
-																		message: 	this.name + " may be modified manually.",
-																		code:		"INTERNAL_PROPERTY"
-																	}
+									if(this.internal) return 	{
+																	message: 	this.name + " cannot be modified manually.",
+																	code:		"INTERNAL_PROPERTY"
+																}
 
-									var error = exports.utils.getTypeError(this, value)
+									var type_error = exports.utils.getTypeError(this, value)
 									
-									if(error) return error
-									return (data.getErrors || noop).call(this)
+									return	type_error
+											?	type_error
+											:	(data.getErrors || noop).call(this, value, key)
 								}
 
 	}
-
-	exports.tags = [
-				'information',
-				"helpdesk",
-				"visiting",
-				"counseling",
-				"care",
-				"provision",
-				"will",
-				'goods',
-				"chemist",
-				"store",
-				"delivery",
-				"market",
-				"health_food",
-				"pharmacy",
-				"physician",
-				"doctors_office",
-				"nutrition_counseling",
-				"discussion_group",
-				"alternative_practitioner",
-				"hospital",
-				"health_food",
-				"rehabilitation",
-				"medical_service",
-				"self_help",
-				'culture_leisure',
-				"handicraft",
-				"library",
-				"learning_opportunity",
-				"festival",
-				"commitment",
-				"needlework",
-				"mobile_cinema",
-				"music",
-				"travel",
-				"senior_leisure_center",
-				"games",
-				"language_course",
-				"city_culture",
-				"dancing",
-				'mv',
-				"mailbox",
-				"coffee shop",
-				"guest_apartment",
-				"atm",
-				"hotel",
-				"church",
-				"neighborhood_floor",
-				"break_point",
-				"post_office",
-				"restaurant",
-				"meeting_places",
-				"wifi_hotspot",
-				'mobility',
-				"accompanying_service",
-				"benches",
-				"resting_place",
-				"public_transport",
-				"taxi_stand",
-				'care',
-				"health_care",
-				"visiting_service",
-				"neighborhood_assistance",
-				"meals_on_wheels",
-				"therapists",
-				"utilities",
-				"medical_supplies",
-				"emergency_call",
-				"chiropody",
-				"cosmetics",
-				"pigeons",
-				"cleaning",
-				"computer",
-				"funeral",
-				"food_delivery",
-				"craftsperson",
-				"optician",
-				"sanitary",
-				"vet",
-				"dog_care",
-				"pets",
-				"animal_care",
-				"finances",
-				"locksmith",
-				"disposal",
-				"hairdresser",
-				"cabs",
-				"lavatory",
-				"memento_mori",
-				"burglary_protection",
-				'sports',
-				"indoor_swimming",
-				"sports_club",
-				"sports_course",
-				"public_toilets",
-				"nordic_walking", 
-				"chair_gymnastics",
-				"seniors_playground",
-				"rehabilitation",
-				"community_college",
-				"dancing",
-				"craftsmen",
-				"relocation_assistance",
-				"burglary protection",
-				"gesobau",
-				"household_help",
-				"nursing home",
-				"guest_apartment",
-				"disposal",
-				"senior_accomodation",
-				'location',
-				'event',
-				'service',
-				'information',
-	]
 
 	exports.properties = [
 		new Property({
@@ -189,8 +62,8 @@
 									code:		"INVALID_LENGTH_MIN"
 								}
 
-								if(value.length > 30) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is 30.",
+								if(value.length > 60) return {
+									message: 	"Invalid length. Max length for "+ this.name +" is 60.",
 									code:		"INVALID_LENGTH_MAX"
 								}
 
@@ -198,6 +71,16 @@
 			defaultValue:	"",
 			searchable:		true,
 		}),		
+		new Property({
+			name: 			"image",
+			getErrors:		function(value){
+								if(value.replace(/\s/, '').length < 3) return {
+									message: 	"Invalid length. Min length for "+ this.name +" is 3.",
+									code:		"INVALID_LENGTH_MIN"
+								}
+							},	
+			defaultValue:	"",
+		}),	
 		new Property({
 			name: 			"state",
 			getErrors:		function(values){
@@ -209,33 +92,42 @@
 
 							},	
 			defaultValue:	"draft",
-			options:		exports.states
+			options:		[
+								'public',
+								'draft',
+								'archived'
+							]
 		}),
 		new Property({
 			name: 			"tags",
 			getErrors:		function(values){
-								var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
-								if(invalid_tags.length != 0) return {
-									message:	"Invalid values: "+ invalid_values.join('')+". Valid values are: "+this.options.join(',')+".",
-									code:		"INVALID_VALUE"
-								}
+								// var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
+								// if(invalid_tags.length != 0) return {
+								// 	message:	"Invalid values: "+ invalid_values.join('')+". Valid values are: "+this.options.join(',')+".",
+								// 	code:		"INVALID_VALUE"
+								// }
 
 							},
 			defaultValue:	[]	
 		}),
 		new Property({
 			name: 			"brief",
-			getErrors:		function(obj, key){		
+			getErrors:		function(obj, key){	
+								var self = this
+
 								function keyErrors(key){
+									
+									if(!obj[key]) return null
+
 									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+this.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
+										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
 										code:		"INVALID_TYPE",
 										key:		key
 									}
 
-									if(obj[key] > 100) return {
-										message: 	"Invalid length. Max length for "+ this.name +" is 100.",										
-										code:		"INVALID_VALUE",
+									if(obj[key].length > 100) return {
+										message: 	"Invalid length. Max length for "+ self.name +" is 100.",										
+										code:		"INVALID_LENGTH_MAX",
 										key:		key
 									}	
 
@@ -244,9 +136,9 @@
 								if(key){
 									return keyErrors(key)
 								} else {
-									for(key in obj){
-										if(error = keyError(key)) return error
-									}
+									var errors = {}
+									for(var key in obj){ errors[key] = keyErrors(key) }
+									return errors
 								}
 
 							},	
@@ -257,17 +149,19 @@
 		new Property({
 			name: 			"description",
 			getErrors:		function(obj, key){		
+								var self = this
+
 								function keyErrors(key){
-									var max_length = 600
+									var max_length 	= 600
 
 									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+this.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
+										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
 										code:		"INVALID_TYPE",
 										key:		key
 									}
 
 									if(obj[key] > max_length) return {
-										message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",										
+										message: 	"Invalid length. Max length for "+ self.name +" is "+max_length+".",										
 										code:		"INVALID_VALUE",
 										key:		key
 									}	
@@ -277,9 +171,9 @@
 								if(key){
 									return keyErrors(key)
 								} else {
-									for(key in obj){
-										if(error = keyError(key)) return error
-									}
+									var errors = {}
+									for(var key in obj){ errors[key] = keyErrors(key) }
+									return errors
 								}
 
 							},	

@@ -37,7 +37,7 @@
 		this.options		=	data.options
 		this.searchable		=	data.searchable
 		
-		this.getErrors		= 	function(value){
+		this.getErrors		= 	function(value, key){
 
 									if(this.internal) return 	{
 																	message: 	this.name + " cannot be modified manually.",
@@ -46,10 +46,9 @@
 
 									var type_error = exports.utils.getTypeError(this, value)
 									
-									console.log(value)
 									return	type_error
 											?	type_error
-											:	(data.getErrors || noop).call(this, value)
+											:	(data.getErrors || noop).call(this, value, key)
 								}
 
 	}
@@ -63,8 +62,8 @@
 									code:		"INVALID_LENGTH_MIN"
 								}
 
-								if(value.length > 30) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is 30.",
+								if(value.length > 60) return {
+									message: 	"Invalid length. Max length for "+ this.name +" is 60.",
 									code:		"INVALID_LENGTH_MAX"
 								}
 
@@ -102,28 +101,33 @@
 		new Property({
 			name: 			"tags",
 			getErrors:		function(values){
-								var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
-								if(invalid_tags.length != 0) return {
-									message:	"Invalid values: "+ invalid_values.join('')+". Valid values are: "+this.options.join(',')+".",
-									code:		"INVALID_VALUE"
-								}
+								// var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
+								// if(invalid_tags.length != 0) return {
+								// 	message:	"Invalid values: "+ invalid_values.join('')+". Valid values are: "+this.options.join(',')+".",
+								// 	code:		"INVALID_VALUE"
+								// }
 
 							},
 			defaultValue:	[]	
 		}),
 		new Property({
 			name: 			"brief",
-			getErrors:		function(obj, key){		
+			getErrors:		function(obj, key){	
+								var self = this
+
 								function keyErrors(key){
+									
+									if(!obj[key]) return null
+
 									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+this.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
+										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
 										code:		"INVALID_TYPE",
 										key:		key
 									}
 
-									if(obj[key] > 100) return {
-										message: 	"Invalid length. Max length for "+ this.name +" is 100.",										
-										code:		"INVALID_VALUE",
+									if(obj[key].length > 100) return {
+										message: 	"Invalid length. Max length for "+ self.name +" is 100.",										
+										code:		"INVALID_LENGTH_MAX",
 										key:		key
 									}	
 
@@ -132,9 +136,9 @@
 								if(key){
 									return keyErrors(key)
 								} else {
-									for(key in obj){
-										if(error = keyError(key)) return error
-									}
+									var errors = {}
+									for(var key in obj){ errors[key] = keyErrors(key) }
+									return errors
 								}
 
 							},	
@@ -145,17 +149,19 @@
 		new Property({
 			name: 			"description",
 			getErrors:		function(obj, key){		
+								var self = this
+
 								function keyErrors(key){
-									var max_length = 600
+									var max_length 	= 600
 
 									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+this.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
+										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
 										code:		"INVALID_TYPE",
 										key:		key
 									}
 
 									if(obj[key] > max_length) return {
-										message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",										
+										message: 	"Invalid length. Max length for "+ self.name +" is "+max_length+".",										
 										code:		"INVALID_VALUE",
 										key:		key
 									}	
@@ -165,9 +171,9 @@
 								if(key){
 									return keyErrors(key)
 								} else {
-									for(key in obj){
-										if(error = keyError(key)) return error
-									}
+									var errors = {}
+									for(var key in obj){ errors[key] = keyErrors(key) }
+									return errors
 								}
 
 							},	

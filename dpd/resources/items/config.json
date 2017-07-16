@@ -9,13 +9,21 @@
             "id": "title",
             "order": 0
         },
+        "image": {
+            "name": "image",
+            "type": "string",
+            "typeLabel": "string",
+            "required": false,
+            "id": "image",
+            "order": 1
+        },
         "state": {
             "name": "state",
             "type": "string",
             "typeLabel": "string",
             "required": false,
             "id": "state",
-            "order": 1
+            "order": 2
         },
         "tags": {
             "name": "tags",
@@ -23,7 +31,7 @@
             "typeLabel": "array",
             "required": false,
             "id": "tags",
-            "order": 2
+            "order": 3
         },
         "brief": {
             "name": "brief",
@@ -31,7 +39,7 @@
             "typeLabel": "object",
             "required": false,
             "id": "brief",
-            "order": 3
+            "order": 4
         },
         "description": {
             "name": "description",
@@ -39,7 +47,7 @@
             "typeLabel": "object",
             "required": false,
             "id": "description",
-            "order": 4
+            "order": 5
         },
         "location": {
             "name": "location",
@@ -47,7 +55,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "location",
-            "order": 5
+            "order": 6
         },
         "address": {
             "name": "address",
@@ -55,7 +63,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "address",
-            "order": 6
+            "order": 7
         },
         "zip": {
             "name": "zip",
@@ -63,7 +71,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "zip",
-            "order": 7
+            "order": 8
         },
         "city": {
             "name": "city",
@@ -71,7 +79,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "city",
-            "order": 8
+            "order": 9
         },
         "latitude": {
             "name": "latitude",
@@ -79,7 +87,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "latitude",
-            "order": 9
+            "order": 10
         },
         "longitude": {
             "name": "longitude",
@@ -87,7 +95,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "longitude",
-            "order": 10
+            "order": 11
         },
         "website": {
             "name": "website",
@@ -95,7 +103,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "website",
-            "order": 11
+            "order": 12
         },
         "email": {
             "name": "email",
@@ -103,7 +111,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "email",
-            "order": 12
+            "order": 13
         },
         "facebook": {
             "name": "facebook",
@@ -111,7 +119,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "facebook",
-            "order": 13
+            "order": 14
         },
         "twitter": {
             "name": "twitter",
@@ -119,7 +127,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "twitter",
-            "order": 14
+            "order": 15
         },
         "whatsapp": {
             "name": "whatsapp",
@@ -127,7 +135,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "whatsapp",
-            "order": 15
+            "order": 16
         },
         "contact": {
             "name": "contact",
@@ -135,7 +143,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "contact",
-            "order": 16
+            "order": 17
         },
         "phone": {
             "name": "phone",
@@ -143,7 +151,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "phone",
-            "order": 17
+            "order": 18
         },
         "mobile": {
             "name": "mobile",
@@ -151,7 +159,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "mobile",
-            "order": 18
+            "order": 19
         },
         "startDate": {
             "name": "startDate",
@@ -159,7 +167,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "startDate",
-            "order": 19
+            "order": 20
         },
         "endDate": {
             "name": "endDate",
@@ -167,7 +175,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "endDate",
-            "order": 20
+            "order": 21
         },
         "hours": {
             "name": "hours",
@@ -175,7 +183,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "hours",
-            "order": 21
+            "order": 22
         },
         "proposalFor": {
             "name": "proposalFor",
@@ -183,7 +191,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "proposalFor",
-            "order": 22
+            "order": 23
         },
         "creationDate": {
             "name": "creationDate",
@@ -191,7 +199,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "creationDate",
-            "order": 23
+            "order": 24
         },
         "creator": {
             "name": "creator",
@@ -199,7 +207,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "creator",
-            "order": 24
+            "order": 25
         },
         "lastEditDate": {
             "name": "lastEditDate",
@@ -207,7 +215,7 @@
             "typeLabel": "number",
             "required": false,
             "id": "lastEditDate",
-            "order": 25
+            "order": 26
         },
         "lastEditor": {
             "name": "lastEditor",
@@ -215,7 +223,7 @@
             "typeLabel": "string",
             "required": false,
             "id": "lastEditor",
-            "order": 26
+            "order": 27
         }
     }
 }
