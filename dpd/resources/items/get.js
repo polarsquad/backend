@@ -1,0 +1,1 @@
+cancelIf(this.state != 'public' && !(me && me.privileges.indexOf('edit_items') != -1) )

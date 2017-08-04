@@ -19,7 +19,30 @@
 				:	{
 						message: 	"Invalid type: expected "+property.type+" got "+exports.utils.getType(value)+" instead.",
 						code:		"INVALID_TYPE"
-					}									
+					}
+	}
+
+	exports.utils.getLengthError = function(property, value, key){
+
+		value =	key
+				?	value[key]
+				:	value
+
+
+		if(property.min !== undefined && value.replace(/\s/, '').length < property.min) return {
+			message: 	"Invalid length. Min length for "+ property.name +" is "+property.min+'.',
+			code:		"INVALID_LENGTH_MIN",
+			key:		key,
+		}
+
+		if(property.max !== undefined && value.length > property.max) return {
+			message: 	"Invalid length. Max length for "+ property.name +" is "+property.max+'.',
+			code:		"INVALID_LENGTH_MAX",
+			key:		key
+		}
+
+		return null
+
 	}
 
 	exports.collectionName = "items"
@@ -36,19 +59,51 @@
 		this.type			= 	exports.utils.getType(data.defaultValue)
 		this.options		=	data.options
 		this.searchable		=	data.searchable
+		this.min			=	data.min
+		this.max			=	data.max
+		this.mandatory		= 	data.mandatory
 		
 		this.getErrors		= 	function(value, key){
+									var self = this
 
-									if(this.internal) return 	{
-																	message: 	this.name + " cannot be modified manually.",
+									if(self.internal) return 	{
+																	message: 	self.name + " cannot be modified manually.",
 																	code:		"INTERNAL_PROPERTY"
 																}
 
-									var type_error = exports.utils.getTypeError(this, value)
+
+									if(!value && !self.mandatory) 										return null
+									if(self.type == 'object' && key && !value[key] && !self.mandatory)	return null
+
+									var type_error = exports.utils.getTypeError(self, value)
+
+									if(type_error) return type_error
+
+
+									var length_error = undefined
+
+									if(self.type == 'object'){
+										for (var k in value){
+
+											if(key && key != k) 				continue
+											if(length_error)					continue
+											if(!value[key] && !self.mandatory)	continue
+
+											console.log(value, k)
+
+											length_error = exports.utils.getLengthError(self, value, k)
+										}
+
+									} else {
+										length_error = exports.utils.getLengthError(self, value)
+									}
+
+
+									if(length_error) return length_error
 									
-									return	type_error
-											?	type_error
-											:	(data.getErrors || noop).call(this, value, key)
+									return	(data.getErrors || noop).call(self, value, key)
+
+
 								}
 
 	}
@@ -57,36 +112,26 @@
 		new Property({
 			name: 			"title",
 			getErrors:		function(value){
-								if(value.replace(/\s/, '').length < 3) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is 3.",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > 60) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is 60.",
-									code:		"INVALID_LENGTH_MAX"
-								}
 
 							},	
 			defaultValue:	"",
+			min:			3,
+			max:			60,
 			searchable:		true,
+			mandatory:		true
 		}),		
 		new Property({
 			name: 			"image",
 			getErrors:		function(value){
-								if(value.replace(/\s/, '').length < 3) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is 3.",
-									code:		"INVALID_LENGTH_MIN"
-								}
+
 							},	
 			defaultValue:	"",
 		}),	
 		new Property({
 			name: 			"state",
-			getErrors:		function(values){
-								var invalid_tags = values.filter(function(value){ return this.options.indexOf(value) == -1 })
-								if(invalid_tags.length != 0) return {
-									message:	"Invalid values: "+ invalid_values.join('')+". Valid values are: "+this.options.join(',')+".",
+			getErrors:		function(value){
+								if(this.options.indexOf(value) == -1) return {
+									message:	"Invalid value: "+ value +". Valid values are: "+this.options.join(', ')+".",
 									code:		"INVALID_VALUE"
 								}
 
@@ -95,7 +140,8 @@
 			options:		[
 								'public',
 								'draft',
-								'archived'
+								'archived',
+								'suggestion'
 							]
 		}),
 		new Property({
@@ -113,72 +159,23 @@
 		new Property({
 			name: 			"brief",
 			getErrors:		function(obj, key){	
-								var self = this
-
-								function keyErrors(key){
-									
-									if(!obj[key]) return null
-
-									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
-										code:		"INVALID_TYPE",
-										key:		key
-									}
-
-									if(obj[key].length > 100) return {
-										message: 	"Invalid length. Max length for "+ self.name +" is 100.",										
-										code:		"INVALID_LENGTH_MAX",
-										key:		key
-									}	
-
-								}
-
-								if(key){
-									return keyErrors(key)
-								} else {
-									var errors = {}
-									for(var key in obj){ errors[key] = keyErrors(key) }
-									return errors
-								}
+								
 
 							},	
 			defaultValue:	{},
+			min:			3,
+			max:			120,
 			searchable:		true,
 		}),
 
 		new Property({
 			name: 			"description",
 			getErrors:		function(obj, key){		
-								var self = this
-
-								function keyErrors(key){
-									var max_length 	= 600
-
-									if(typeof obj[key] != 'string') return {
-										message:	"Invalid type: "+self.name+"." + key + "must be a string. Got: " + typeof obj[key] +".",
-										code:		"INVALID_TYPE",
-										key:		key
-									}
-
-									if(obj[key] > max_length) return {
-										message: 	"Invalid length. Max length for "+ self.name +" is "+max_length+".",										
-										code:		"INVALID_VALUE",
-										key:		key
-									}	
-
-								}
-
-								if(key){
-									return keyErrors(key)
-								} else {
-									var errors = {}
-									for(var key in obj){ errors[key] = keyErrors(key) }
-									return errors
-								}
-
 							},	
 			defaultValue:	{},
 			searchable:		true,
+			min:			0,
+			max:			600
 		}),
 
 		new Property({
@@ -329,6 +326,7 @@
 		new Property({
 			name: 			"facebook",
 			getErrors:		function(value, key){		
+
 								var min_length = 3,
 									max_length = 60
 
