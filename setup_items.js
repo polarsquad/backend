@@ -25,7 +25,6 @@ var content = 	{
 											"name": 		property.name,
 											"type": 		property.type,
 											"typeLabel":	property.type,
-											"required": 	!!property.mandatory,
 											"id": 			property.name,
 											"order": 		index											
 										}

@@ -16,6 +16,14 @@
 			"required": false,
 			"id": "privileges",
 			"order": 1
+		},
+		"email": {
+			"name": "email",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "email",
+			"order": 2
 		}
 	}
 }

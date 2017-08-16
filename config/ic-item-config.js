@@ -83,11 +83,26 @@
 									var length_error = undefined
 
 									if(self.type == 'object'){
+										var at_least_one_key_ready = 	Object.keys(value)
+																		.reduce(function(s, key){
+																			return s || value[key]
+																		}, false)
+
+
+										if(!at_least_one_key_ready && self.mandatory){
+											return 	{
+														message: 	self.name + " needs at least one entry.",
+														code:		"MISSING_ENTRY"	
+													}
+										}
+
+										console.log('blu')
+
 										for (var k in value){
 
-											if(key && key != k) 				continue
-											if(length_error)					continue
-											if(!value[key] && !self.mandatory)	continue
+											if(key && key != k) continue
+											if(length_error)	continue
+											if(!value[key])		continue
 
 											console.log(value, k)
 
@@ -142,7 +157,8 @@
 								'draft',
 								'archived',
 								'suggestion'
-							]
+							],
+			mandatory:		true
 		}),
 		new Property({
 			name: 			"tags",
@@ -163,6 +179,7 @@
 
 							},	
 			defaultValue:	{},
+			mandatory:		true,
 			min:			3,
 			max:			120,
 			searchable:		true,
@@ -276,22 +293,9 @@
 		new Property({
 			name: 			"website",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
 								if(!value.match(/^https?:\/\/.+/)) return{
 									message:	"Website url must start with http(s).",
 									code:		"INVALID_PROTOCOL"
-								}
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
 								}
 							},	
 			defaultValue:	"",
