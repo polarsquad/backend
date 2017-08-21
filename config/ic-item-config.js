@@ -96,8 +96,6 @@
 													}
 										}
 
-										console.log('blu')
-
 										for (var k in value){
 
 											if(key && key != k) continue

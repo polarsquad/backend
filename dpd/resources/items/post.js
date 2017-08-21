@@ -7,18 +7,14 @@ cancelUnless(
 var self = this
 
 this.creationDate   = new Date().getTime()
-this.creator        = me.id
+this.creator        = me ? me.id : undefined
 
-// partial suggestions:
-if(this.proposalFor){
     
-    var icUtils = require('../ic-utils.js')
-    
-    dpd.users.get().then(function(users){
-        users.forEach(function(user){
-        if(user.privileges.indexOf('be_notified_about_suggestions') != -1 && user.email)
-            icUtils.mail(user.email, 'new suggestion', JSON.stringify(self))    
-        })
+var icUtils = require('../ic-utils.js')
+
+dpd.users.get().then(function(users){
+    users.forEach(function(user){
+    if(user.privileges.indexOf('be_notified_about_suggestions') != -1 && user.email)
+        icUtils.mailSuggestion(user.email, self)    
     })
-    
-}
+})

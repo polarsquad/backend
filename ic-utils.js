@@ -1,7 +1,8 @@
 var nodemailer  = require('nodemailer')
 	path		= require('path')
+	itemConfig	= require(path.resolve('../config/ic-item-config.js'))
 
-exports.config	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'));
+exports.config	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
 
 exports.get = function(url){
 
@@ -56,4 +57,36 @@ exports.mail = function(to, subject, content){
 	    }
 	    console.log('Message %s sent: %s', info.messageId, info.response);
 	});
+}
+
+
+exports.mailSuggestion = function(to, suggestion){
+
+	var subject = "Neuer Vorschlag eingegangen",
+		link	= this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
+		content	= 	suggestion.proposalFor
+					?	"Der Änderungsvorschlag betrifft diesen Eintrag:\n\n"
+					:	"Ein neuer Eintrag wurde vorgeschlagen:\n\n" 
+
+
+		content += link + '\n\n'
+
+		content += "Der Vorschlag enthält folgende Daten:\n\n"
+
+		itemConfig.properties.forEach(function(property){
+			if(property.name in suggestion){
+				if(property.type != 'object'){
+					content += property.name+': \t'	+ JSON.stringify(suggestion[property.name])	+ '\n'				
+				} else {
+					content += property.name+': \n'
+
+					for(key in suggestion[property.name]){
+						content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
+					}
+				}
+				
+			}
+		})
+
+	exports.mail(to, subject, content)
 }
