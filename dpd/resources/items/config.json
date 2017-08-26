@@ -150,15 +150,15 @@
         },
         "startDate": {
             "name": "startDate",
-            "type": "number",
-            "typeLabel": "number",
+            "type": "string",
+            "typeLabel": "string",
             "id": "startDate",
             "order": 21
         },
         "endDate": {
             "name": "endDate",
-            "type": "number",
-            "typeLabel": "number",
+            "type": "string",
+            "typeLabel": "string",
             "id": "endDate",
             "order": 22
         },

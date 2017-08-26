@@ -129,7 +129,7 @@
 							},	
 			defaultValue:	"",
 			min:			3,
-			max:			60,
+			max:			80,
 			searchable:		true,
 			mandatory:		true
 		}),		
@@ -195,19 +195,7 @@
 
 		new Property({
 			name: 			"location",
-			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 30
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+			getErrors:		function(value, key){	
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -462,19 +450,29 @@
 		new Property({
 			name: 			"startDate",
 			getErrors:		function(value, key){	
-									
-							},	
-			defaultValue:	0,
+								return 	isNaN(Date.parse(value))
+										?	{
+												message: 'Unable to convert string to date. Try YYYY-MM-DDTHH:MM',
+												code:	 'INVALID_DATE_STRING'
+											}
+										:	null
+							},
 			searchable:		false,
+			defaultValue:	""
 		}),
 
 
 		new Property({
 			name: 			"endDate",
 			getErrors:		function(value, key){	
-									
+								return 	isNaN(Date.parse(value))
+										?	{
+												message: 'Unable to convert string to date. Try YYYY-MM-DDTHH:MM',
+												code:	 'INVALID_DATE_STRING'
+											}
+										:	null
 							},	
-			defaultValue:	0,
+			defaultValue:	"",
 			searchable:		false,
 		}),
 
