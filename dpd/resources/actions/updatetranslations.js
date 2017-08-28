@@ -43,7 +43,7 @@ icUtils.get(icConfig.translationSpreadsheetUrl)
 			if(!section) return null
 
 			sheet.data.forEach( (row, row_index) => {
-				var id = row[0].toUpperCase()
+				var id = row[0].toUpperCase().replace(/\s/g, "")
 				if(row_index != 0){
 					row.forEach( (value, col_index) => {
 						if(col_index != 0){

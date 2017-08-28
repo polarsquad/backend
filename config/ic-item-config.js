@@ -257,7 +257,7 @@
 									code:		"INVALID_LENGTH_MAX"
 								}
 							},	
-			defaultValue:	"",
+			defaultValue:	"Berlin",
 			searchable:		true,
 		}),
 

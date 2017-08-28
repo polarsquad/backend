@@ -60,7 +60,47 @@ exports.mail = function(to, subject, content){
 }
 
 
-exports.mailSuggestion = function(to, suggestion){
+exports.diff = function(property, old_value, new_value, key){
+	if(old_value == new_value) 			return false
+
+	if(property.type == "string"){
+		if(!old_value && !new_value)	return false
+		return true
+	}
+
+	if(property.type == "number"){
+		if(parseFloat(old_value) == parseFloat(new_value)) 					return false
+		if(isNaN(parseFloat(old_value)) && isNaN(parseFloat(new_value))	) 	return false
+		return true
+	}
+
+	if(property.type == "array"){
+		if(!old_value && !new_value)				return false
+		if(old_value.length != new_value.length)	return true
+
+		if(old_value.some(function(x){ return new_value.indexOf(x) == -1} ))	return true
+		if(new_value.some(function(y){ return old_value.indexOf(y) == -1} ))	return true
+
+		return false
+	}
+
+	if(property.type == "object"){
+		if(!old_value && !new_value)				return false
+
+		for(var k in old_value){
+			if( k == key || !key){
+				if( (!!old_value[k] && old_value[k]) != (!!new_value[k] && new_value[k]) ) return true
+			}
+		}
+
+		return false
+	}
+	
+	return true
+}
+
+
+exports.mailSuggestion = function(to, suggestion, target){
 
 	var subject = "Neuer Vorschlag eingegangen",
 		link	= this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
@@ -69,19 +109,40 @@ exports.mailSuggestion = function(to, suggestion){
 					:	"Ein neuer Eintrag wurde vorgeschlagen:\n\n" 
 
 
+		console.log('TARGET')
+		console.log(target)
+		console.log(suggestion)
+
 		content += link + '\n\n'
 
-		content += "Der Vorschlag enthält folgende Daten:\n\n"
+		content += 	suggestion.proposalFor
+					?	"Der Vorschlag enthält folgende Änderungen:\n\n"
+					:	"Der Vorschlag enthält folgende Daten:\n\n"
+
 
 		itemConfig.properties.forEach(function(property){
 			if(property.name in suggestion){
+				if(property.name == 'state') 			return null
+				if(property.name == 'proposalFor') 		return null
+				if(property.name == 'creationDate') 	return null
+
+
+				console.log(property.name, exports.diff(property, suggestion[property.name], target[property.name]) )
+
+
 				if(property.type != 'object'){
-					content += property.name+': \t'	+ JSON.stringify(suggestion[property.name])	+ '\n'				
+					if(!suggestion.proposalFor || exports.diff(property, suggestion[property.name], target[property.name])){
+						content += property.name+': \t'	+ JSON.stringify(suggestion[property.name])	+ '\n'				
+					}
 				} else {
-					content += property.name+': \n'
+					if(!suggestion.proposalFor || exports.diff(property, suggestion[property.name], target[property.name])){
+						content += property.name+': \n'
+					}
 
 					for(key in suggestion[property.name]){
-						content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
+						if(!suggestion.proposalFor || exports.diff(property, suggestion[property.name], target[property.name], key)){
+							content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
+						}
 					}
 				}
 				
