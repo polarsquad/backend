@@ -14,12 +14,21 @@
 	}
 
 	exports.utils.getTypeError = function(property, value){
-		return 	exports.utils.getType(value) == property.type
-				?	null
-				:	{
+
+		var type_error = false
+
+		if(property.type == 'number'){
+			type_error = isNaN(parseFloat(value))
+		}else{
+			type_error = exports.utils.getType(value) != property.type
+		}
+
+		return 	type_error
+				?	{
 						message: 	"Invalid type: expected "+property.type+" got "+exports.utils.getType(value)+" instead.",
 						code:		"INVALID_TYPE"
 					}
+				:	null
 	}
 
 	exports.utils.getLengthError = function(property, value, key){
