@@ -73,6 +73,7 @@
 		this.mandatory		= 	data.mandatory
 		
 		this.getErrors		= 	function(value, key){
+
 									var self = this
 
 									if(self.internal) return 	{
@@ -93,10 +94,7 @@
 
 									if(self.type == 'object'){
 										var at_least_one_key_ready = 	Object.keys(value)
-																		.reduce(function(s, key){
-																			return s || value[key]
-																		}, false)
-
+																		.some(function(k){ return !!value[k] })
 
 										if(!at_least_one_key_ready && self.mandatory){
 											return 	{
@@ -105,13 +103,13 @@
 													}
 										}
 
+
 										for (var k in value){
 
 											if(key && key != k) continue
 											if(length_error)	continue
-											if(!value[key])		continue
+											if(!value[k])		continue
 
-											console.log(value, k)
 
 											length_error = exports.utils.getLengthError(self, value, k)
 										}
