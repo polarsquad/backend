@@ -270,14 +270,22 @@
 
 		new Property({
 			name: 			"latitude",
-			getErrors:		function(value, key){		
+			getErrors:		function(value, key){	
+								if(Math.abs(value) > 90) return {
+									message:	"Out of range: latitude must be between -90.00 and + 90.00",
+									code:		"OUT_OF_RANGE"
+								} 	
 							},	
 			defaultValue:	0,
 		}),
 
 		new Property({
 			name: 			"longitude",
-			getErrors:		function(value, key){		
+			getErrors:		function(value, key){	
+								if(Math.abs(value) > 180) return {
+									message:	"Out of range: longitude must be between -180.00 and + 180.00",
+									code:		"OUT_OF_RANGE"
+								} 	
 							},	
 			defaultValue:	0,
 		}),

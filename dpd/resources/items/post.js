@@ -15,6 +15,7 @@ if(this.state == 'suggestion') {
     var next =  this.proposalFor
                 ?   dpd.items.get({id:this.proposalFor})
                 :   Promise.resolve()
+    
         
     next.then(function(target){
         dpd.users.get().then(function(users){
