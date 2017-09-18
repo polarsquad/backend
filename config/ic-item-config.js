@@ -332,18 +332,7 @@
 			name: 			"facebook",
 			getErrors:		function(value, key){		
 
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -354,18 +343,7 @@
 		new Property({
 			name: 			"twitter",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -376,18 +354,7 @@
 		new Property({
 			name: 			"whatsapp",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -396,18 +363,7 @@
 		new Property({
 			name: 			"contact",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -416,18 +372,7 @@
 		new Property({
 			name: 			"phone",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
@@ -436,18 +381,7 @@
 		new Property({
 			name: 			"mobile",
 			getErrors:		function(value, key){		
-								var min_length = 3,
-									max_length = 60
-
-								if(value.replace(/\s/, '').length < min_length) return {
-									message: 	"Invalid length. Min length for "+ this.name +" is "+min_length+".",
-									code:		"INVALID_LENGTH_MIN"
-								}
-
-								if(value.length > max_length) return {
-									message: 	"Invalid length. Max length for "+ this.name +" is "+max_length+".",
-									code:		"INVALID_LENGTH_MAX"
-								}
+								
 							},	
 			defaultValue:	"",
 			searchable:		true,
