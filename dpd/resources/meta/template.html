@@ -2,30 +2,30 @@
 
 <html>
 	<head>
-		<title><%= item.title %></title>
-		<meta name="description" content="<%= item.brief[language] %>" />
+		<title><%= title %></title>
+		<meta name="description" content="<%= description %>" />
 
 		<!-- Schema.org markup for Google+ -->
-		<meta itemprop="name" content="<%= item.title %>">
-		<meta itemprop="description" content="<%= item.description[language] %>">
-		<meta itemprop="image" content="<%= item.image %>">
+		<meta itemprop="name" content="<%= title %>">
+		<meta itemprop="description" content="<%= description %>">
+		<meta itemprop="image" content="<%= image %>">
 
 		<!-- Twitter Card data -->
-		<meta name="twitter:card" content="<%= item.image %>">
+		<meta name="twitter:card" content="<%= image %>">
 		<meta name="twitter:site" content="@<%= site.twitter %>">
-		<meta name="twitter:title" content="<%= item.title %>">
-		<meta name="twitter:description" content="<%= item.description[language] %>">
-		<meta name="twitter:creator" content="@<%= item.twitter %>">
+		<meta name="twitter:title" content="<%= title %>">
+		<meta name="twitter:description" content="<%= description %>">
+		<meta name="twitter:creator" content="@<%= twitter %>">
 		<!-- Twitter summary card with large image must be at least 280x150px -->
-		<meta name="twitter:image:src" content="<%= item.image %>">
+		<meta name="twitter:image:src" content="<%= image %>">
 
 		<!-- Open Graph data -->
-		<meta property="og:title" content="<%= item.title %>" />
-		<meta property="og:type" content="article" />
-		<!-- <meta property="og:url" content="http://www.example.com/" /> -->
-		<meta property="og:image" content="<%= item.image %>" />
-		<meta property="og:description" content="<%= item.description[language] %>" />
-		<meta property="og:site_name" content="<%= site.title %>" />
+		<meta property="og:title" 		content="<%= title %>" />
+		<meta property="og:type" 		content="article" />
+		<meta property="og:image" 		content="<%= image %>" />
+		<meta property="og:description"	content="<%= description %>" />
+		<meta property="og:site_name" 	content="<%= site.title %>" />
+		<meta property="og:url" 		content="<%= url %>" />
 	</head>
 
 	<body>
