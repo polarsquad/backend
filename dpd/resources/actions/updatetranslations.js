@@ -24,7 +24,7 @@ icUtils.get(icConfig.translationSpreadsheetUrl)
 			
 			sheet.data[0].rowData.forEach( row => {
 
-				var row_data = row.values.map( value => value.effectiveValue && value.effectiveValue.stringValue )
+				var row_data = row.values.map( value => value.effectiveValue && value.effectiveValue.stringValue || "" )
 
 				if(row_data[0]) result.data.push(row_data)
 			})
