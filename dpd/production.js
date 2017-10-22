@@ -26,14 +26,3 @@ server.on('error', function(err) {
 		process.exit()
 	})
 })
-
-
-db.createUser(
-  {
-    user: 	"deployd",
-    pwd: 	"ooy8teachei5Aiphae8Y",
-    roles: [ 
-    	{ role: "readWrite", db: "-deployd" },
-    ]
-  }
-)
