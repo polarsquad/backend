@@ -1,8 +1,13 @@
-var icItemConfig 	= require('./config/ic-item-config.js'),
-	fs				= require('fs-extra')
+var	fs				= require('fs-extra'),
+	itemConfig 		= fs.readFileSync('config/ic-item-config.js', 'utf8'),
+	icItems			= fs.readFileSync('ic-items.js', 'utf8')
+
+fs.writeFileSync('dpd/public/ic-item-config.js', icItems.replace(/\/\* CONFIG[\s\S]*CONFIG \*\//gi, itemConfig))
+
+var icItemConfig 	= require('./dpd/public/ic-item-config.js')
 
 
-fs.copy('config/ic-item-config.js', 'dpd/public/ic-item-config.js')
+
 
 //checking soundness of item config
 icItemConfig.properties.forEach(function(property, index){

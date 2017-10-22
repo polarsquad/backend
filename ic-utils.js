@@ -1,6 +1,6 @@
 var nodemailer  = require('nodemailer')
 	path		= require('path')
-	itemConfig	= require(path.resolve('../config/ic-item-config.js'))
+	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
 
 exports.config	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
 
