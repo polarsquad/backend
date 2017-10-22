@@ -102,16 +102,14 @@ exports.diff = function(property, old_value, new_value, key){
 
 exports.mailSuggestion = function(to, suggestion, target){
 
-	var subject = "Neuer Vorschlag eingegangen",
-		link	= this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
+	var subject = 	"Neuer Vorschlag eingegangen",
+		link	= 	this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
 		content	= 	suggestion.proposalFor
 					?	"Der Änderungsvorschlag betrifft diesen Eintrag:\n\n"
 					:	"Ein neuer Eintrag wurde vorgeschlagen:\n\n" 
 
 
 	content += link + '\n\n'
-
-	console.log('SUG', suggestion)
 
 	content += 	suggestion.proposalFor
 				?	"Der Vorschlag enthält folgende Änderungen:\n\n"
@@ -130,7 +128,7 @@ exports.mailSuggestion = function(to, suggestion, target){
 
 
 			if(property.type != 'object'){
-				if(!target || exports.diff(property, suggestion[property.name], target[property.name])){
+				if(target ? exports.diff(property, suggestion[property.name], target[property.name]) : !!suggestion[property.name]){
 					content += property.name+': \t'	+ JSON.stringify(suggestion[property.name])	+ '\n'				
 				}
 			} else {
@@ -139,7 +137,7 @@ exports.mailSuggestion = function(to, suggestion, target){
 				}
 
 				for(key in suggestion[property.name]){
-					if(!target || exports.diff(property, suggestion[property.name], target[property.name], key)){
+					if(target ? exports.diff(property, suggestion[property.name], target[property.name], key) : !!suggestion[property.name][key]){
 						content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
 					}
 				}

@@ -9,3 +9,6 @@
 /dpd/data
 /dpd/.dpd
 /dpd/public
+
+migrate-infocompass.js
+data.json
