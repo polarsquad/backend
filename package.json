@@ -5,13 +5,16 @@
   "main": "setup_items.js",
   "dependencies": {
     "deployd": "^0.8.9",
+    "forever": "^0.15.3",
     "fs-extra": "^3.0.1",
     "nodemailer": "^4.0.1"
   },
   "devDependencies": {},
   "scripts": {
     "setup": "node setup_items.js",
-    "run": ""
+    "prestart": "mongod --dbpath=dpd/data --port $(node config.js db.port) --fork --logpath /dev/null",
+    "start": "node_modules/forever/bin/forever start dpd/production.js",
+    "stop": "node_modules/forever/bin/forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown"
   },
   "repository": {
     "type": "git",

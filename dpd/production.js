@@ -1,5 +1,9 @@
-var	config	= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8'))
-	deployd	= 	require('deployd')
+"use strict";
+
+process.chdir(__dirname);
+
+var	config	= 	JSON.parse(require('fs').readFileSync(__dirname+'/../config/config.json', 'utf8')),
+	deployd	= 	require('deployd'),
 	server 	= 	deployd({
 					port:	config.port,
 					env: 	'production',
@@ -13,6 +17,7 @@ var	config	= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'ut
 						}
 					}
 				})
+
 
 server.listen()
 
