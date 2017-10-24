@@ -4,7 +4,7 @@ cancelUnless(
     "You are not authorized. Unregistered users can only submit suggestions.", 401
 )
 
-var icUtils = require('../ic-utils.js'),
+var icUtils = require(process.cwd()+'/../ic-utils.js'),
     self = this
 
 this.creationDate   = new Date().getTime()

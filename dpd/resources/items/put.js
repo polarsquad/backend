@@ -3,7 +3,7 @@ cancelUnless(
     "You are not authorized.", 401
 )
 
-var icItemConfig    = require ('./public/ic-item-config.js'),
+var icItemConfig    = require (process.cwd()+'/public/ic-item-config.js'),
 	self			= this,
     data            = ctx.body
 

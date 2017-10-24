@@ -1,4 +1,4 @@
-var icItemConfig    = require ('./public/ic-item-config.js'),
+var icItemConfig    = require(process.cwd()+'/public/ic-item-config.js'),
 	data			= ctx.body
 
 

@@ -5,6 +5,8 @@
   "main": "setup_items.js",
   "dependencies": {
     "deployd": "^0.8.9",
+    "dpd-clientlib": "0.0.1",
+    "dpd-dashboard": "0.0.2",
     "forever": "^0.15.3",
     "fs-extra": "^3.0.1",
     "nodemailer": "^4.0.1"
