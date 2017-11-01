@@ -3,7 +3,7 @@ var icItemConfig    = require(process.cwd()+'/public/ic-item-config.js'),
 
 
 
-if(!data.proposalFor){ //partial suggestions dont need to be validated at this point
+if(!internal && !data.proposalFor){ //partial suggestions dont need to be validated at this point
 
     icItemConfig.properties.forEach(function(property){
         var e = property.getErrors(data[property.name])

@@ -1,12 +1,28 @@
-var	fs				= require('fs-extra'),
-	itemConfig 		= fs.readFileSync('config/ic-item-config.js', 'utf8'),
-	icItems			= fs.readFileSync('ic-items.js', 'utf8')
+'use strict'
+
+var	fs					= require('fs-extra'),
+	icItems				= fs.readFileSync('ic-items.js', 'utf8'),
+	item_config_file	= process.argv[2],
+	itemConfig 			= undefined
+
+if(!item_config_file){
+	console.error('Missing item config file.')
+	console.log('Try: npm run setup -- config/ic-config.js')
+	console.log('Or:  node setup.items.js config/ic-config.js')
+	process.exit()
+}
+
+try{
+	itemConfig = fs.readFileSync(item_config_file, 'utf8')
+} catch(e){
+	console.error(e)
+	console.error('Unable to read '+item_config_file) || process.exit()
+}
 
 fs.writeFileSync('dpd/public/ic-item-config.js', icItems.replace(/\/\* CONFIG[\s\S]*CONFIG \*\//gi, itemConfig))
 
-var icItemConfig 	= require('./dpd/public/ic-item-config.js')
 
-
+var icItemConfig = require('./dpd/public/ic-item-config.js')
 
 
 //checking soundness of item config
