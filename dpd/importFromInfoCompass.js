@@ -54,7 +54,7 @@ server.on('listening', function() {
 						.then( item		=> 	{
 												console.log(item.title)
 
-												return 	dpd.items.find( {legacyId: item.id} )
+												return 	dpd.items.get( {legacyId: item.id} )
 														.then(
 															items	=> (items[0] ? ( console.log('overwrite...') || dpd.items.del(items[0].id) ) : null),	
 															() 		=> null
