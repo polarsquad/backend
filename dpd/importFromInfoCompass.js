@@ -54,7 +54,11 @@ server.on('listening', function() {
 						.then( item		=> 	{
 												console.log(item.title)
 
-												return 	dpd.items.del( {legacyId: item.id} )
+												return 	dpd.items.find( {legacyId: item.id} )
+														.then(
+															items	=> items[0] ? console.log('overwrite...') || dpd.items.del(items[0].id) : null	
+															() 		=> null
+														)
 														.then( () => 	dpd.items.post({
 																			title:				item.title,
 																			image:				item.image_url,
