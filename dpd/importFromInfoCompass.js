@@ -56,7 +56,7 @@ server.on('listening', function() {
 
 												return 	dpd.items.find( {legacyId: item.id} )
 														.then(
-															items	=> items[0] ? console.log('overwrite...') || dpd.items.del(items[0].id) : null	
+															items	=> items[0] ? console.log('overwrite...') || dpd.items.del({id:items[0].id}) : null	
 															() 		=> null
 														)
 														.then( () => 	dpd.items.post({
