@@ -59,7 +59,7 @@ server.on('listening', function() {
 																			title:				item.title,
 																			image:				item.image_url,
 																			state:				{'published': 'public', 'suggestion': 'suggestion', 'archived': 'archived', 'draft': 'darft' }[item.status],
-																			tags:				[...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type],
+																			tags:				[...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type]],
 																			primaryTopic:		item.primaryTopic,
 																			brief:				item.definitions,
 																			description:		item.descriptions_full,
