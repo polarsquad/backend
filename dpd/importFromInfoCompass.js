@@ -47,7 +47,7 @@ server.on('listening', function() {
 
 		ids.forEach( (id, index) => {
 			chain = chain.then( () => {
-				console.log('Getting '+index+'/'+ids.length, '#'+id+' ...')
+				console.log('Getting '+index+1+'/'+ids.length, '#'+id+' ...')
 				return 	delay(1000)
 						.then( () 		=> 	request.get('http://213.187.84.22:3000/items/'+id, {json:true}))
 						.then( result	=>  result.item)

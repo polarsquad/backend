@@ -1,3 +1,9 @@
+cancelUnless( 
+        internal
+    ||  (me && me.privileges.indexOf('edit_items') != -1),
+    "unauthorized", 401
+)
+
 var fs				= require('fs'),
 	parsingErrors 	= []
 
@@ -35,8 +41,6 @@ icUtils.get(icConfig.translationSpreadsheetUrl)
 
 		var translationTable = {}
 
-
-		console.log('sheets:', sheets.length)
 
 		sheets.forEach( sheet => {
 			var	section	= (sheet.title || '').toUpperCase().replace(/\s/g, "_")

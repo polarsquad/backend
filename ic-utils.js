@@ -1,8 +1,13 @@
-var nodemailer  = require('nodemailer')
-	path		= require('path')
-	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
+'use strict'
 
-exports.config	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
+var nodemailer  = require('nodemailer'),
+	path		= require('path'),
+	request		= require('request-promise'),
+	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js')),
+	Promise		= require('bluebird'),
+	icConfig	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
+
+exports.config = icConfig
 
 exports.get = function(url){
 
@@ -30,6 +35,26 @@ exports.get = function(url){
 		request.on('error', (err) => reject(err))
 
 	})
+}
+
+exports.getGoogleTranslation = function(from, to, text){
+
+	if(!icConfig.googleTranslateApiKey) Promise.reject('missing api key.')
+
+	return 	Promise.resolve(request.get(
+				'https://translation.googleapis.com/language/translate/v2', 
+				{
+					qs:{
+						key:	icConfig.googleTranslateApiKey,
+						q:		text,
+						source:	from,
+						target:	to
+					},
+					json: true
+				}
+			))
+			.then( 	result 	=> result.data && result.data.translations && result.data.translations[0] && result.data.translations[0].translatedText)
+			.then( 	text	=> text || Promise.reject('reponse yields no translation'))
 }
 
 exports.mail = function(to, subject, content){
