@@ -19,7 +19,8 @@
     "setup": "node setup_items.js",
     "prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",
     "start": "forever start dpd/production.js",
-    "stop": "forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown"
+    "stop": "forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown",
+    "mongodump": "mongodump --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)"
   },
   "repository": {
     "type": "git",
