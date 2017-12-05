@@ -8,13 +8,13 @@ function sanetizePropertiy(prop){
     return prop.replace(",", "\\COMMA")
 }
 
-
 $addCallback()
 
 dpd.items.get({})
 .then( items => {
     if(format =='CSV'){
         ctx.res.setHeader('Content-Type', 'text/csv')
+        ctx.res.setHeader('content-disposition', "attachment; filename=\"" + icUtils.config.title.toLowerCase()+"_items.csv\"")
         return      keys.join(',')+'\n'
                    +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',')).join('\n')
     }
