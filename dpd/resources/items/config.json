@@ -190,40 +190,47 @@
             "id": "hours",
             "order": 26
         },
+        "legacyId": {
+            "name": "legacyId",
+            "type": "string",
+            "typeLabel": "string",
+            "id": "legacyId",
+            "order": 27
+        },
         "proposalFor": {
             "name": "proposalFor",
             "type": "string",
             "typeLabel": "string",
             "id": "proposalFor",
-            "order": 27
+            "order": 28
         },
         "creationDate": {
             "name": "creationDate",
             "type": "number",
             "typeLabel": "number",
             "id": "creationDate",
-            "order": 28
+            "order": 29
         },
         "creator": {
             "name": "creator",
             "type": "string",
             "typeLabel": "string",
             "id": "creator",
-            "order": 29
+            "order": 30
         },
         "lastEditDate": {
             "name": "lastEditDate",
             "type": "number",
             "typeLabel": "number",
             "id": "lastEditDate",
-            "order": 30
+            "order": 31
         },
         "lastEditor": {
             "name": "lastEditor",
             "type": "string",
             "typeLabel": "string",
             "id": "lastEditor",
-            "order": 31
+            "order": 32
         }
     }
 }
