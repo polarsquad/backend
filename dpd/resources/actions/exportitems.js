@@ -1,6 +1,6 @@
 var query   	= ctx.query,
-    format  	= query.format.toUpperCase()    || 'JSON',
-    keys    	= query.keys.split(',')         || [],
+    format  	= (query.format    || 'json').toUpperCase(),
+    keys    	= (query.keys      || 'title').split(',')
     response	= this
 
 function sanetizePropertiy(prop){
