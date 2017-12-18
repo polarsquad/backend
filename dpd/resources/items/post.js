@@ -1,6 +1,6 @@
 cancelUnless( 
         internal
-    ||  (me && me.privileges.indexOf('edit_items') != -1) 
+    ||  (me && me.privileges && me.privileges.indexOf('edit_items') != -1) 
     ||  this.state == 'suggestion', 
     "You are not authorized. Unregistered users can only submit suggestions.", 401
 )

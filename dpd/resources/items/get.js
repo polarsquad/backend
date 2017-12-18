@@ -1,7 +1,7 @@
 cancelUnless(
         internal
     ||  this.state == 'public' 
-    || (me && me.privileges.indexOf('edit_items') != -1) 
+    || (me && me.privileges && me.privileges.indexOf('edit_items') != -1) 
 )
 
 cancelIf(this.proposalFor)

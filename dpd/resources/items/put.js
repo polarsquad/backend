@@ -1,6 +1,6 @@
 cancelUnless(
 		internal
-	|| 	(me && me.privileges.indexOf('edit_items') != -1), 
+	|| 	(me && me.privileges && me.privileges.indexOf('edit_items') != -1), 
     "You are not authorized.", 401
 )
 
