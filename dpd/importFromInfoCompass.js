@@ -38,6 +38,10 @@ server.on('listening', function() {
 	console.log("Server is listening")
 	var dpd = internalClient.build(process.server);
 
+	var topic_map =	{
+						'information': 'information_counseling'
+					}
+
   	
 	request.get('http://213.187.84.22:3000/items?limit=10000&offset=0', {json:true})
 	.then( result 	=> result.items.map(item => item.id))
@@ -54,6 +58,13 @@ server.on('listening', function() {
 						.then( item		=> 	{
 												console.log(item.title)
 
+												item.topic.forEach(function(topic,index){
+													if(topic in topic_map){
+														item.topic[index] = topic_map[topic]
+														console.log('replaced topic: ', topic, '->', topic_map[topic])
+													}
+												})
+
 												return 	dpd.items.get( {legacyId: item.id} )
 														.then(
 															items	=> (items[0] ? ( console.log('overwrite...') || dpd.items.del(items[0].id) ) : null),	
@@ -63,7 +74,7 @@ server.on('listening', function() {
 																			title:				item.title,
 																			image:				item.image_url,
 																			state:				{'published': 'public', 'suggestion': 'suggestion', 'archived': 'archived', 'draft': 'darft' }[item.status],
-																			tags:				[...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type]],
+																			tags:				[item.primaryTopic, ...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type]],
 																			primaryTopic:		item.primaryTopic,
 																			brief:				item.definitions,
 																			description:		item.descriptions_full,
