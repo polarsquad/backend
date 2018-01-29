@@ -39,7 +39,7 @@ server.on('listening', function() {
 	var dpd = internalClient.build(process.server);
 
 	var topic_map =	{
-						'information': 'information_counseling'
+						'information': 	'information_counseling'.
 					}
 
   	
