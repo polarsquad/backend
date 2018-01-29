@@ -60,7 +60,7 @@ server.on('listening', function() {
 
 												item.topics && item.topics.forEach(function(topic,index){
 													if(topic in topic_map){
-														item.topic[index] = topic_map[topic]
+														item.topics[index] = topic_map[topic]
 														console.log('replaced topic: ', topic, '->', topic_map[topic])
 													}
 												})
