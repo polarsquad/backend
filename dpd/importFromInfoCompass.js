@@ -107,7 +107,7 @@ server.on('listening', function() {
 																				lastEditor:			null
 																			}
 
-															if(item.primary_topic) new_item.tags.push(item.primary_topic)
+															if(item.primary_topic) new_item.tags.push(topic_map[item.primary_topic])
 
 															dpd.items.post(new_item)
 														})
