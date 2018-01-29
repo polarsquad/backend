@@ -51,7 +51,7 @@ server.on('listening', function() {
 
 		ids.forEach( (id, index) => {
 			chain = chain.then( () => {
-				console.log('Getting '+(index+1)+'/'+ids.length, '#'+id+' ...')
+				console.log('\n\nGetting '+(index+1)+'/'+ids.length, '#'+id+' ...')
 				return 	delay(1000)
 						.then( () 		=> 	request.get('http://213.187.84.22:3000/items/'+id, {json:true}))
 						.then( result	=>  result.item)
@@ -61,7 +61,7 @@ server.on('listening', function() {
 												item.topics && item.topics.forEach(function(topic,index){
 													if(topic in topic_map){
 														item.topics[index] = topic_map[topic]
-														console.log('replaced topic: ', topic, '->', topic_map[topic])
+														console.log('## replaced topic: ', topic, ' ==> ', topic_map[topic])
 													}
 												})
 
