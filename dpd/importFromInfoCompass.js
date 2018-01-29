@@ -76,7 +76,7 @@ server.on('listening', function() {
 																				image:				item.image_url,
 																				state:				{'published': 'public', 'suggestion': 'suggestion', 'archived': 'archived', 'draft': 'darft' }[item.status],
 																				tags:				[...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type]],
-																				primaryTopic:		item.primaryTopic,
+																				primaryTopic:		item.primary_topic,
 																				brief:				item.definitions,
 																				description:		item.descriptions_full,
 																				location:			'',
@@ -108,7 +108,7 @@ server.on('listening', function() {
 																			}
 
 															if(item.primaryTopic) new_item.tags.push(item.primaryTopic)
-																
+
 															dpd.items.post(new_item)
 														})
 														.then(
