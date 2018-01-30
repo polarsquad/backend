@@ -71,12 +71,14 @@ server.on('listening', function() {
 															() 		=> null
 														)
 														.then( () => {
+															item.primary_topic = topic_map[item.primary_topic] || item.primary_topic
+
 															var new_item = {
 																				title:				item.title,
 																				image:				item.image_url,
 																				state:				{'published': 'public', 'suggestion': 'suggestion', 'archived': 'archived', 'draft': 'darft' }[item.status],
 																				tags:				[...item.topics, ...item.target_groups, {'places': 'location', 'events': 'event', 'services': 'service', 'information': 'information'}[item.type]],
-																				primaryTopic:		topic_map[item.primary_topic],
+																				primaryTopic:		item.primary_topic,
 																				brief:				item.definitions,
 																				description:		item.descriptions_full,
 																				location:			'',
@@ -107,7 +109,7 @@ server.on('listening', function() {
 																				lastEditor:			null
 																			}
 
-															if(item.primary_topic && new_item.tags.indexOf(topic_map[item.primary_topic]) == -1 ) new_item.tags.push(topic_map[item.primary_topic])
+															if(item.primary_topic && new_item.tags.indexOf(item.primary_topic) == -1)  new_item.tags.push(item.primary_topic)
 
 															dpd.items.post(new_item)
 														})
