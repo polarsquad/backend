@@ -29,10 +29,11 @@ icUtils.get(icConfig.translationSpreadsheetUrl)
 			if(!sheet.data || !sheet.data.length || !sheet.data[0].rowData) return parsingErrors.push('rowData missing: '+result.title+'.')
 			
 			sheet.data[0].rowData.forEach( row => {
+				if(row.values){
+					var row_data = row.values.map( value => value.effectiveValue && value.effectiveValue.stringValue || "" )
 
-				var row_data = row.values.map( value => value.effectiveValue && value.effectiveValue.stringValue || "" )
-
-				if(row_data[0]) result.data.push(row_data)
+					if(row_data[0]) result.data.push(row_data)
+				}
 			})
 			
 			return result
