@@ -161,7 +161,7 @@ exports.mailSuggestion = function(to, suggestion, target){
 					content += property.name+': \n'
 				}
 
-				for(key in suggestion[property.name]){
+				for(var key in suggestion[property.name]){
 					if(target ? exports.diff(property, suggestion[property.name], target[property.name], key) : !!suggestion[property.name][key]){
 						content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
 					}
