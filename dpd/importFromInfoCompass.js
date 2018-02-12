@@ -51,12 +51,21 @@ server.on('listening', function() {
 
 		ids.forEach( (id, index) => {
 			chain = chain.then( () => {
-				console.log('\n\nGetting '+(index+1)+'/'+ids.length, '#'+id+' ...')
-				return 	delay(500)
+				//console.log('\n\nGetting '+(index+1)+'/'+ids.length, '#'+id+' ...')
+				return 	delay(0)
 						.then( () 		=> 	request.get('http://213.187.84.22:3000/items/'+id, {json:true}))
 						.then( result	=>  result.item)
 						.then( item		=> 	{
-												console.log(item.title)
+												var last_change = new Date(item.meta.last_edit_on),
+													now			= Date.now(),
+													diff		= (now-last_change)/(1000*60*60*24) 
+
+												if(diff <= 5){
+													console.log(Math.floor(diff), item.id, item.title)
+												}
+
+												return Promise.resolve()
+
 
 												item.topics && item.topics.forEach(function(topic,index){
 													if(topic in topic_map){
@@ -65,11 +74,12 @@ server.on('listening', function() {
 													}
 												})
 
+
 												return 	dpd.items.get( {legacyId: item.id} )
-														.then(
-															items	=> (items[0] ? ( console.log('overwrite...') || dpd.items.del(items[0].id) ) : null),	
-															() 		=> null
-														)
+														// .then(
+														// 	items	=> (items[0] ? ( console.log('overwrite...') || dpd.items.del(items[0].id) ) : null),	
+														// 	() 		=> null
+														// )
 														.then( () => {
 															item.primary_topic = topic_map[item.primary_topic] || item.primary_topic
 
@@ -111,7 +121,8 @@ server.on('listening', function() {
 
 															if(item.primary_topic && new_item.tags.indexOf(item.primary_topic) == -1)  new_item.tags.push(item.primary_topic)
 
-															dpd.items.post(new_item)
+															console.log('no POST')
+															//dpd.items.post(new_item)
 														})
 														.then(
 															()	=> console.log('\t done.'),

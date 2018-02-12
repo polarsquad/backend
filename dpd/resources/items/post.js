@@ -21,8 +21,10 @@ if(this.state == 'suggestion') {
     next.then(function(target){
         dpd.users.get().then(function(users){
             users.forEach(function(user){
-            if(user.privileges.indexOf('be_notified_about_suggestions') != -1 && user.email)
-                icUtils.mailSuggestion(user.email, self, target)    
+                if(user.privileges.indexOf('be_notified_about_suggestions') != -1 && user.email){
+                    try         { icUtils.mailSuggestion(user.email, self, target)   }
+                    catch(e)    { console.error(e)}
+                }
             })
         })    
     }, console.log)
