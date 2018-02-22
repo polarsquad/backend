@@ -11,8 +11,14 @@ function sanetizePropertiy(prop){
 
 $addCallback()
 
+
 dpd.items.get({})
 .then( items => {
+
+    items.forEach( item => {
+        item.link = icConfig.frontendUrl+'/item/'+item.id
+    })
+
     if(format =='CSV'){
         ctx.res.setHeader('Content-Type', 'text/csv; charset=utf-8')
         ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (icUtils.config.title||'ic').toLowerCase()+"_items.csv\"")
