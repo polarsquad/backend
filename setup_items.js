@@ -19,6 +19,7 @@ try{
 	console.error('Unable to read '+item_config_file) || process.exit()
 }
 
+
 fs.writeFileSync('dpd/public/ic-item-config.js', icItems.replace(/\/\* CONFIG[\s\S]*CONFIG \*\//gi, itemConfig))
 
 

@@ -169,25 +169,25 @@
             "id": "endDate",
             "order": 23
         },
+        "hours": {
+            "name": "hours",
+            "type": "object",
+            "typeLabel": "object",
+            "id": "hours",
+            "order": 24
+        },
         "maxParticipants": {
             "name": "maxParticipants",
             "type": "number",
             "typeLabel": "number",
             "id": "maxParticipants",
-            "order": 24
+            "order": 25
         },
         "fees": {
             "name": "fees",
             "type": "number",
             "typeLabel": "number",
             "id": "fees",
-            "order": 25
-        },
-        "hours": {
-            "name": "hours",
-            "type": "string",
-            "typeLabel": "string",
-            "id": "hours",
             "order": 26
         },
         "legacyId": {

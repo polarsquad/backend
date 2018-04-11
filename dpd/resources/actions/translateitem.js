@@ -1,22 +1,40 @@
+
 cancelUnless( 
         internal
     ||  (me && me.privileges.indexOf('edit_items') != -1),
     "unauthorized", 401
 )
 
-var req = ctx.body
+
+var req 			= ctx.body,
+	icItemConfig    = require(process.cwd()+'/public/ic-item-config.js')
+
 
 
 if(!req.item) 		ctx.done('missing item.')
 if(!req.from) 		ctx.done('missing from language(s).')
 if(!req.to) 		ctx.done('missing target language(s).')
-if(!req.properties) ctx.done('missing properties to translate.')
 
 if(typeof req.from 			== 'string') req.from 		= [req.from]
 if(typeof req.to 			== 'string') req.to 		= [req.to]
 if(typeof req.properties 	== 'string') req.properties = [req.properties]
 
+
+
 $addCallback()
+
+
+
+var properties_to_translate = 	req.properties && req.properties.length
+								?	req.properties
+								:	icItemConfig.properties
+									.filter( property_obj => property_obj.translatable)
+									.map( property_obj => property_obj.name)
+
+if(properties_to_translate.length == 0){
+	$finishCallback()
+	ctx.error('no translatable properties found')
+}
 
 
 ctx.dpd.items.get({id:req.item})
@@ -24,10 +42,9 @@ ctx.dpd.items.get({id:req.item})
 
 
 	return 	Promise.all(
-				req.properties
-				.filter(	property => item[property])
-				.map(		property => {
-
+				properties_to_translate
+				.filter( 	property => !!item[property] )
+				.map( 		property => {
 					var from_language = req.from.filter( lang => item[property][lang] && !item[property][lang].match(/^\s*Google Translate/))[0]
 
 					if(!from_language) return false

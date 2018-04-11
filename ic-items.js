@@ -64,6 +64,7 @@
 		this.type			= 	exports.utils.getType(data.defaultValue)
 		this.options		=	data.options
 		this.searchable		=	data.searchable
+		this.translatable	=	data.translatable
 		this.min			=	data.min
 		this.max			=	data.max
 		this.mandatory		= 	data.mandatory
