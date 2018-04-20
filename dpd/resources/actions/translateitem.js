@@ -40,12 +40,13 @@ if(properties_to_translate.length == 0){
 ctx.dpd.items.get({id:req.item})
 .then( item => {
 
-
 	return 	Promise.all(
 				properties_to_translate
 				.filter( 	property => !!item[property] )
 				.map( 		property => {
 					var from_language = req.from.filter( lang => item[property][lang] && !item[property][lang].match(/^\s*Google Translate/))[0]
+
+					console.log(from_language, item[property][from_language])
 
 					if(!from_language) return false
 
@@ -54,14 +55,16 @@ ctx.dpd.items.get({id:req.item})
 								.filter(	to_lang	=> 	!item[property][to_lang] || item[property][to_lang].match(/^\s*Google Translate/) )
 								.map( 		to_lang	=> 	icUtils.getGoogleTranslation(from_language, to_lang, item[property][from_language]) 
 														.catch( ()			=> 'not available.')														
-														.then( translation 	=> item[property][to_lang] = "Google Translate: "+translation)
+														.then( translation 	=> {
+															item[property][to_lang]	= "Google Translate: "+translation
+														})
 								)
 							)
 
 				})
 			)
-			.then( () => ctx.dpd.items.put(item))
-			.then( () => setResult(item) )
+			.then( 	() => ctx.dpd.items.put(item))
+			.then( 	updated_item => setResult(updated_item) )
 			.catch( reason => ctx.done(reason))
 })
 .finally($finishCallback)
