@@ -44,15 +44,13 @@ ctx.dpd.items.get({id:req.item})
 				properties_to_translate
 				.filter( 	property => !!item[property] )
 				.map( 		property => {
-					var from_language = req.from.filter( lang => item[property][lang] && !item[property][lang].match(/^\s*Google Translate/))[0]
-
-					console.log(from_language, item[property][from_language])
+					var from_language = req.from.filter( lang => item[property][lang] && !item[property][lang].match(/^\s*Google Translat/i))[0]
 
 					if(!from_language) return false
 
 					return 	Promise.all(
 								req.to
-								.filter(	to_lang	=> 	!item[property][to_lang] || item[property][to_lang].match(/^\s*Google Translate/) )
+								.filter(	to_lang	=> 	!item[property][to_lang] || item[property][to_lang].match(/^\s*Google Translat/i) )
 								.map( 		to_lang	=> 	icUtils.getGoogleTranslation(from_language, to_lang, item[property][from_language]) 
 														.catch( ()			=> 'not available.')														
 														.then( translation 	=> {
