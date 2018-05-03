@@ -11,9 +11,9 @@ var req 			= ctx.body,
 
 
 
-if(!req.item) 		ctx.done('missing item.')
-if(!req.from) 		ctx.done('missing from language(s).')
-if(!req.to) 		ctx.done('missing target language(s).')
+cancelUnless(req.item, 	'missing item.', 400)
+cancelUnless(req.from, 	'missing from language(s).', 400)
+cancelUnless(req.to, 	'missing target language(s).', 400)
 
 if(typeof req.from 			== 'string') req.from 		= [req.from]
 if(typeof req.to 			== 'string') req.to 		= [req.to]
@@ -65,4 +65,5 @@ ctx.dpd.items.get({id:req.item})
 			.then( 	updated_item => setResult(updated_item) )
 			.catch( reason => ctx.done(reason))
 })
+.catch( e => cancel('item not found', 404) )
 .finally($finishCallback)
