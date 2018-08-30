@@ -7,6 +7,12 @@ var nodemailer  = require('nodemailer'),
 	Promise		= require('bluebird'),
 	icConfig	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
 
+
+if(!itemConfig){
+	console.log('Missing dpd/public/ic-item-config.js. Please run npm setup first.')
+	process.exit(1)
+}
+
 exports.config = icConfig
 
 exports.get = function(url){
@@ -27,8 +33,8 @@ exports.get = function(url){
 
 							var body = [];
 
-							response.on('data', (chunk) => body.push(chunk));
-							response.on('end', () => resolve(JSON.parse(body.join(''))));
+							response.on('data', (chunk) => body.push(chunk))
+							response.on('end', () => resolve(JSON.parse(body.join(''))))
 						})
 
 
