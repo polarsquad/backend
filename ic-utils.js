@@ -9,8 +9,9 @@ var nodemailer  = require('nodemailer'),
 
 
 try{
-	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js')),
-}catch(e){
+	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
+}
+catch(e){
 	console.error(e)
 	console.log('Missing dpd/public/ic-item-config.js. Please run npm setup first.')
 	process.exit(1)
