@@ -5,7 +5,7 @@
 	"main": "setup_items.js",
 	"dependencies": {
     	"dpd-clientlib": "^1.0.0",
-    	"dpd-dashboard": "^1.1.3"
+    	"dpd-dashboard": "^1.1.3",
 		"bluebird": "^3.5.1",
 		"deployd": "^1.1.2",
 		"forever": "^0.15.3",
