@@ -11,9 +11,6 @@
 /dpd/public
 /dpd/node_modules
 
-!/dpd/ic-actions.js
-!/dpd/ic-meta.js
-
 /dump
 
 migrate-infocompass.js
