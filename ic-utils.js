@@ -13,7 +13,6 @@ try{
 }
 catch(e){
 	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')
-	console.error(e)
 	process.exit(1)
 }
 
