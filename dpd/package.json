@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "dpd-clientlib": "../../node_modules/dpd-clientlib",
-    "dpd-dashboard": "../../node_modules/dpd-dashboard"
+    "dpd-clientlib": "../node_modules/dpd-clientlib",
+    "dpd-dashboard": "../node_modules/dpd-dashboard",
   },
+  "dpdInclude":[
+  	"ic-actions.js",
+  	"ic-meta.js"
+  ]
 }
