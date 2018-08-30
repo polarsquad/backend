@@ -9,8 +9,13 @@
 /dpd/data
 /dpd/.dpd
 /dpd/public
+/dpd/node_modules
+
+!/dpd/ic-actions.js
+!/dpd/ic-meta.js
 
 /dump
 
 migrate-infocompass.js
 data.json
+package-lock.json

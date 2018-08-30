@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "dpd-clientlib": "^1.0.0",
+    "dpd-dashboard": "^1.1.3"
+  }
+}
