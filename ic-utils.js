@@ -12,7 +12,7 @@ try{
 	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
 }
 catch(e){
-	console.log('Missing dpd/public/ic-item-config.js. Please run npm setup first. \n\n')
+	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')
 	console.error(e)
 	process.exit(1)
 }
