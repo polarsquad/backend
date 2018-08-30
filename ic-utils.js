@@ -3,12 +3,15 @@
 var nodemailer  = require('nodemailer'),
 	path		= require('path'),
 	request		= require('request-promise'),
-	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js')),
 	Promise		= require('bluebird'),
-	icConfig	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
+	icConfig	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8')),
+	itemConfig	= {}
 
 
-if(!itemConfig){
+try{
+	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js')),
+}catch(e){
+	console.error(e)
 	console.log('Missing dpd/public/ic-item-config.js. Please run npm setup first.')
 	process.exit(1)
 }
