@@ -29,208 +29,180 @@
             "id": "tags",
             "order": 3
         },
-        "primaryTopic": {
-            "name": "primaryTopic",
-            "type": "string",
-            "typeLabel": "string",
-            "id": "primaryTopic",
-            "order": 4
-        },
         "brief": {
             "name": "brief",
             "type": "object",
             "typeLabel": "object",
             "id": "brief",
-            "order": 5
+            "order": 4
         },
         "description": {
             "name": "description",
             "type": "object",
             "typeLabel": "object",
             "id": "description",
-            "order": 6
+            "order": 5
         },
         "location": {
             "name": "location",
             "type": "string",
             "typeLabel": "string",
             "id": "location",
-            "order": 7
+            "order": 6
         },
         "address": {
             "name": "address",
             "type": "string",
             "typeLabel": "string",
             "id": "address",
-            "order": 8
+            "order": 7
         },
         "zip": {
             "name": "zip",
             "type": "string",
             "typeLabel": "string",
             "id": "zip",
-            "order": 9
+            "order": 8
         },
         "city": {
             "name": "city",
             "type": "string",
             "typeLabel": "string",
             "id": "city",
-            "order": 10
+            "order": 9
         },
         "latitude": {
             "name": "latitude",
             "type": "number",
             "typeLabel": "number",
             "id": "latitude",
-            "order": 11
+            "order": 10
         },
         "longitude": {
             "name": "longitude",
             "type": "number",
             "typeLabel": "number",
             "id": "longitude",
-            "order": 12
+            "order": 11
         },
         "website": {
             "name": "website",
             "type": "string",
             "typeLabel": "string",
             "id": "website",
-            "order": 13
+            "order": 12
         },
         "email": {
             "name": "email",
             "type": "string",
             "typeLabel": "string",
             "id": "email",
-            "order": 14
+            "order": 13
         },
         "facebook": {
             "name": "facebook",
             "type": "string",
             "typeLabel": "string",
             "id": "facebook",
-            "order": 15
+            "order": 14
         },
         "twitter": {
             "name": "twitter",
             "type": "string",
             "typeLabel": "string",
             "id": "twitter",
-            "order": 16
+            "order": 15
         },
         "whatsapp": {
             "name": "whatsapp",
             "type": "string",
             "typeLabel": "string",
             "id": "whatsapp",
-            "order": 17
+            "order": 16
         },
         "contact": {
             "name": "contact",
             "type": "string",
             "typeLabel": "string",
             "id": "contact",
-            "order": 18
+            "order": 17
         },
         "phone": {
             "name": "phone",
             "type": "string",
             "typeLabel": "string",
             "id": "phone",
-            "order": 19
+            "order": 18
         },
         "mobile": {
             "name": "mobile",
             "type": "string",
             "typeLabel": "string",
             "id": "mobile",
-            "order": 20
+            "order": 19
         },
         "editingNote": {
             "name": "editingNote",
             "type": "string",
             "typeLabel": "string",
             "id": "editingNote",
-            "order": 21
+            "order": 20
         },
         "startDate": {
             "name": "startDate",
             "type": "string",
             "typeLabel": "string",
             "id": "startDate",
-            "order": 22
+            "order": 21
         },
         "endDate": {
             "name": "endDate",
             "type": "string",
             "typeLabel": "string",
             "id": "endDate",
-            "order": 23
+            "order": 22
         },
         "hours": {
             "name": "hours",
             "type": "object",
             "typeLabel": "object",
             "id": "hours",
-            "order": 24
-        },
-        "maxParticipants": {
-            "name": "maxParticipants",
-            "type": "number",
-            "typeLabel": "number",
-            "id": "maxParticipants",
-            "order": 25
-        },
-        "fees": {
-            "name": "fees",
-            "type": "number",
-            "typeLabel": "number",
-            "id": "fees",
-            "order": 26
-        },
-        "legacyId": {
-            "name": "legacyId",
-            "type": "string",
-            "typeLabel": "string",
-            "id": "legacyId",
-            "order": 27
+            "order": 23
         },
         "proposalFor": {
             "name": "proposalFor",
             "type": "string",
             "typeLabel": "string",
             "id": "proposalFor",
-            "order": 28
+            "order": 24
         },
         "creationDate": {
             "name": "creationDate",
             "type": "number",
             "typeLabel": "number",
             "id": "creationDate",
-            "order": 29
+            "order": 25
         },
         "creator": {
             "name": "creator",
             "type": "string",
             "typeLabel": "string",
             "id": "creator",
-            "order": 30
+            "order": 26
         },
         "lastEditDate": {
             "name": "lastEditDate",
             "type": "number",
             "typeLabel": "number",
             "id": "lastEditDate",
-            "order": 31
+            "order": 27
         },
         "lastEditor": {
             "name": "lastEditor",
             "type": "string",
             "typeLabel": "string",
             "id": "lastEditor",
-            "order": 32
+            "order": 28
         }
     }
 }

@@ -4,10 +4,10 @@
 	"description": "",
 	"main": "setup_items.js",
 	"dependencies": {
-    	"dpd-clientlib": "^1.0.0",
-    	"dpd-dashboard": "^1.1.3",
 		"bluebird": "^3.5.1",
 		"deployd": "^1.1.2",
+		"dpd-clientlib": "^1.0.0",
+		"dpd-dashboard": "^1.1.3",
 		"forever": "^0.15.3",
 		"fs-extra": "^3.0.1",
 		"nodemailer": "^4.6.8",
@@ -20,11 +20,9 @@
 		"prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",
 		"start": "forever start dpd/production.js",
 		"stop": "forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown",
-	 
 		"mongodump": "mongodump --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
 		"mongorestore": "mongorestore --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
-
-		"postinstall":"cd dpd && npm install" 
+		"postinstall": "cd dpd && npm install"
 	},
 	"repository": {
 		"type": "git",
