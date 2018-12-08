@@ -49,13 +49,29 @@
 			"id": "background",
 			"order": 5
 		},
+		"weight": {
+			"name": "weight",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "weight",
+			"order": 6
+		},
+		"order": {
+			"name": "order",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "order",
+			"order": 7
+		},
 		"bottom": {
 			"name": "bottom",
 			"type": "boolean",
 			"typeLabel": "boolean",
 			"required": false,
 			"id": "bottom",
-			"order": 6
+			"order": 8
 		}
 	}
 }
