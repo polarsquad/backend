@@ -49,12 +49,12 @@
 			"id": "background",
 			"order": 5
 		},
-		"weight": {
-			"name": "weight",
-			"type": "number",
-			"typeLabel": "number",
+		"stretch": {
+			"name": "stretch",
+			"type": "boolean",
+			"typeLabel": "boolean",
 			"required": false,
-			"id": "weight",
+			"id": "stretch",
 			"order": 6
 		},
 		"order": {
