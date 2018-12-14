@@ -1,2 +1,1 @@
-
-cancel()
+cancel("Unauthorized", 401)
