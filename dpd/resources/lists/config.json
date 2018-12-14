@@ -1,0 +1,29 @@
+{
+	"type": "Collection",
+	"properties": {
+		"items": {
+			"name": "items",
+			"type": "array",
+			"typeLabel": "array",
+			"required": true,
+			"id": "items",
+			"order": 0
+		},
+		"public": {
+			"name": "public",
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"required": false,
+			"id": "public",
+			"order": 1
+		},
+		"user": {
+			"name": "user",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "user",
+			"order": 2
+		}
+	}
+}
