@@ -2,7 +2,7 @@
 /dump
 
 /config/*
-!/config.default-item-config.js
+!/config/default-item-config.js
 /npm-debug.log
 
 !/config/.gitkeep 
