@@ -1,1 +1,1 @@
-cancel("Unauthorized", 401)
+cancelUnless(internal, "Unauthorized", 401)

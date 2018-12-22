@@ -1,13 +1,21 @@
 {
 	"type": "Collection",
 	"properties": {
+		"name": {
+			"name": "name",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "name",
+			"order": 0
+		},
 		"items": {
 			"name": "items",
 			"type": "array",
 			"typeLabel": "array",
-			"required": true,
+			"required": false,
 			"id": "items",
-			"order": 0
+			"order": 1
 		},
 		"public": {
 			"name": "public",
@@ -15,15 +23,15 @@
 			"typeLabel": "boolean",
 			"required": false,
 			"id": "public",
-			"order": 1
+			"order": 2
 		},
 		"user": {
 			"name": "user",
 			"type": "string",
 			"typeLabel": "string",
-			"required": true,
+			"required": false,
 			"id": "user",
-			"order": 2
+			"order": 3
 		}
 	}
 }
