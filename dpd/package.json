@@ -4,9 +4,9 @@
     "dpd-dashboard": "^1.1.3"
   },
   "dpdInclude": [
-  	 "dpd-clientlib",
-  	 "dpd-dashboard",
-  	 "ic-actions.js",
-  	 "ic-meta.js"
+    "dpd-clientlib",
+    "dpd-dashboard",
+    "ic-actions.js",
+    "ic-meta.js"
   ]
 }
