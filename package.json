@@ -14,7 +14,7 @@
 	},
 	"devDependencies": {},
 	"scripts": {
-		"setup": "node setup_items.js",
+		"setup": "node setup.js",
 		"prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",
 		"start": "forever start dpd/production.js",
 		"stop": "forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown",
