@@ -2,4 +2,6 @@ cancelUnless(internal || me , "Unauthorized", 401)
 
 this.user = me.id
 
-emit("lists:creation", this)
+this.items = this.items || []
+
+emit("lists:creation", this.id) //only sending id, because of access restrctions
