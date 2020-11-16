@@ -94,8 +94,7 @@ function resubmissionCheck(dpd){
 			.then(function(users){
 				users.forEach( function(user){
 					if(user.email){
-						//try{ icUtils.mail(user.email, subject, content) } 
-						try{ icUtils.mail("andreas.pittrich@posteo.de", subject, content) } 
+						try{ icUtils.mail(user.email, subject, content) } 
 						catch(e){ console.error(e) }
 					}
 				})
