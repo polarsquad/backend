@@ -98,6 +98,7 @@ function resubmissionCheck(dpd){
 						catch(e){ console.error(e) }
 					}
 				})
+				
 				due_items.forEach(function(item){
 					dpd.items.put(item.id, {resubmissionDate: null })
 				})
