@@ -48,7 +48,7 @@ server.on('error', function(err) {
 
 //ad hoc, todo extra script:
 function resubmissionCheck(dpd){
-	console.log('\n\n Checking resubmissions...\n')
+	console.log('\n\nChecking resubmissions...\n')
 	dpd.items
 	.get({		
 			$and: [
@@ -74,7 +74,10 @@ function resubmissionCheck(dpd){
 				return now > resubmissionDate
 			})
 
-			if(due_items.length == 0) return null
+			if(due_items.length == 0){
+				console.log("No resbumissions due.\n")
+				return null
+			}
 
 			var subject = 	'Wiedervorlage von Einträgen',
 				content	= 	"Folgende Einträg wurden zur Wiedervorlage markiert: \n\n"+
