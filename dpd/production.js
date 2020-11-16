@@ -1,10 +1,10 @@
 "use strict";
 
-var icUtils = require(path.resolve('../ic-utils.js'))
 
 process.chdir(__dirname);
 
-var	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8')),
+var icUtils 		= 	require(path.resolve('../ic-utils.js')),
+	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8')),
 	deployd			= 	require('deployd'),
 	server 			= 	deployd({
 							port:	config.port,
@@ -19,7 +19,7 @@ var	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', '
 								}
 							}
 						}),
-	internalClient = require('deployd/lib/internal-client');
+	internalClient	=	require('deployd/lib/internal-client')
 
 server.listen()
 
@@ -31,8 +31,8 @@ server.on('listening', function() {
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
 
-	resubmissionCheck()
-	setInterval(resubmissionCheck, 1000*60*60*12)
+	resubmissionCheck(dpd)
+	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
 })
 
@@ -47,14 +47,14 @@ server.on('error', function(err) {
 
 
 //ad hoc, todo extra script:
-function resubmissionCheck(){
+function resubmissionCheck(dpd){
 	dpd.items
 	.get({resubmissionDate: {$ne:null}})
 	.then( function(items) {
 		var now	= Date.now()
 
 		items.forEach( function(item) {
-			resubmissionDate 	= new Date(item.resubmissionDate)
+			var resubmissionDate 	= new Date(item.resubmissionDate)
 			if(now > resubmissionDate){
 				dpd.items.put(item.id, {resubmissionDate: null })
 				icUtils.mail(
