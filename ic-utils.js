@@ -182,3 +182,8 @@ exports.mailSuggestion = function(to, suggestion, target){
 
 	exports.mail(to, subject, content)
 }
+
+
+exports.resubmissionCheck = function(){
+
+}

@@ -1,5 +1,7 @@
 "use strict";
 
+var icUtils = require(path.resolve('../ic-utils.js'))
+
 process.chdir(__dirname);
 
 var	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8')),
@@ -28,6 +30,10 @@ server.on('listening', function() {
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
+
+	resubmissionCheck()
+	setInterval(resubmissionCheck, 1000*60*60*12)
+
 })
 
 server.on('error', function(err) {
@@ -36,3 +42,31 @@ server.on('error', function(err) {
 		process.exit()
 	})
 })
+
+
+
+
+//ad hoc, todo extra script:
+function resubmissionCheck(){
+	dpd.items
+	.get({resubmissionDate: {$ne:null}})
+	.then( function(items) {
+		var now	= Date.now()
+
+		items.forEach( function(item) {
+			resubmissionDate 	= new Date(item.resubmissionDate)
+			if(now > resubmissionDate){
+				dpd.items.put(item.id, {resubmissionDate: null })
+				icUtils.mail(
+					'andreas.pittrich@posteo.de', 
+					'Wiedervorlage Eintrag: '+item.title, 
+
+					"Folgender Eintrag wurde zur Wiedervorlage markiert: \n"+
+					item.title+"\n"+
+					config.frontendUrl+"/item/"+item.id
+				)
+			}
+		})
+			
+	})
+}
