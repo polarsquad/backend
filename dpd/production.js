@@ -74,6 +74,8 @@ function resubmissionCheck(dpd){
 				return now > resubmissionDate
 			})
 
+			if(due_items.length == 0) return null
+
 			var subject = 	'Wiedervorlage von Einträgen',
 				content	= 	"Folgende Einträg wurden zur Wiedervorlage markiert: \n\n"+
 				 			due_items.map(function(item){ 
