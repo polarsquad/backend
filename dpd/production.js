@@ -74,11 +74,14 @@ function resubmissionCheck(dpd){
 				return now > resubmissionDate
 			})
 
-			var subject = 	'Wiedervorlage Eintrag: '+item.title, 
-				content	= 	"Folgender Eintrag wurde zur Wiedervorlage markiert: \n\n"+
-							item.title+"\n"+
-							config.frontendUrl+"/item/"+item.id
-
+			var subject = 	'Wiedervorlage von Einträgen'
+				content	= 	"Folgende Einträg wurden zur Wiedervorlage markiert: \n\n"+
+				 			due_items.map(function(item){ 
+				 				return 	item.title+"\n"+
+										config.frontendUrl+"/item/"+item.id
+										+"\n"
+				 			}).join("\n")
+							
 
 			dpd.users.get({
 				privileges: 'be_notified_about_suggestions'
@@ -86,7 +89,8 @@ function resubmissionCheck(dpd){
 			.then(function(users){
 				users.forEach( function(user){
 					if(user.email){
-						try{ icUtils.mail(user.email, subject, content) } 
+						//try{ icUtils.mail(user.email, subject, content) } 
+						try{ icUtils.mail("andreas.pittrich@posteo.de", subject, content) } 
 						catch(e){ console.error(e) }
 					}
 				})
