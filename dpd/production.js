@@ -60,29 +60,39 @@ function resubmissionCheck(dpd){
 	})
 	.then( function(items) {
 		try{
-			var now	= Date.now()
+			var now			= Date.now(),
+				due_items 	= []
 
 			console.log('now:', now, items.length)
 
-			items.forEach( function(item) {
+			due_items = items.filter( function(item) {
 
 				var resubmissionDate 	= new Date(item.resubmissionDate)
 				console.log(item.title, item.id)
 				console.log('\tresubmissionDate: ', item.resubmissionDate, resubmissionDate)
 				console.log('\tdue: ', now > resubmissionDate)
 
-				if(now > resubmissionDate){
-					dpd.items.put(item.id, {resubmissionDate: null })
-					icUtils.mail(
-						'andreas.pittrich@posteo.de', 
-						'Wiedervorlage Eintrag: '+item.title, 
-
-						"Folgender Eintrag wurde zur Wiedervorlage markiert: \n\n"+
-						item.title+"\n"+
-						config.frontendUrl+"/item/"+item.id
-					)
-				}
+				return now > resubmissionDate
 			})
+
+			var subject = 	'Wiedervorlage Eintrag: '+item.title, 
+				content	= 	"Folgender Eintrag wurde zur Wiedervorlage markiert: \n\n"+
+							item.title+"\n"+
+							config.frontendUrl+"/item/"+item.id
+
+
+			dpd.users.get({
+				privileges: 'be_notified_about_suggestions'
+			})
+			.then(function(users){
+				users.forEach( function(user){
+					if(user.email){
+						try{ icUtils.mail(user.email, subject, content) } 
+						catch(e){ console.error(e) }
+					}
+				})
+			})
+
 		} catch(e){
 			console.log(e)
 		}
