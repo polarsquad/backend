@@ -48,7 +48,7 @@ server.on('error', function(err) {
 
 //ad hoc, todo extra script:
 function resubmissionCheck(dpd){
-	console.log('checking resubmissions...')
+	console.log('\n\n Checking resubmissions...\n')
 	dpd.items
 	.get({		
 			$and: [
@@ -62,15 +62,14 @@ function resubmissionCheck(dpd){
 		try{
 			var now			= Date.now(),
 				due_items 	= []
-
-			console.log('now:', now, items.length)
+			
 
 			due_items = items.filter( function(item) {
 
 				var resubmissionDate 	= new Date(item.resubmissionDate)
 				console.log(item.title, item.id)
-				console.log('\tresubmissionDate: ', item.resubmissionDate, resubmissionDate)
-				console.log('\tdue: ', now > resubmissionDate)
+				console.log('\tresubmissionDate: ', item.resubmissionDate)
+				console.log('\tDue: ', now > resubmissionDate)
 
 				return now > resubmissionDate
 			})
@@ -98,4 +97,5 @@ function resubmissionCheck(dpd){
 		}
 			
 	}, console.log)
+	console.log("\n\n")
 }
