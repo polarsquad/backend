@@ -75,7 +75,7 @@ function resubmissionCheck(dpd){
 			})
 
 			if(due_items.length == 0){
-				console.log("No resbumissions due.\n")
+				console.log("No resubmissions due.\n")
 				return null
 			}
 
@@ -98,12 +98,12 @@ function resubmissionCheck(dpd){
 						catch(e){ console.error(e) }
 					}
 				})
+				dpd.items.put(item.id, {resubmissionDate: null })
 			})
 
 		} catch(e){
 			console.log(e)
 		}
 			
-	}, console.log)
-	console.log("\n\n")
+	}, console.log)	
 }
