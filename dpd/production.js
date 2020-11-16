@@ -72,7 +72,7 @@ function resubmissionCheck(dpd){
 				console.log('\tdue: ', now > resubmissionDate)
 
 				if(now > resubmissionDate){
-					dpd.items.put(item.id, {resubmissionDate: "" })
+					dpd.items.put(item.id, {resubmissionDate: null })
 					icUtils.mail(
 						'andreas.pittrich@posteo.de', 
 						'Wiedervorlage Eintrag: '+item.title, 
