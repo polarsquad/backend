@@ -48,25 +48,44 @@ server.on('error', function(err) {
 
 //ad hoc, todo extra script:
 function resubmissionCheck(dpd){
+	console.log('checking resubmissions...')
 	dpd.items
-	.get({resubmissionDate: {$ne:null}})
-	.then( function(items) {
-		var now	= Date.now()
-
-		items.forEach( function(item) {
-			var resubmissionDate 	= new Date(item.resubmissionDate)
-			if(now > resubmissionDate){
-				dpd.items.put(item.id, {resubmissionDate: null })
-				icUtils.mail(
-					'andreas.pittrich@posteo.de', 
-					'Wiedervorlage Eintrag: '+item.title, 
-
-					"Folgender Eintrag wurde zur Wiedervorlage markiert: \n"+
-					item.title+"\n"+
-					config.frontendUrl+"/item/"+item.id
-				)
-			}
-		})
-			
+	.get({		
+			$and: [
+				{resubmissionDate:  {$exists: 	true} },
+				{resubmissionDate:  {$ne: 		undefined} },
+				{resubmissionDate:  {$ne:		null} },
+				{resubmissionDate:  {$ne:		""} }
+			]
 	})
+	.then( function(items) {
+		try{
+			var now	= Date.now()
+
+			console.log('now:', now, items.length)
+
+			items.forEach( function(item) {
+
+				var resubmissionDate 	= new Date(item.resubmissionDate)
+				console.log(item.title, item.id)
+				console.log('\tresubmissionDate: ', item.resubmissionDate, resubmissionDate)
+				console.log('\tdue: ', now > resubmissionDate)
+
+				if(now > resubmissionDate){
+					dpd.items.put(item.id, {resubmissionDate: "" })
+					icUtils.mail(
+						'andreas.pittrich@posteo.de', 
+						'Wiedervorlage Eintrag: '+item.title, 
+
+						"Folgender Eintrag wurde zur Wiedervorlage markiert: \n\n"+
+						item.title+"\n"+
+						config.frontendUrl+"/item/"+item.id
+					)
+				}
+			})
+		} catch(e){
+			console.log(e)
+		}
+			
+	}, console.log)
 }
