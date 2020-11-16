@@ -3,7 +3,7 @@
 
 process.chdir(__dirname);
 
-var icUtils 		= 	require(path.resolve('../ic-utils.js')),
+var icUtils 		= 	require('../ic-utils.js'),
 	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8')),
 	deployd			= 	require('deployd'),
 	server 			= 	deployd({
