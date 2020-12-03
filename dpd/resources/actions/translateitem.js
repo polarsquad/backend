@@ -55,9 +55,9 @@ ctx.dpd.items.get({id:req.item})
 				.filter( 	property => !!item[property] )
 				.map( 		property => {
 
-					console.log(property.name)
+					console.log('property: ', property.name)
 
-					var from_language = req.from.filter( lang => isValidFrom(item[property][lang]))
+					var from_language = req.from.filter( lang => isValidFrom(item[property][lang]))[0]
 
 					console.log('from_language: ', from_language)
 
