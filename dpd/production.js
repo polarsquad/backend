@@ -37,6 +37,9 @@ server.on('listening', function() {
 		console.log(items.length)
 		items.forEach(function(item){
 			console.log(item.remarks)
+			//dpd.items.put(item.id, {
+				console.log(typeof item.remarks)
+			//})
 		})
 	})
 
