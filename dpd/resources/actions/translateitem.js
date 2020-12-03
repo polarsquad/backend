@@ -65,7 +65,9 @@ ctx.dpd.items.get({id:req.item})
 														.then( 
 															translation 	=> {
 																console.log(translation)
-																item[property][to_lang]	= "["+translation.translator+":] "+translation.text
+																if(translation.translator && translation.text ){
+																	item[property][to_lang] = "["+translation.translator+":] "+translation.text
+																}
 															},
 															reason			=> {
 																console.log(reason)

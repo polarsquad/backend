@@ -49,9 +49,10 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
-	if(from == 'none' || to == 'none') return Promise.reject("Language 'none' ignored.")
-	if(from == to ) return Promise.reject("Source and target language cannot be the same.")
-	if(!text) return Promise.reject("Missing text")
+	if(from == 'none' || to == 'none') return Promise.resolve({message: "Language 'none' ignored."})
+	if(from == to ) return Promise.resolve({message:"Source and target language cannot be the same."})
+	if(!text) return Promise.resolve({message:"Missing text."})
+
 
 	return 	Promise.reject()
 			.catch( () => getDeepLTranslation(from, to, text))
