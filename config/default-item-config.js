@@ -339,6 +339,28 @@
 			translatable:	true
 		}),
 
+
+		new Property({
+			name: 			"resubmissionDate",
+			getErrors:		function(value, key){	
+								return 	isNaN(Date.parse(value))
+										?	{
+												message: 'Unable to convert string to date. Try YYYY-MM-DDTHH:MM',
+												code:	 'INVALID_DATE_STRING'
+											}
+										:	null
+							},	
+			defaultValue:	"",
+			searchable:		false,
+		}),
+
+		new Property({
+			name: 			"resubmissionNotification",			
+			defaultValue:	"",
+			searchable:		false,
+		}),
+
+
 		new Property({
 			name:			"legacyId",
 			defaultValue:	"",

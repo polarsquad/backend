@@ -15,4 +15,4 @@ icItemConfig.properties.forEach(function(property){
 
 
 this.lastEditDate   = new Date().getTime()
-this.lastEditor     = me.id
+this.lastEditor     = me ? me.id : this.lastEditor
