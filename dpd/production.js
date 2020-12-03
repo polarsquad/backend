@@ -41,7 +41,7 @@ server.on('listening', function() {
 			?	console.log(item.remarks.de)
 			:	console.log(item.remarks)
 			//dpd.items.put(item.id, {
-				console.log(typeof item.remarks)
+				//console.log(typeof item.remarks)
 			//})
 		})
 	})
