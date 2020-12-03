@@ -36,13 +36,11 @@ server.on('listening', function() {
 	.then(function(items){
 		console.log(items.length)
 		items.forEach(function(item){
-
-			typeof item.remarks == 'object'
-			?	console.log(item.remarks.de)
-			:	console.log(item.remarks)
-			//dpd.items.put(item.id, {
-				//console.log(typeof item.remarks)
-			//})
+			dpd.items.put(item.id, {
+				remarks: typeof item.remarks == 'object'
+						?	item.remarks.de
+						:	item.remarks
+			})
 		})
 	})
 
