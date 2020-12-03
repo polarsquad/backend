@@ -38,8 +38,8 @@ server.on('listening', function() {
 		items.forEach(function(item){
 			dpd.items.put(item.id, {
 				remarks: typeof item.remarks == 'object'
-						?	item.remarks.de
-						:	item.remarks
+						?	item.remarks.de||''
+						:	item.remarks||''
 			})
 		})
 	})
