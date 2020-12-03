@@ -49,6 +49,9 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
+	console.log(from, to, text, '\n','\n')
+
+
 	if(from == 'none' || to == 'none') return Promise.resolve({message: "Language 'none' ignored."})
 	if(from == to ) return Promise.resolve({message:"Source and target language cannot be the same."})
 	if(!text) return Promise.resolve({message:"Missing text."})
