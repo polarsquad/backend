@@ -49,8 +49,6 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
-	console.log(from, to, text, "\n","\n")
-
 
 	if(from == 'none' || to == 'none') return Promise.resolve({message: "Language 'none' ignored."})
 	if(from == to ) return Promise.resolve({message:"Source and target language cannot be the same."})
@@ -86,7 +84,7 @@ function getGoogleTranslation(from, to, text){
 
 function getDeepLTranslation(from, to, text){
 
-	console.log('translating with deepl...', from, ' => ', to, text)
+	console.log('Translating with deepl:', from, ' => ', to, '\"'+text.substr(0,20)+'\"\n')
 
 	if(!icConfig.deepLApiKey) Promise.reject('missing deepL api key.')
 

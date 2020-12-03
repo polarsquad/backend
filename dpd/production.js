@@ -31,6 +31,16 @@ server.on('listening', function() {
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
 
+
+	dpd.items.get()
+	.then(function(items){
+		console.log(item.length)
+		items.forEach(function(item){
+			console.log(item.remarks)
+		})
+	})
+
+
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
