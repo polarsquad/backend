@@ -34,7 +34,7 @@ server.on('listening', function() {
 
 	dpd.items.get()
 	.then(function(items){
-		console.log(item.length)
+		console.log(items.length)
 		items.forEach(function(item){
 			console.log(item.remarks)
 		})
