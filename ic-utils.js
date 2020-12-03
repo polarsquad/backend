@@ -49,6 +49,8 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
+	if(from == 'none' || to == 'none') return promise.reject("Language 'none' ignored.")
+
 	return 	Promise.reject()
 			.catch( () => getDeepLTranslation(from, to, text))
 			.catch( () => getGoogleTranslation(from, to, text))
@@ -78,7 +80,7 @@ function getGoogleTranslation(from, to, text){
 
 function getDeepLTranslation(from, to, text){
 
-	console.log('translating with deepl...')
+	console.log('translating with deepl...', from, ' => ', to, text)
 
 	if(!icConfig.deepLApiKey) Promise.reject('missing deepL api key.')
 
