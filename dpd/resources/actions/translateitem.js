@@ -64,6 +64,7 @@ ctx.dpd.items.get({id:req.item})
 								.map( 		to_lang	=> 	icUtils.getTranslation(from_language, to_lang, item[property][from_language]) 
 														.then( 
 															translation 	=> {
+																console.log(translation)
 																item[property][to_lang]	= "["+translation.translator+":] "+translation.text
 															},
 															reason			=> {
