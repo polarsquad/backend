@@ -46,9 +46,17 @@ exports.get = function(url){
 	})
 }
 
-exports.getGoogleTranslation = function(from, to, text){
 
-	if(!icConfig.googleTranslateApiKey) Promise.reject('missing api key.')
+exports.getTranslation = function(from, to ,text){
+
+	return 	Promise.reject()
+			.catch( () => getDeepLTranslation(from, to, text))
+			.catch( () => getGoogleTranslation(from, to, text))
+}
+
+function getGoogleTranslation(from, to, text){
+
+	if(!icConfig.googleTranslateApiKey) Promise.reject('missing google translation api key.')
 
 	return 	Promise.resolve(request.get(
 				'https://translation.googleapis.com/language/translate/v2', 
@@ -63,7 +71,31 @@ exports.getGoogleTranslation = function(from, to, text){
 				}
 			))
 			.then( 	result 	=> result.data && result.data.translations && result.data.translations[0] && result.data.translations[0].translatedText)
-			.then( 	text	=> text || Promise.reject('reponse yields no translation'))
+			.then( 	text	=> 	text
+								?	{text, translator: 'Google Translate'}
+								:	Promise.reject('Google Translate: reponse yields no translation'))
+}
+
+function getDeepLTranslation(from, to, text){
+
+	console.log('translating with deepl...')
+
+	if(!icConfig.deepLApiKey) Promise.reject('missing deepL api key.')
+
+
+	return 	Promise.resolve(request.post(
+				' https://api.deepl.com/v2/translate?auth_key='
+				+ icConfig.deepLApiKey
+				+ '&text=' + text
+				+ '&source_lang=' + from
+				+ '&target_lang=' + to
+			))
+			.then( 	json	=>	{ try{ return JSON.parse(json) } catch(e) { return Promise.reject(e) } })
+			.then( 	result 	=> 	result && result.translations && result.translations[0] && result.translations[0].text)
+			.then( 	text	=> 	text
+								?	{text, translator: 'DeepL'}
+								:	Promise.reject('DeepL: reponse yields no translation'))
+			.catch( x => console.log(x))
 }
 
 exports.mail = function(to, subject, content){

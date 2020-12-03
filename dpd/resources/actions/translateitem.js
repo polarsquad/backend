@@ -24,7 +24,6 @@ if(typeof req.properties 	== 'string') req.properties = [req.properties]
 $addCallback()
 
 
-
 var properties_to_translate = 	req.properties && req.properties.length
 								?	req.properties
 								:	icItemConfig.properties
@@ -37,6 +36,17 @@ if(properties_to_translate.length == 0){
 }
 
 
+function isValidFrom(str){
+	return	str 
+			&&	!str.match(/^\s*Google Translat/i) //legacy
+			&&	!str.match(/^\[[^\]]*:\]/i)
+}
+
+function isValidTo(str){
+	return !isValidFrom(str)
+}
+
+
 ctx.dpd.items.get({id:req.item})
 .then( item => {
 
@@ -44,18 +54,23 @@ ctx.dpd.items.get({id:req.item})
 				properties_to_translate
 				.filter( 	property => !!item[property] )
 				.map( 		property => {
-					var from_language = req.from.filter( lang => item[property][lang] && !item[property][lang].match(/^\s*Google Translat/i))[0]
+					var from_language = req.from.filter( lang => isValidFrom(item[property][lang]))
 
 					if(!from_language) return false
 
 					return 	Promise.all(
 								req.to
-								.filter(	to_lang	=> 	!item[property][to_lang] || item[property][to_lang].match(/^\s*Google Translat/i) )
-								.map( 		to_lang	=> 	icUtils.getGoogleTranslation(from_language, to_lang, item[property][from_language]) 
-														.catch( ()			=> 'not available.')														
-														.then( translation 	=> {
-															item[property][to_lang]	= "Google Translate: "+translation
-														})
+								.filter(lang => isValidTo(item[property][lang]))
+								.map( 		to_lang	=> 	icUtils.getTranslation(from_language, to_lang, item[property][from_language]) 
+														.then( 
+															translation 	=> {
+																item[property][to_lang]	= "["+translation.translator+":] "+translation.text
+															},
+															reason			=> {
+																console.log(reason)
+																item[property][to_lang] = "[translation failed:]"
+															}
+														)
 								)
 							)
 
@@ -65,5 +80,5 @@ ctx.dpd.items.get({id:req.item})
 			.then( 	updated_item => setResult(updated_item) )
 			.catch( reason => ctx.done(reason))
 })
-.catch( e => cancel('item not found', 404) )
+.catch( e => { console.log(e); cancel('item not found', 404) })
 .finally($finishCallback)
