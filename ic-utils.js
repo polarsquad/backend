@@ -49,7 +49,8 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
-	if(from == 'none' || to == 'none') return promise.reject("Language 'none' ignored.")
+	if(from == 'none' || to == 'none') return Promise.reject("Language 'none' ignored.")
+	if(from == to ) return Promise.reject("Source and target language cannot be the same.")
 
 	return 	Promise.reject()
 			.catch( () => getDeepLTranslation(from, to, text))
