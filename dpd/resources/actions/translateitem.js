@@ -54,7 +54,12 @@ ctx.dpd.items.get({id:req.item})
 				properties_to_translate
 				.filter( 	property => !!item[property] )
 				.map( 		property => {
+
+					console.log(property.name)
+
 					var from_language = req.from.filter( lang => isValidFrom(item[property][lang]))
+
+					console.log('from_language: ', from_language)
 
 					if(!from_language) return false
 

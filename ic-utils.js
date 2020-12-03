@@ -49,7 +49,7 @@ exports.get = function(url){
 
 exports.getTranslation = function(from, to ,text){
 
-	console.log(from, to, text, '\n','\n')
+	console.log(from, to, text, "\n","\n")
 
 
 	if(from == 'none' || to == 'none') return Promise.resolve({message: "Language 'none' ignored."})
