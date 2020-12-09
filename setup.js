@@ -21,6 +21,7 @@ try{
 
 
 fs.writeFileSync('dpd/public/ic-item-config.js', icItems.replace(/\/\* CONFIG[\s\S]*CONFIG \*\//gi, itemConfig))
+fs.writeFileSync('public_api/ic-item-config.cjs', icItems.replace(/\/\* CONFIG[\s\S]*CONFIG \*\//gi, itemConfig))
 
 
 var icItemConfig = require('./dpd/public/ic-item-config.js')

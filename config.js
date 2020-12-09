@@ -1,5 +1,6 @@
-var fs 			= require('fs'),
-	config		= JSON.parse(fs.readFileSync('config/config.json')),
+var fs = require('fs')
+
+var config		= JSON.parse(fs.readFileSync('config/config.json')),
 	key_path	= (process.argv[2] || '' ).split('.'),
 	result		= ''
 

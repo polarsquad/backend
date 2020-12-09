@@ -4,11 +4,11 @@
 	"description": "",
 	"main": "setup_items.js",
 	"dependencies": {
-		"bluebird": "^3.5.3",
+		"bluebird": "^3.7.2",
 		"deployd": "^1.2.0",
-		"forever": "^3.0.0",
-		"fs-extra": "^3.0.1",
-		"nodemailer": "^4.7.0",
+		"forever": "^3.0.4",
+		"fs-extra": "^9.0.1",
+		"nodemailer": "^6.4.16",
 		"request": "^2.88.0",
 		"request-promise": "^4.2.2"
 	},
@@ -16,8 +16,8 @@
 	"scripts": {
 		"setup": "node setup.js",
 		"prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",
-		"start": "forever start dpd/production.js",
-		"stop": "forever stop dpd/production.js; mongod --dbpath dpd/data --shutdown",
+		"start": "forever start dpd/production.js; forever start public_api/public_api.js",
+		"stop": "forever stop dpd/production.js; forever stop public_api/public_api.js; mongod --dbpath dpd/data --shutdown",
 		"mongodump": "mongodump --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
 		"mongorestore": "mongorestore --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
 		"postinstall": "cd dpd && npm install"

@@ -1,0 +1,17 @@
+{
+  "name": "ic-public-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "public_api.js",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andreas Pittrich",
+  "license": "MIT"
+}

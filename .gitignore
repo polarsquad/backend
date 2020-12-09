@@ -15,6 +15,10 @@
 !/dpd/node_modules/*.js
 !/dpd/node_modules/*.js
 
+/public_api/node_modules
+#/public_api/import/*
+/public_api/ic-item-config.*
+
 /dump
 
 migrate-infocompass.js
