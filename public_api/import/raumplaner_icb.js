@@ -181,7 +181,8 @@ export async function getRemoteItems(config){
 									if(!offerData) return null
 								
 									const dates			= 	getOfferDates(data, offer_id) || []
-									const locations		= 	getLocationData(data, dates.map( ({location_id}) => location_id ))
+									const location_ids	=	Array.from( new Set(dates.map( ({location_id}) => location_id )) )
+									const locations		= 	getLocationData(data, location_ids)
 
 									const hours			=	{ de : dates.map( date => getHoursFromDate(date) ).join('\n\n') }
 
@@ -200,9 +201,8 @@ export async function getRemoteItems(config){
 																url:		url
 															}
 														}
-														
+
 										item.tags = item.tags ||[]				
-										item.tags.push('raumplaner', key)				
 
 										services.push(item)
 									})
