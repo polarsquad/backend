@@ -137,11 +137,9 @@ export async function getRemoteItems(config){
 		const frequency_ln	=	frequency && (frequency + " " + day)
 		const time_ln		=	startTime + (startTime && endTime && ' – ') + endTime
 
-		const hours 		=	{
-									de:	[date_ln, frequency_ln, time_ln]
-									.filter( x => !!x.trim())	 	
-									.join('\n')
-								}
+		const hours 		=	[date_ln, frequency_ln, time_ln]
+								.filter( x => !!x.trim())	 	
+								.join('\n')
 						
 
 		return hours 
@@ -187,7 +185,7 @@ export async function getRemoteItems(config){
 									const dates			= 	getOfferDates(data, offer_id) || []
 									const locations		= 	getLocationData(data, dates.map( ({location_id}) => location_id ))
 
-									const hours			=	dates.map( date => getHoursFromDate(date) ).join('\n\n')
+									const hours			=	{ de : dates.map( date => getHoursFromDate(date) ).join('\n\n') }
 
 									if(locations.length == 0) locations.push({})
 
