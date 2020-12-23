@@ -80,6 +80,9 @@ export async function invokeImportScript(key, config){
 
 				item.id = '--remote-'+key+'-'+Date.now()+index+Math.random()
 
+				item.tags = item.tags || []
+				item.tags.push('remote')
+
 				return item
 			})
 			.filter( item => !!item)

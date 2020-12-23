@@ -188,17 +188,23 @@ export async function getRemoteItems(config){
 									if(locations.length == 0) locations.push({})
 
 									locations.forEach( locationData => {
-										services.push({
-											...locationData,
-											...offerData,
-											hours,
-											remoteItem: {
-													type: 		'raumplaner',
-													instance:	key,
-													source,
-													url:		url
-												}
-										})
+
+										const item = 	{
+															...locationData,
+															...offerData,
+															hours,
+															remoteItem: {
+																type: 		'raumplaner',
+																instance:	key,
+																source,
+																url:		url
+															}
+														}
+														
+										item.tags = item.tags ||[]				
+										item.tags.push('raumplaner', key)				
+
+										services.push(item)
 									})
 
 								})
