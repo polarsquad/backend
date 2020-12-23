@@ -44,7 +44,7 @@ export async function getRemoteItems(config){
 
 		const title 		=	cleanString(location.name)
 		const brief			=	{de: cleanString(location.subtitle)}
-		const description	=	cleanString(location.description)
+		const description	=	{de: cleanString(location.description)}
 		const address		=	cleanString(location.street)
 		const zip			=	cleanString(location.zipcode)
 		const city			=	cleanString(location.town)
@@ -84,7 +84,7 @@ export async function getRemoteItems(config){
 
 		const title 		= 	cleanString(offer.title)
 		const brief 		= 	{de: cleanString(offer.subtitle) }	
-		const description	= 	cleanString(offer.description)
+		const description	= 	{de: cleanString(offer.description) }
 
 		const manager		= 		offer.manager_id 
 								&& 	offer.manager_id[0]
