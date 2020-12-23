@@ -97,7 +97,7 @@ export async function getRemoteItems(config){
 		const contact		= 	cleanString(`${firstname} ${lastname}`)
 		const email			= 	cleanString(manager.email)
 		const phone			= 	cleanString(manager.phone)
-		const url			= 	cleanString(offer.url)
+		const website		= 	cleanString(offer.url)
 		const tags			= 	["service"]
 	
 		return {
@@ -107,7 +107,7 @@ export async function getRemoteItems(config){
 			contact,
 			email,
 			phone,
-			url,
+			website,
 			tags
 		}
 

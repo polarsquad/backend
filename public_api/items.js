@@ -73,12 +73,12 @@ export async function invokeImportScript(key, config){
 	const importModule 	= await import(`./import/${config.script||config}`)
 	const items			= await importModule.getRemoteItems(config)
 
-	return 	items.map( item => {
+	return 	items.map( (item, index) => {
 				itemConfig.properties.forEach( property => {
 					item[property.name] = sanatizeProperty(item[property.name]) || null
 				})	
 
-				item.id = '--remote-'+key+'-'+Date.now()+Math.random()
+				item.id = '--remote-'+key+'-'+Date.now()+index+Math.random()
 
 				return item
 			})
