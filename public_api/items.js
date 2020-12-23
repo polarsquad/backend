@@ -50,7 +50,7 @@ export async function getLocalItems(db){
 
 export function sanatizeProperty(property){
 
-	if(typeof property == 'object'){
+	if(typeof property == 'object' && !Array.isArray(property)){
 		const result = {}
 
 		Object.entries(property).forEach( ([key, value]) => { result[key] =  sanatizeProperty(value) })
