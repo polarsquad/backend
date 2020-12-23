@@ -137,9 +137,7 @@ export async function getRemoteItems(config){
 		const frequency_ln	=	frequency && (frequency + " " + day+ ": ")
 		const time_ln		=	startTime + (startTime && endTime && ' – ') + endTime
 
-		const hours 		=	[date_ln, frequency_ln, time_ln]
-								.filter( x => !!x.trim())	 	
-								.join('\n')
+		const hours 		=	(date_ln '\n' + frequency_ln + time_ln).trim()
 						
 
 		return hours 
