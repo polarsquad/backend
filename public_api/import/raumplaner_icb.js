@@ -1,303 +1,215 @@
-export async function getRemoteItems(){	
+import fetch from 'node-fetch'
 
-	let data 	=	await Promise.resolve({
-						"locations": [
-							{
-								"location_id": "1",
-								"name": "muster-stadtteilzentrum",
-								"title": "Muster StadtTeilZentrum",
-								"subtitle": "Ein Ort für viele.",
-								"description": "Dieses ist die Beschreibung für ein Stadtteilzentrum.",
-								"street": "Musterstraße 45",
-								"zipcode": "12345",
-								"town": "Musterstadt",
-								"url": "http://home.tpl",
-								"latitude": "52.531677",
-								"longitude": "13.381777"
-							},
-							{
-								"location_id": "2",
-								"name": "muster-stadtteilzentrum-2",
-								"title": "Muster StadtTeilZentrum 2",
-								"subtitle": "Ein Ort für alle.",
-								"description": "Dieses ist die Beschreibung für noch ein Stadtteilzentrum.",
-								"street": "Musterstraße 43",
-								"zipcode": "12346",
-								"town": "Musterstadt2",
-								"url": "http://home2.tpl",
-								"latitude": "52.531671",
-								"longitude": "13.381771"
-							}
-						],
-						"managers": [
-							{
-								"manger_id": "1",
-								"firstname": "Maria",
-								"lastname": "Muster",
-								"function": "Mitarbeiterin",
-								"description": "Mitarbeiterin mit sehr viel Erfahrung.",
-								"email": "maria@muster.tpl",
-								"phone": "0123456789"
-							},
-							{
-								"manger_id": "2",
-								"firstname": "Paule",
-								"lastname": "Tester",
-								"function": "Mitarbeiter",
-								"description": "Mitarbeiter mit sehr viel Erfahrung.",
-								"email": "paule@tester.tpl",
-								"phone": "0987654321"
-							}
-						],
-						"offers": [
-							{
-								"offer_id": "1",
-								"manger_id": [
-									"1",
-									"2"
-								],
-								"name": "muster-offer",
-								"title": "Muster Angebot",
-								"subtitle": "Ein schönes Angebot für Kinder.",
-								"description": "Dieses ist die Beschreibung für ein Angebot.",
-								"url": "http://home.tpl/muster-offer",
-								"info_target_group_id": [
-									"da brauchen wir die IDs für die Zielgruppen",
-									"ID der zweiten Zielgruppe"
-								],
-								"info_category": [
-									"da brauchen wir die IDs für die Themen",
-									"ID des zweiten Themas"
-								],
-								"info_filter": [
-									"IDs für Filter",
-									"KOMMENTAR: existiert noch nicht, wie wird damit umgegangen, wenn es nicht übergeben wird?"
-								]
-							},
-							{
-								"offer_id": "2",
-								"manger_id": [
-									"2"
-								],
-								"name": "muster-offer-2",
-								"title": "Muster Angebot zwei",
-								"subtitle": "Ein schönes Angebot für Jugendliche.",
-								"description": "Dieses ist die Beschreibung für dieses Angebot.",
-								"url": "http://home.tpl/muster-offer-2",
-								"info_target_group_id": [
-									"da brauchen wir die IDs für die Zielgruppen",
-									"ID der zweiten Zielgruppe"
-								],
-								"info_category": [
-									"da brauchen wir die IDs für die Themen",
-									"ID des zweiten Themas"
-								],
-								"info_filter": [
-									"IDs für Filter",
-									"KOMMENTAR: existiert noch nicht, wie wird damit umgegangen, wenn es nicht übergeben wird?"
-								]
-							}
-						],
-						"events": [
-							{
-								"event_id": "1",
-								"offer_id": "1"
-							},
-							{
-								"event_id": "2",
-								"offer_id": "2"
-							},
-							{
-								"event_id": "3",
-								"offer_id": "2"
-							}
-						],
-						"dates": [
-							{
-								"date_id": "1",
-								"event_id": "1",
-								"location_id": "2",
-								"start_day": "2020-11-09",
-								"end_day": "2020-12-11",
-								"start_time": "09:00",
-								"end_time": "12:00",
-								"frequency": "each",
-								"weekday": "5"
-							},
-							{
-								"date_id": "2",
-								"event_id": "2",
-								"location_id": "2",
-								"start_day": "2020-11-09",
-								"end_day": "2020-11-11",
-								"start_time": "09:00",
-								"end_time": "12:00",
-								"frequency": "none",
-								"weekday": "0"
-							},
-							{
-								"date_id": "3",
-								"event_id": "2",
-								"location_id": "1",
-								"start_day": "2020-11-13",
-								"end_day": "2020-11-16",
-								"start_time": "09:00",
-								"end_time": "12:00",
-								"frequency": "none",
-								"weekday": "0"
-							},
-							{
-								"date_id": "4",
-								"event_id": "3",
-								"location_id": "1",
-								"start_day": "2020-11-19",
-								"end_day": "2020-11-19",
-								"start_time": "09:00",
-								"end_time": "18:00",
-								"frequency": "none",
-								"weekday": "0"
-							}
-						],
-						"days": [
-							{
-								"day_id": "1",
-								"date_id": "1",
-								"location_id": "2",
-								"day": "2020-11-13",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "2",
-								"date_id": "1",
-								"location_id": "1",
-								"day": "2020-11-20",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "3",
-								"date_id": "1",
-								"location_id": "2",
-								"day": "2020-11-27",
-								"start_time": "09:00",
-								"end_time": "13:00"
-							},
-							{
-								"day_id": "4",
-								"date_id": "1",
-								"location_id": "2",
-								"day": "2020-12-04",
-								"start_time": "09:00",
-								"end_time": "13:00"
-							},
-							{
-								"day_id": "5",
-								"date_id": "1",
-								"location_id": "2",
-								"day": "2020-12-11",
-								"start_time": "09:00",
-								"end_time": "13:00"
-							},
-							{
-								"day_id": "6",
-								"date_id": "2",
-								"location_id": "2",
-								"day": "2020-11-09",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "7",
-								"date_id": "2",
-								"location_id": "2",
-								"day": "2020-11-10",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "8",
-								"date_id": "2",
-								"location_id": "2",
-								"day": "2020-11-11",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "9",
-								"date_id": "3",
-								"location_id": "1",
-								"day": "2020-11-13",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "10",
-								"date_id": "3",
-								"location_id": "2",
-								"day": "2020-11-14",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "11",
-								"date_id": "3",
-								"location_id": "1",
-								"day": "2020-11-15",
-								"start_time": "09:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "12",
-								"date_id": "3",
-								"location_id": "2",
-								"day": "2020-11-16",
-								"start_time": "11:00",
-								"end_time": "12:00"
-							},
-							{
-								"day_id": "13",
-								"date_id": "4",
-								"location_id": "1",
-								"day": "2020-11-19",
-								"start_time": "09:00",
-								"end_time": "18:00"
-							}
-						]
-					})
+export async function getRemoteItems(config){	
+
 	
+	function cleanString(x){
+		return String(x||'').trim() || undefined
+	}
 
-	/*"location_id": "1",
-	"name": "muster-stadtteilzentrum",
-	"title": "Muster StadtTeilZentrum",
-	"subtitle": "Ein Ort für viele.",
-	"description": "Dieses ist die Beschreibung für ein Stadtteilzentrum.",
-	"street": "Musterstraße 45",
-	"zipcode": "12345",
-	"town": "Musterstadt",
-	"url": "http://home.tpl",
-	"latitude": "52.531677",
-	"longitude": "13.381777"*/
+	function cleanNumber(x){
 
-	let items = data.locations.map( location => {
-				return 	{							
-							title: 			location.name,
-							brief:			{de: location.subtitle},
-							description:	location.description,
-							address:		location.street,
-							zip:			location.zipcode,
-							city:			location.town,
-							latitude:		location.latitude,
-							longitude:		location.longitude,
-							tags:			['location'],
+		if(typeof x == 'string') x = parseFloat(x)
+		if(isNaN(x)) return undefined
+		if(typeof x != 'number') return undefined
 
-							remoteItem: {
-								type: 	'raumplaner',
-								source: 'unknown-source',
-								url:	location.url
-							}
-						}
-			})
+		return x	
+	}
+
+
+	function getOfferDates(data, id){
+		if(!data) return null
+		if(!data.dates) return null
+		if(!data.events) return null
+
+		const offerEventsIds = 	data.events
+								.filter( 	({offer_id}) => offer_id == id)	
+								.map( 		({event_id}) => event_id )
+
+		return data.dates.filter( ({event_id}) => offerEventsIds.includes(event_id) )	
+	}
+
+	function getLocationData(data, id_or_array_of_ids){
+
+		if(Array.isArray(id_or_array_of_ids)) return id_or_array_of_ids.map( id => getLocationData(data, id) ).filter( x => !!x)
+
+
+		const id = id_or_array_of_ids
+
+		if(!data.locations) return null
+
+		const location = data.locations.find( ({location_id}) => location_id == id)
+
+		if(!location) return null
+
+		const title 		=	cleanString(location.name)
+		const brief			=	{de: cleanString(location.subtitle)}
+		const description	=	cleanString(location.description)
+		const address		=	cleanString(location.street)
+		const zip			=	cleanString(location.zipcode)
+		const city			=	cleanString(location.town)
+		const latitude		=	cleanNumber(location.latitude)
+		const longitude		=	cleanNumber(location.longitude)
+		const tags			=	['location']
+
+		return 	{
+					title,
+					brief,
+					description,
+					address,
+					zip,
+					city,
+					latitude,
+					longitude,
+					tags
+				}
+
+	}
+
+	function getOfferData(data, id_or_array_of_ids){
+
+		if(Array.isArray(id_or_array_of_ids)) return id_or_array_of_ids.map( id => getOfferData(data, id) ).filter( x => !!x)
+
+		const id = id_or_array_of_ids
+			
+
+		if(!data.dates) return null
+
+
+		const offer = data.offers.find( ({offer_id}) => offer_id == id) 
+
+
+		if(!offer) return null
+
+
+		const title 		= 	cleanString(offer.title)
+		const brief 		= 	{de: cleanString(offer.subtitle) }	
+		const description	= 	cleanString(offer.description)
+
+		const manager		= 		offer.manager_id 
+								&& 	offer.manager_id[0]
+								&& 	data.managers
+									.find( m => m.manager_id == offer.manager_id) 
+								||	{}
+
+		const firstname		= 	cleanString(manager.firstname) 	|| ''
+		const lastname		= 	cleanString(manager.lastname)	|| ''
+		const contact		= 	cleanString(`${firstname} ${lastname}`)
+		const email			= 	cleanString(manager.email)
+		const phone			= 	cleanString(manager.phone)
+		const url			= 	cleanString(offer.url)
+		const tags			= 	["service"]
+	
+		return {
+			title,
+			brief,
+			description,
+			contact,
+			email,
+			phone,
+			url,
+			tags
+		}
+
+	}
+
+	function getHoursFromDate(date){
+
+		if(!date) return null
+
+
+
+		const days			= 	["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
+		const day			=	days[date.weekday] || "Tag"
+		const frequencies 	=	{
+									"each": 	"Jeden",
+									"each_2":	"Jeden zweiten"
+								}
+		const frequency		=	frequencies[date.frequency]
+
+		const startDate		=	new Date(date.start_day).toLocaleDateString('de')
+		const endDate		=	new Date(date.end_day).toLocaleDateString('de')
+
+		const startTime		=	date.start_time.match(/\d\d:\d\d/)[0]	|| ''
+		const endTime		=	date.end_time.match(/\d\d:\d\d/)[0]		|| ''
+
+		const date_ln		=	startDate + (startDate && endDate && ' – ') + endDate
+		const frequency_ln	=	frequency && (frequency + " " + day)
+		const time_ln		=	startTime + (startTime && endTime && ' – ') + endTime
+
+		const hours 		=	[date_ln, frequency_ln, time_ln]
+								.filter( x => !!x.trim())	 	
+								.join('\n')
+						
+
+		return hours 
+	}
+
+	const result_array 	= 	await	Promise.all(
+										Object.entries(config.urls)
+										.map( ([key, source])	=> 	fetch(source)
+																	.then( result 	=> result.json() )
+																	.then( data		=> [key, source, data])
+										)
+									)
+
+	const items			=	result_array.map( ([key, source, data]) => {
+
+								const locations = 	data.locations.map( ({location_id, url}) => {
+
+														const locationData = getLocationData(data, location_id)
+
+														return	locationData
+																?	{
+																		...locationData,
+																		remoteItem: {
+																			type: 		'raumplaner',
+																			instance:	key,
+																			source,
+																			url
+																		}
+																	}
+																: null
+														
+
+													})					
+
+								const services = []
+
+								data.offers.forEach( ({offer_id, url}) => {
+								
+									const offerData		=	getOfferData(data, offer_id)		
+
+									if(!offerData) return null
+								
+									const dates			= 	getOfferDates(data, offer_id) || []
+									const locations		= 	getLocationData(data, dates.map( ({location_id}) => location_id ))
+
+									const hours			=	dates.map( date => getHoursFromDate(date) ).join('\n\n')
+
+									if(locations.length == 0) locations.push({})
+
+									locations.forEach( locationData => {
+										services.push({
+											...locationData,
+											...offerData,
+											hours,
+											remoteItem: {
+													type: 		'raumplaner',
+													instance:	key,
+													source,
+													url:		url
+												}
+										})
+									})
+
+								})
+
+
+								return [...locations, ...services]
+							})
+							.flat()
+							.filter( item => !!item)
 
 	return items
 }

@@ -1,3 +1,4 @@
+import	sanitizeHtml 				from 'sanitize-html'
 import	{ writeFileSync 		}	from 'fs'
 
 let itemConfig
@@ -47,22 +48,43 @@ export async function getLocalItems(db){
 			}))			
 }
 
-export async function invokeImportScript(key, path){
+export function sanatizeProperty(property){
 
-	const importModule 	= await import(`./import/${path}`)
-	const items			= await importModule.getRemoteItems()
+	if(typeof property == 'object'){
+		const result = {}
+
+		Object.entries(property).forEach( ([key, value]) => { result[key] =  sanatizeProperty(value) })
+
+		return result
+	}
+
+	if(typeof property != 'string') return property
+
+	sanitizeHtml(property, {
+		allowedTags: [],
+		allowedAttributes: {}
+	})
+
+}
+
+export async function invokeImportScript(key, config){
+
+	const importModule 	= await import(`./import/${config.script||config}`)
+	const items			= await importModule.getRemoteItems(config)
 
 	return 	items.map( item => {
 				itemConfig.properties.forEach( property => {
-					item[property.name] = item[property.name] || property.defaultValue
+					item[property.name] = sanatizeProperty(item[property.name] || property.defaultValue )
 				})	
 
 				item.id = '--remote-'+key+'-'+Date.now()+Math.random()
 
 				return item
 			})
+			.filter( item => !!item)
 	
 }
+
 
 export function mergeResults(results){
 
@@ -76,14 +98,15 @@ export function mergeResults(results){
 			}
 }
 
-export async function getRemoteItems(remoteItemImports){
+
+export async function getRemoteItems(remoteItemsConfig){
 	
-	if(!remoteItemImports) return wrapResult('unknown', 'failed', 'missing config', [])
+	if(!remoteItemsConfig) return wrapResult('unknown', 'failed', 'missing config', [])
 
 	return 	await	Promise.all(
-						Object.entries(remoteItemImports)
+						Object.entries(remoteItemsConfig)
 						.map( 
-							([key, path]) =>	invokeImportScript(key, path) 
+							([key, config]) =>	invokeImportScript(key, config) 
 												.then(
 													wrapSuccess(key),
 													wrapFailure(key)
@@ -93,7 +116,7 @@ export async function getRemoteItems(remoteItemImports){
 					.then( mergeResults )
 }
 
-export async function getItems(db, remoteItemImports){
+export async function getItems(db, remoteItemsConfig){
 
 	return 	await	Promise.all([
 						getLocalItems(db)
@@ -101,8 +124,8 @@ export async function getItems(db, remoteItemImports){
 							wrapSuccess('local'),
 							wrapFailure('local')
 						),
-						getRemoteItems(remoteItemImports)
-						.then( x => { console.log(x); return x })
+						getRemoteItems(remoteItemsConfig)
+						//.then( x => { console.log(x); return x })
 					])
 					.then(mergeResults)
 }
