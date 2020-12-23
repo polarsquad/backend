@@ -81,7 +81,12 @@ export async function invokeImportScript(key, config){
 					if( buf !== null || item[property.name] !== undefined ) item[property.name] = buf
 				})	
 
-				item.id = '--remote-'+key+'-'+Date.now()+index+Math.random()
+				const preliminary_id = item.id 
+
+				item.id = 	preliminary_id
+							?	'--r-'+key+preliminary_id
+							:	'--r-'+key+Date.now()+index+Math.random()
+
 				item.state = 'public'
 
 				item.tags = item.tags || []
