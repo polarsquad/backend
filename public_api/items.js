@@ -60,11 +60,12 @@ export function sanatizeProperty(property){
 
 	if(typeof property != 'string') return property
 
-	sanitizeHtml(property, {
-		allowedTags: [],
-		allowedAttributes: {}
-	})
+	return	sanitizeHtml(property, {
+				allowedTags: [],
+				allowedAttributes: {}
+			})
 
+	 
 }
 
 export async function invokeImportScript(key, config){
@@ -74,7 +75,7 @@ export async function invokeImportScript(key, config){
 
 	return 	items.map( item => {
 				itemConfig.properties.forEach( property => {
-					item[property.name] = sanatizeProperty(item[property.name] || property.defaultValue )
+					item[property.name] = sanatizeProperty(item[property.name]) || null
 				})	
 
 				item.id = '--remote-'+key+'-'+Date.now()+Math.random()
