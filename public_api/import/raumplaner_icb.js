@@ -50,12 +50,14 @@ export async function getRemoteItems(config){
 		const city			=	cleanString(location.town)
 		const latitude		=	cleanNumber(location.latitude)
 		const longitude		=	cleanNumber(location.longitude)
+		const website		=	cleanString(location.url)
 		const tags			=	['location']
 
 		return 	{
 					title,
 					brief,
 					description,
+					website,
 					address,
 					zip,
 					city,
