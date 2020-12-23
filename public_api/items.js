@@ -79,6 +79,7 @@ export async function invokeImportScript(key, config){
 				})	
 
 				item.id = '--remote-'+key+'-'+Date.now()+index+Math.random()
+				item.state = 'public'
 
 				return item
 			})
