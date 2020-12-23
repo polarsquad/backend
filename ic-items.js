@@ -9,6 +9,7 @@
 	exports.utils = {}
 
 	exports.utils.getType = function(val){
+		if(val === null) return 'object'
 		var matches = Object.prototype.toString.call(val).match(/\[object\s(.*)\]/)
 		return matches && matches[1].toLowerCase()
 	}
@@ -68,7 +69,7 @@
 		this.min			=	data.min
 		this.max			=	data.max
 		this.mandatory		= 	data.mandatory
-		
+
 		this.getErrors		= 	function(value, key){
 
 									var self = this
