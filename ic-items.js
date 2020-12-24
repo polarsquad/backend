@@ -9,7 +9,6 @@
 	exports.utils = {}
 
 	exports.utils.getType = function(val){
-		if(val === null) return 'object'
 		var matches = Object.prototype.toString.call(val).match(/\[object\s(.*)\]/)
 		return matches && matches[1].toLowerCase()
 	}
@@ -62,13 +61,14 @@
 	function Property(data){
 		this.name 			= 	data.name
 		this.defaultValue 	= 	data.defaultValue
-		this.type			= 	exports.utils.getType(data.defaultValue)
+		this.type			= 	data.type || exports.utils.getType(data.defaultValue)
 		this.options		=	data.options
 		this.searchable		=	data.searchable
 		this.translatable	=	data.translatable
 		this.min			=	data.min
 		this.max			=	data.max
 		this.mandatory		= 	data.mandatory
+		this.match			=	data.match
 
 		this.getErrors		= 	function(value, key){
 
