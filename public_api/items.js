@@ -41,7 +41,27 @@ export async function getLocalItems(db){
 								proposalFor:null,
 							})
 							.toArray()
-												
+		
+	var tags = new Set()
+	var re = /<([a-zA-Z\-]+)/gi;
+
+	items.forEach( item => {
+		
+		var m;
+
+		for(var key in item.description){
+			do {
+				m = re.exec(item.description[key]);
+				if (m) {
+					tags.add(m[1])
+				}
+			} while (m)
+		}
+			
+	})
+
+	console.log(tags)
+
 	return 	items.map( ({_id, ...item}) => ({
 				...item,
 				id: _id						
