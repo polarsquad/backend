@@ -150,7 +150,7 @@ export async function getRemoteItems(remoteItemsConfig){
 					.then( mergeResults )
 }
 
-export async function getItems(db, remoteItemsConfig){
+export async function getItems(db, publicApiConfig){
 
 	return 	await	Promise.all([
 						getLocalItems(db)
@@ -158,7 +158,7 @@ export async function getItems(db, remoteItemsConfig){
 							wrapSuccess('local'),
 							wrapFailure('local')
 						),
-						getRemoteItems(remoteItemsConfig)
+						getRemoteItems(publicApiConfig.remoteItems)
 						//.then( x => { console.log(x); return x })
 					])
 					.then(mergeResults)

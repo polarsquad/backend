@@ -31,8 +31,8 @@ app.use(function(req, res, next) {
 })
 
 
-if(config.publicApi.remoteItems){
-	app.get('/items', handle(getItems, db, config.publicApi.remoteItems) )
+if(config.publicApi){
+	app.get('/items', handle(getItems, db, config.publicApi) )
 }
 
 console.log('Listening on port', config.publicApi.port)
