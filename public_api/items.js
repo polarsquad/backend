@@ -74,7 +74,7 @@ export function sanatizeProperty(property){
 
 		const result = {}
 
-		Object.entries(property).forEach( ([key, value]) => { result[key] =  sanatizeProperty(value).replace('&amp;', '&') })
+		Object.entries(property).forEach( ([key, value]) => { result[key] =  sanatizeProperty(value) })
 
 		return result
 	}
@@ -84,7 +84,7 @@ export function sanatizeProperty(property){
 	return	sanitizeHtml(property, {
 				allowedTags: [],
 				allowedAttributes: {}
-			})
+			}).replace('&amp;', '&') 
 
 	 
 }
