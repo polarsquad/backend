@@ -114,7 +114,7 @@ export async function invokeImportScript(key, config){
 				item.remoteItem = 	{
 										...item.remoteItem,
 										key,
-										config
+										...config
 									}
 
 				return item
