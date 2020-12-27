@@ -145,69 +145,72 @@ export async function getRemoteItems(config){
 		return hours 
 	}
 
-	const result_array 	= 	fetch( config.url )
-							.then( result 	=> result.json() )
-							.then( data		=> {
+	const data 		= 	await fetch( config.url )
+						.then( result 	=> result.json() )
+					
 
-								const locations = 	data.locations.map( ({location_id, url}) => {
+	const locations = 	data.locations.map( ({location_id, url}) => {
 
-														const locationData = getLocationData(data, location_id)
+							const locationData = getLocationData(data, location_id)
 
-														return	locationData
-																?	{
-																		...locationData,
-																		id:	key+'location'+location_id, //preliminary	
-																		remoteItem: {
-																			type: 		'raumplaner',
-																			original:	url
-																		}
-																	}
-																: null
-														
+							return	locationData
+									?	{
+											...locationData,
+											id:	'location'+location_id, //preliminary	
+											remoteItem: {
+												original:	url
+											}
+										}
+									: null
+							
 
-													})					
+						})					
 
-								const services = []
+	const services = []
 
-								data.offers.forEach( ({offer_id, url}) => {
-								
-									const offerData		=	getOfferData(data, offer_id)		
+	data.offers.forEach( ({offer_id, url}) => {
+	
+		const offerData		=	getOfferData(data, offer_id)		
 
-									if(!offerData) return null
-								
-									const dates			= 	getOfferDates(data, offer_id) || []
-									const location_ids	=	Array.from( new Set(dates.map( ({location_id}) => location_id )) )
-									const locations		= 	getLocationData(data, location_ids)
+		if(!offerData) return null
+	
+		const dates			= 	getOfferDates(data, offer_id) || []
+		const location_ids	=	Array.from( new Set(dates.map( ({location_id}) => location_id )) )
+		const locations		= 	getLocationData(data, location_ids)
 
-									const hours			=	{ de : dates.map( date => getHoursFromDate(date) ).join('\n\n') }
+		const hours			=	{ de : dates.map( date => getHoursFromDate(date) ).join('\n\n') }
 
-									if(locations.length == 0) locations.push({})
+		if(locations.length == 0) locations.push({})
 
-									locations.forEach( (locationData, index) => {
+		locations.forEach( (locationData, index) => {
 
-										const item = 	{
-															...locationData,
-															...offerData,
-															id:	'offer'+offer_id+'-'+index,		//preliminary	
-															hours,
-															remoteItem: {
-																original:	url,
-																type:		'raumplaner'
-															}
-														}
+			const item = 	{
+								...locationData,
+								...offerData,
+								id:	'offer'+offer_id+'-'+index,		//preliminary	
+								hours,
+								remoteItem: {
+									original:	url
+								}
+							}
 
-										item.tags = item.tags ||[]				
+			item.tags = item.tags ||[]				
 
-										services.push(item)
-									})
+			services.push(item)
+		})
 
-								})
+	})
 
-
-								return [...locations, ...services]
+	return	[...locations, ...services]
+			.filter( item => !!item)
+			.map( item =>	({
+								...item, 
+								remoteItem:{
+									...item.remoteItem, 
+									type: 'raumplaner'
+								}
 							})
-							.flat()
-							.filter( item => !!item)
+			)
 
-	return items
+	
 }
