@@ -61,7 +61,7 @@ export async function getLocalItems(db){
 	})
 
 	console.log('HTML tags in item properties: ')
-	console.log(tags.join(', '))
+	console.log(Array.from(tags).join(', '))
 
 	return 	items.map( ({_id, ...item}) => ({
 				...item,
