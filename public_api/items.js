@@ -53,7 +53,7 @@ export async function getLocalItems(db){
 			do {
 				m = re.exec(item.description[key]);
 				if (m) {
-					tags.add(m[1])
+					tags.add(m[1].toUpperCase())
 				}
 			} while (m)
 		}
@@ -92,7 +92,7 @@ export function sanatizeProperty(property){
 
 export async function invokeImportScript(key, config){
 
-	const importModule 	= await import(`./import/${config.script||config}`)
+	const importModule 	= await import(`./import/${config.script}`)
 	const items			= await importModule.getRemoteItems(config)
 
 	return 	items.map( (item, index) => {
@@ -111,9 +111,11 @@ export async function invokeImportScript(key, config){
 
 				item.state = 'public'
 
-				item.tags = item.tags || []
-				item.tags.push('remote')
-
+				item.remoteItem = 	{
+										...item.remoteItem,
+										key,
+										config
+									}
 
 				return item
 			})

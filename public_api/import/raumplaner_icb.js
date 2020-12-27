@@ -145,15 +145,9 @@ export async function getRemoteItems(config){
 		return hours 
 	}
 
-	const result_array 	= 	await	Promise.all(
-										Object.entries(config.urls)
-										.map( ([key, source])	=> 	fetch(source)
-																	.then( result 	=> result.json() )
-																	.then( data		=> [key, source, data])
-										)
-									)
-
-	const items			=	result_array.map( ([key, source, data]) => {
+	const result_array 	= 	fetch( config.url )
+							.then( result 	=> result.json() )
+							.then( data		=> {
 
 								const locations = 	data.locations.map( ({location_id, url}) => {
 
@@ -165,9 +159,7 @@ export async function getRemoteItems(config){
 																		id:	key+'location'+location_id, //preliminary	
 																		remoteItem: {
 																			type: 		'raumplaner',
-																			instance:	key,
-																			source,
-																			url
+																			original:	url
 																		}
 																	}
 																: null
@@ -196,13 +188,11 @@ export async function getRemoteItems(config){
 										const item = 	{
 															...locationData,
 															...offerData,
-															id:	key+'offer'+offer_id+'-'+index,		//preliminary	
+															id:	'offer'+offer_id+'-'+index,		//preliminary	
 															hours,
 															remoteItem: {
-																type: 		'raumplaner',
-																instance:	key,
-																source,
-																url:		url
+																original:	url,
+																type:		'raumplaner'
 															}
 														}
 
