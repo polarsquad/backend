@@ -1,7 +1,7 @@
 var query   	= ctx.query,
 	format  	= (query.format    || 'json').toUpperCase(),
 	keys    	= (query.keys      || 'title').split(',')
-	tags        = (query.tags      || 'title').split(',')
+	tags        = query.tags ?	tags.split(',') : []
 	response	= this
 
 function sanetizePropertiy(prop){
