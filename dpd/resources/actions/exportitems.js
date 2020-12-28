@@ -36,4 +36,4 @@ dpd.items.get({})
 	return  JSON.stringify(items.map( item => keys.reduce( (result, key) => {result[key] = item[key]; return result}, {})))
 })
 .then( result =>  ctx.res.end(result))
-
+.finally($finishCallback)
