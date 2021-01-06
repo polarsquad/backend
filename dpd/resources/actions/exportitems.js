@@ -57,7 +57,6 @@ dpd.items.get({})
 
 		var regex
 
-		console.log(0)
 
 		try {
 			regex = new RegExp(search, 'i') 
@@ -65,7 +64,6 @@ dpd.items.get({})
 			regex = new RegExp(search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
 		}
 
-		console.log(1)
 
 		items = items.filter( function(item){
 
@@ -87,7 +85,6 @@ dpd.items.get({})
 
 		})
 
-		console.log(items.length)
 	}
 
 
