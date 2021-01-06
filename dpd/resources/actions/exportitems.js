@@ -51,9 +51,15 @@ dpd.items.get({})
 
 		var searchable_properties 	= 	itemConfig.properties.filter(function(property){
 											return property.searchable
-										}),
-			regex 					=	new RegExp(search, 'i') 
+										})
 
+		var regex
+
+		try {
+			regex = new RegExp(search, 'i') 
+		} catch(e) {
+			regex = new RegExp(search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+		}
 
 		console.log(searchable_properties)
 
@@ -94,8 +100,10 @@ dpd.items.get({})
 		return      keys.join(',')+'\n'
 				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',')).join('\n')
 	}
+	
 	ctx.res.setHeader('Content-Type', 'application/json')   
 	return  JSON.stringify(items.map( item => keys.reduce( (result, key) => {result[key] = item[key]; return result}, {})))
+
 })
 .then( result =>  ctx.res.end(result))
 .finally($finishCallback)
