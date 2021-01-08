@@ -1,8 +1,8 @@
 var query   	= ctx.query,
 	format  	= (query.format	|| 'json').toUpperCase(),
 	keys    	= (query.keys	|| 'title').split(','),
-	states		= (query.states	|| '').split(','),
-	tags        = (query.tags 	|| '').split(','),
+	states		= query.states	? query.states.split(',') 	: [],
+	tags        = query.tags 	? query.tags.split(',')		: [],
 	search		= (query.search	|| ''),
 	response	= this
 
@@ -31,12 +31,14 @@ dpd.items.get({})
 	}
 
 
-	// STATE
+	// STATES
 	if(states && states.length > 0){
 		items = items.filter( function(item){
 					return states.includes(item.state)
 				})
 	}
+
+
 
 	// SEARCH TERM
 	if(search){
@@ -58,7 +60,6 @@ dpd.items.get({})
 
 		search = accent_fold(search)
 
-		console.log(0)
 
 		var searchable_properties 	= 	icItemConfig.properties.filter(function(property){
 											return property.searchable
@@ -76,11 +77,6 @@ dpd.items.get({})
 											return regex
 										})
 
-		console.log(1)
-		console.log(search, typeof regex_array)
-		console.log(2)
-
-		console.log(regex_array)
 
 		items = items.filter( function(item){
 
