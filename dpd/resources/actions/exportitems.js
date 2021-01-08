@@ -16,7 +16,6 @@ function sanetizePropertiy(prop){
 $addCallback()
 
 
-console.log(search)
 
 dpd.items.get({})
 .then( items => {
@@ -31,8 +30,6 @@ dpd.items.get({})
 	}
 
 
-
-	console.log('before search')
 
 	// SEARCH TERM
 	if(search){
@@ -52,6 +49,7 @@ dpd.items.get({})
 
 
 
+		console.log(0)
 
 		var searchable_properties 	= 	icItemConfig.properties.filter(function(property){
 											return property.searchable
@@ -67,13 +65,13 @@ dpd.items.get({})
 											}
 
 											return regex
-										}),
-
-			searchable_properties 	= 	ic.itemConfig.properties.filter(function(property){
-											return property.searchable
 										})
 
+		console.log(1)
+		console.log(search, typeof regex_array)
+		console.log(2)
 
+		console.log(regex_array)
 
 		items = items.filter( function(item){
 			return	regex_array.every(function(regex){
