@@ -1,6 +1,7 @@
 var query   	= ctx.query,
 	format  	= (query.format	|| 'json').toUpperCase(),
 	keys    	= (query.keys	|| 'title').split(','),
+	state		= (query.state	|| '').split(','),
 	tags        = query.tags ?	query.tags.split(',') : [],
 	search		= (query.search	|| ''),
 	response	= this
@@ -30,6 +31,12 @@ dpd.items.get({})
 	}
 
 
+	// STATE
+	if(state && state.length > 0){
+		items = items.filter( function(item){
+					return states.includes(item.state)
+				})
+	}
 
 	// SEARCH TERM
 	if(search){
