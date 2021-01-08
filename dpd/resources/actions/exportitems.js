@@ -49,6 +49,8 @@ dpd.items.get({})
 
 
 
+		search = accent_fold(search)
+
 		console.log(0)
 
 		var searchable_properties 	= 	icItemConfig.properties.filter(function(property){
@@ -74,25 +76,26 @@ dpd.items.get({})
 		console.log(regex_array)
 
 		items = items.filter( function(item){
-			return	regex_array.every(function(regex){
-				return searchable_properties.some(function(property){
-					switch(property.type){
-						case "array": 
-							return (item[property.name]||[]).some(function(sub){ return accent_fold(sub).match(regex)})
-						break 
 
-						case "object": 
-							return Object.keys(item[property.name]||{}).some(function(key){ return accent_fold(item[property.name][key]).match(regex) })
-						break 
+					return regex_array.every(function(regex){
+						return searchable_properties.some(function(property){
+							switch(property.type){
+								case "array": 
+									return (item[property.name]||[]).some(function(sub){ return accent_fold(sub).match(regex)})
+								break 
 
-						default:
-							return accent_fold(String(item[property.name]||'')).match(regex)
-						break
-					}
+								case "object": 
+									return Object.keys(item[property.name]||{}).some(function(key){ return accent_fold(item[property.name][key]).match(regex) })
+								break 
+
+								default:
+									return accent_fold(String(item[property.name]||'')).match(regex)
+								break
+							}
+						})
+					})
+
 				})
-			})
-
-		})
 
 	}
 
