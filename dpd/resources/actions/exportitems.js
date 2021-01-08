@@ -16,6 +16,8 @@ function sanetizePropertiy(prop){
 $addCallback()
 
 
+console.log(search)
+
 dpd.items.get({})
 .then( items => {
 
@@ -55,32 +57,41 @@ dpd.items.get({})
 											return property.searchable
 										})
 
-		var regex
+		var regex_array				= 	search.split(/\s/).map(function(part){ 
+											var regex = undefined
+											
+											try {
+												regex = new RegExp(part, 'i') 
+											} catch(e) {
+												regex = new RegExp(part.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+											}
 
+											return regex
+										}),
 
-		try {
-			regex = new RegExp(search, 'i') 
-		} catch(e) {
-			regex = new RegExp(search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
-		}
+			searchable_properties 	= 	ic.itemConfig.properties.filter(function(property){
+											return property.searchable
+										})
+
 
 
 		items = items.filter( function(item){
+			return	regex_array.every(function(regex){
+				return searchable_properties.some(function(property){
+					switch(property.type){
+						case "array": 
+							return (item[property.name]||[]).some(function(sub){ return accent_fold(sub).match(regex)})
+						break 
 
-			return searchable_properties.some(function(property){
-				switch(property.type){
-					case "array": 
-						return (item[property.name]||[]).some(function(sub){ return accent_fold(sub).match(regex)})
-					break 
+						case "object": 
+							return Object.keys(item[property.name]||{}).some(function(key){ return accent_fold(item[property.name][key]).match(regex) })
+						break 
 
-					case "object": 
-						return Object.keys(item[property.name]||{}).some(function(key){ return accent_fold(item[property.name][key]).match(regex) })
-					break 
-
-					default:
-						return accent_fold(String(item[property.name]||'')).match(regex)
-					break
-				}
+						default:
+							return accent_fold(String(item[property.name]||'')).match(regex)
+						break
+					}
+				})
 			})
 
 		})
