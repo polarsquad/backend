@@ -5,7 +5,7 @@ var	fs				= require('fs'),
 	data			= json_file && JSON.parse(fs.readFileSync(process.argv[2], 'utf8')),
 	valid_data		= []
 
-console.log('Nuber of items:'+ data.length)
+console.log('Number of items:'+ data.length)
 
 data.forEach( (item, index) => {
 	if(icItemConfig.properties.every(property => {

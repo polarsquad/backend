@@ -3,17 +3,25 @@
 var nodemailer  = require('nodemailer'),
 	path		= require('path'),
 	request		= require('request-promise'),
+	fetch		= require('node-fetch'),
 	Promise		= require('bluebird'),
-	icConfig	= JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8')),
+	icConfig	= {},
 	itemConfig	= {}
 
+
+fetch.Promise = Promise
+
+try{ 
+	JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
+}catch(e){
+	console.log('Missing config file...')
+}
 
 try{
 	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
 }
 catch(e){
-	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')
-	process.exit(1)
+	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')	
 }
 
 exports.config = icConfig
@@ -220,3 +228,113 @@ exports.mailSuggestion = function(to, suggestion, target){
 
 	exports.mail(to, subject, content)
 }
+
+exports.fetchGoogleSheets = async function(sheet_id, api_key){
+
+	const base		= 'https://sheets.googleapis.com/v4/spreadsheets'
+	const url		= `${base}/${sheet_id}?key=${api_key}&includeGridData=true`
+
+	console.log(url)
+
+	const result	= await fetch(url)
+	const data		= await result.json()
+
+	const sheets	= data.sheets
+
+	return sheets
+}
+
+
+exports.getEffectiveValues = function(sheet){
+
+	const data 				= 	sheet.data[0]
+	const rows				= 	data.rowData
+
+	const effective_values	= 	rows.map(  
+
+									rowData =>	rowData.values.map( 
+
+													value => {
+
+														if(!value) 					return undefined
+														if(!value.effectiveValue)	return undefined
+														
+														return  value.effectiveValue.stringValue
+																|| 
+																value.effectiveValue.numberValue
+																||
+																undefined 
+													}
+												)
+
+								)
+	return effective_values
+}
+
+exports.trimEffectiveValues = function(effective_values, skip_rows, skip_columns){
+
+	skip_rows 		= skip_rows 	|| []
+	skip_columns	= skip_columns 	|| []
+
+
+	const rows					= 	effective_values
+									.filter( 	(row, 		row_index) 		=> !skip_rows.includes(row_index))
+
+
+
+	const column_count			= 	Math.max(...rows.map( row => row.length))
+
+	const columns				= 	Array(column_count).fill(0)	
+									.map( 		(x, 		column_index)	=> rows.map( row => row[column_index] ) )
+									.filter( 	(column, 	column_index)	=> !skip_columns.includes(column_index) )
+
+	const columns_value_count	= 	columns.map( column => column.filter( value => value != undefined).length)
+
+	const trimmed_values		=	rows
+									.map( 		row => row.filter( (column, column_index) => columns_value_count[column_index] > 0) )	
+									.filter(	row => row.filter( value => value != undefined).length > 0)
+
+	return trimmed_values
+
+}
+
+exports.evHashArray = function(effective_values){
+
+
+	const properties 	= 	effective_values[0]
+	const data			= 	effective_values.slice(1)
+
+	const hash_array	= 	data.map( row => 	row.reduce( (acc, value, index) => {
+
+													const property_name = properties[index]
+
+													if(property_name) acc[property_name] = value
+
+													return acc
+
+												}, {})
+							)
+
+	return hash_array
+
+}
+
+exports.evDictionary = function(effective_values){	
+
+	const keys			= 	effective_values.slice(1).map( row => row[0] )			
+	const data			= 	effective_values.map( row => row.slice(1) )
+	const hashes		=	exports.evHashArray(data)
+
+	const dictionary	= 	keys.reduce( (acc, key, index ) => {
+
+								if(key) acc[key] = hashes[index]
+
+								return	acc
+
+							}, {})
+
+	return dictionary
+}
+
+
+

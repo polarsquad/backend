@@ -1,5 +1,6 @@
 /node_modules
 /dump
+/import
 
 /config/*
 !/config/default-item-config.js

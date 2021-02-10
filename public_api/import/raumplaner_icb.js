@@ -53,6 +53,7 @@ export async function getRemoteItems(config){
 		const website		=	cleanString(location.url)
 		const tags			=	['location']
 
+
 		return 	{
 					title,
 					brief,
@@ -100,8 +101,12 @@ export async function getRemoteItems(config){
 		const email			= 	cleanString(manager.email)
 		const phone			= 	cleanString(manager.phone)
 		const website		= 	cleanString(offer.url)
-		const tags			= 	["service"]
+		const categories	=	offer.info_category
+		const target_groups	=	info_target_group_id
+		const tags			= 	["service", ...categories, ...target_groups]
 	
+
+
 		return {
 			title,
 			brief,
