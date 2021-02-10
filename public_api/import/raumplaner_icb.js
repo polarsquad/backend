@@ -101,8 +101,8 @@ export async function getRemoteItems(config){
 		const email			= 	cleanString(manager.email)
 		const phone			= 	cleanString(manager.phone)
 		const website		= 	cleanString(offer.url)
-		const categories	=	offer.info_category
-		const target_groups	=	info_target_group_id
+		const categories	=	offer.info_category || []
+		const target_groups	=	offer.info_target_group_id || []
 		const tags			= 	["service", ...categories, ...target_groups]
 	
 
