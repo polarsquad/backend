@@ -26,6 +26,10 @@ catch(e){
 
 exports.config = icConfig
 
+
+console.log(icConfig)
+
+//replace with fetch:
 exports.get = function(url){
 
 	if(!url) console.error('utils.get: missing url')
@@ -338,3 +342,5 @@ exports.evDictionary = function(effective_values){
 
 
 
+
+exports
