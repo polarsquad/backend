@@ -1,6 +1,7 @@
 /node_modules
 /dump
-/import
+/import/*
+!/import/import_json.mjs
 
 /config/*
 !/config/default-item-config.js

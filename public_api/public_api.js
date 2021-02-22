@@ -1,6 +1,6 @@
 import	{ readFileSync				}	from 'fs'
 import	{ default as express 		}	from 'express'
-import	{ getLocalDB				}	from './connect_db.js'
+import	{ getLocalDB				}	from '../connect_db.mjs'
 import	{ getItems					}	from './items.js'
 import	{ fileURLToPath				}	from 'url'
 import	path							from 'path'

@@ -26,9 +26,6 @@ catch(e){
 
 exports.config = icConfig
 
-
-console.log(icConfig)
-
 //replace with fetch:
 exports.get = function(url){
 
