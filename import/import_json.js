@@ -1,5 +1,7 @@
+process.chdir(__dirname)
+
 const	path			=	require('path')
-const	config			= 	JSON.parse(require('fs').readFileSync(path.resolve(__dirname,'../config/config.json'), 'utf8'))
+const	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json'), 'utf8')
 const	{readFileSync}	= 	require('fs')
 const	deployd			= 	require('deployd')
 const	json_file 		= 	process.argv[2]
