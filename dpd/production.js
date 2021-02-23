@@ -63,7 +63,7 @@ function importJSON(dpd, import_json){
 			dpd.items.post(item)
 		}))
 		.then(
-			() => {console.log('Import: [ok])'},
+			() => {console.log('Import: [ok]')},
 			console.log
 		)
 	} catch(e) {
