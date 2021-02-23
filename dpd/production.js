@@ -5,7 +5,6 @@ process.chdir(__dirname);
 
 var icUtils 		= 	require('../ic-utils.js'),
 	{readFileSync}	=	require('fs'),
-	path			=	require('path'),
 	config			= 	JSON.parse(readFileSync('../config/config.json', 'utf8')),
 	deployd			= 	require('deployd'),
 	server 			= 	deployd({
@@ -35,7 +34,7 @@ server.on('listening', function() {
 
 	var dpd = internalClient.build(server)
 
-	if(import_json) importJSON(import_json)
+	if(import_json) importJSON(dpd, import_json)
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
@@ -56,7 +55,7 @@ server.on('error', function(err) {
 
 function importJSON(dpd, import_json){
 	try{
-		const	json = JSON.parse(readFileSync(path.resolve(import_json), 'utf8'))
+		const	json = JSON.parse(readFileSync(import_json, 'utf8'))
 
 		console.log('Importing '+json.length+' items...')
 		console.log(json)
