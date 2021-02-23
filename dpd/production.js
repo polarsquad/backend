@@ -19,7 +19,13 @@ var icUtils 		= 	require('../ic-utils.js'),
 								}
 							}
 						}),
-	internalClient	=	require('deployd/lib/internal-client')
+	internalClient	=	require('deployd/lib/internal-client'),
+	import_json		=	process.argv
+						.map( arg => arg.match(/import=(.*)/)[0] )
+						.map( arg => !!arg)
+
+
+console.log(import_json)
 
 server.listen()
 
