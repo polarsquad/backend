@@ -55,7 +55,7 @@ server.on('error', function(err) {
 
 function importJSON(dpd, import_json){
 	try{
-		const	json = JSON.parse(readFileSync(json_file, 'utf8'))
+		const	json = JSON.parse(readFileSync(import_json, 'utf8'))
 
 		Promise.all(json.map( item => {
 			dpd.items.post(item)
