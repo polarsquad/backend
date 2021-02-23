@@ -1,7 +1,9 @@
+const	path			=	require('path')
+const 	__dirname 		= 	path.dirname(fileURLToPath(import.meta.url));
+
 process.chdir(__dirname)
 
 const	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8'))
-const	path			=	require('path')
 const	{readFileSync}	= 	require('fs')
 const	deployd			= 	require('deployd')
 const	json_file 		= 	process.argv[2]
