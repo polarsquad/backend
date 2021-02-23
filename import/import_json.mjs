@@ -1,31 +1,35 @@
-import	{ default as mongodb 		}	from 'mongodb'
-import	{ readFileSync				}	from 'fs'
-import	{ fileURLToPath				}	from 'url'
-import	{ getLocalDB				}	from '../connect_db.mjs'
-import	path							from 'path'
+process.chdir(__dirname);
 
-const __dirname 		= path.dirname(fileURLToPath(import.meta.url))
-const { MongoClient } 	= mongodb
-const config			= JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
-const db 				= await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password)
+const	config		= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8'))
+const	deployd		= 	require('deployd')
+const	json_file 	= 	process.argv[2]
+const	server 		= 	deployd({
+							port:	config.port,
+							env: 	'production',
+							db: {
+								host: 	config.db.host,
+								port: 	config.db.port,
+								name: 	config.db.name,
+								credentials: {
+									username: config.db.credentials.username,
+									password: config.db.credentials.password
+								}
+							}
+						})
+const	internalClient 	= require('deployd/lib/internal-client')
+const	dpd = internalClient.build(process.server)
 
-const json_file 		= process.argv[2]
 
 const json = JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
 
+
 if(json){
-	 db.collection('items').insertMany(json)
-	 .then(
-	 	console.log,
-	 	console.log
-	 )
-	 .then( 
-	 	() => process.exit(0),
-	 	() => process.exit(0)
-	 )
+	Promise.all(json.map( item => {
+		dpd.items.post(item)
+	})
+	then(
+		console.log,
+		console.log
+	)
 }
-
-
-
-
 
