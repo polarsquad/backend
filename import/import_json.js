@@ -1,8 +1,6 @@
-const	path			=	require('path')
-const 	__dirname 		= 	path.dirname(fileURLToPath(import.meta.url));
-
 process.chdir(__dirname)
 
+const	path			=	require('path')
 const	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8'))
 const	{readFileSync}	= 	require('fs')
 const	deployd			= 	require('deployd')
