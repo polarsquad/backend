@@ -1,7 +1,8 @@
 process.chdir(__dirname)
 
 const	config			= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8'))
-const	{readFileSync}	= require('fs')
+const	path			=	require('path')
+const	{readFileSync}	= 	require('fs')
 const	deployd			= 	require('deployd')
 const	json_file 		= 	process.argv[2]
 const	server 			= 	deployd({
@@ -19,14 +20,14 @@ const	server 			= 	deployd({
 							})
 const	internalClient 	= require('deployd/lib/internal-client')
 const	dpd 			= internalClient.build(process.server)
-
+const	json 			= JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
 
 
 
 if(json){
 	Promise.all(json.map( item => {
 		dpd.items.post(item)
-	})
+	}))
 	.then(
 		console.log,
 		console.log
