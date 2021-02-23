@@ -58,13 +58,12 @@ function importJSON(dpd, import_json){
 		const	json = JSON.parse(readFileSync(import_json, 'utf8'))
 
 		console.log('Importing '+json.length+' items...')
-		console.log(json)
 
 		Promise.all(json.map( item => {
 			dpd.items.post(item)
 		}))
 		.then(
-			console.log,
+			() => {console.log('Import: [ok])'},
 			console.log
 		)
 	} catch(e) {
