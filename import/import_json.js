@@ -20,7 +20,7 @@ const	internalClient 	= require('deployd/lib/internal-client')
 const	dpd 			= internalClient.build(process.server)
 const	json 			= JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
 
-
+console.log(dpd)
 
 if(json){
 	Promise.all(json.map( item => {
