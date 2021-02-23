@@ -20,15 +20,24 @@ const	internalClient 	= require('deployd/lib/internal-client')
 const	dpd 			= internalClient.build(process.server)
 const	json 			= JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
 
-console.log(dpd)
+console.log(config)
+
 
 if(json){
-	Promise.all(json.map( item => {
-		dpd.items.post(item)
-	}))
-	.then(
-		console.log,
-		console.log
-	)
+	server.listen()
+
+	server.on('listening', function() {
+
+	console.log(dpd)
+	
+		Promise.all(json.map( item => {
+			dpd.items.post(item)
+		}))
+		.then(
+			console.log,
+			console.log
+		)
+
+	})
 }
 
