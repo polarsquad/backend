@@ -25,7 +25,6 @@ var icUtils 		= 	require('../ic-utils.js'),
 						.find( arg => !!arg)
 
 
-console.log(import_json)
 
 server.listen()
 
@@ -33,6 +32,8 @@ server.on('listening', function() {
 	console.log("Server is listening on "+ config.port)
 
 	var dpd = internalClient.build(server)
+
+	if(import_json) importJSON(import_json)
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
@@ -50,6 +51,22 @@ server.on('error', function(err) {
 })
 
 
+
+function importJSON(dpd, import_json){
+	try{
+		const	json = JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
+
+		Promise.all(json.map( item => {
+			dpd.items.post(item)
+		}))
+		.then(
+			console.log,
+			console.log
+		)
+	} catch(e) {
+		console.log(e)
+	}
+}
 
 
 //ad hoc, todo extra script:
