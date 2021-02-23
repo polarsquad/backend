@@ -19,8 +19,6 @@ const	server 			= 	deployd({
 const	internalClient 	= require('deployd/lib/internal-client')
 const	json 			= JSON.parse(readFileSync(path.resolve(json_file), 'utf8'))
 
-console.log(config)
-
 
 if(json){
 	server.listen()
@@ -28,6 +26,8 @@ if(json){
 	server.on('listening', function() {
 
 		const	dpd = internalClient.build(server)
+
+		console.log(server)
 
 		console.log(dpd)
 
