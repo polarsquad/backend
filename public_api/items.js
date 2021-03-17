@@ -126,7 +126,7 @@ export async function invokeImportScript(key, config){
 
 export function mergeResults(results){
 
-	console.log('Results:', results.key, results.status, results.message, results.items.legth)
+	console.log('Results:', results.key, results.status, results.message, (results.items||[]).length)
 
 	return 	{
 				results: 	results
