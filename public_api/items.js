@@ -156,14 +156,25 @@ export async function getRemoteItems(remoteItemsConfig){
 
 export async function getItems(db, publicApiConfig){
 
-	return 	await	Promise.all([
-						getLocalItems(db)
-						.then(
-							wrapSuccess('local'),
-							wrapFailure('local')
-						),
-						getRemoteItems(publicApiConfig.remoteItems)
-						//.then( x => { console.log(x); return x })
-					])
-					.then(mergeResults)
+	const results	=  	await	Promise.all([
+							getLocalItems(db)
+							.then(
+								wrapSuccess('local'),
+								wrapFailure('local')
+							),
+							getRemoteItems(publicApiConfig.remoteItems)
+							//.then( x => { console.log(x); return x })
+						])
+						
+	results.forEach( result => {
+
+		const {key, status, message }	= result
+		const size						= result.items.length
+
+		console.log({key, status, message, size})
+	})
+
+
+	return meregeResults(results)
+
 }
