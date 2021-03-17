@@ -126,7 +126,8 @@ export async function invokeImportScript(key, config){
 
 export function mergeResults(results){
 
-	console.log('Results:', results.key, results.status, results.message, (results.items||[]).length)
+	console.log('Merging results:')
+	results.forEach( ({key, status, message, items}) => console.log({key, status, message, size: items.length}))
 
 	return 	{
 				results: 	results
