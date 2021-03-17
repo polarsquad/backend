@@ -50,7 +50,7 @@ export async function getRemoteItems(config){
 		const city			=	cleanString(location.town)
 		const latitude		=	cleanNumber(location.latitude)
 		const longitude		=	cleanNumber(location.longitude)
-		const website		=	cleanString(location.url)
+		const website		=	cleanString(location.url)		
 		const tags			=	['location']
 
 
@@ -105,6 +105,8 @@ export async function getRemoteItems(config){
 		const target_groups	=	offer.info_target_group_id || []
 		const tags			= 	["service", ...categories, ...target_groups]
 	
+
+		if(categories.length == 0) console.log(offer)
 
 
 		return {
