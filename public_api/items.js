@@ -168,6 +168,6 @@ export async function getItems(db, publicApiConfig){
 									//.then( x => { console.log(x); return x })
 								])
 						
-	return meregeResults(results)
+	return mergeResults(results)
 
 }
