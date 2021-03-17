@@ -86,7 +86,7 @@ export async function getRemoteItems(config){
 
 
 		const title 		= 	cleanString(offer.title)
-		const brief 		= 	{de: cleanString(offer.subtitle) }	
+		const brief 		= 	{de: cleanString(offer.subtitle || config.sourceName) }	
 		const description	= 	{de: cleanString(offer.description) }
 
 		const manager		= 		offer.manager_id 
@@ -105,9 +105,6 @@ export async function getRemoteItems(config){
 		const target_groups	=	offer.info_target_group_id || []
 		const tags			= 	["service", ...categories, ...target_groups]
 	
-
-		if(categories.length == 0) console.log(offer)
-
 
 		return {
 			title,
