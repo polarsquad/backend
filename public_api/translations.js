@@ -122,7 +122,7 @@ export class Translator{
 												to_languages.filter( lang => !item[translatable][lang] ), 
 												trimmed_value
 											)
-											.catch( reason => { console.log(reason); return {'translator': 'translation failed'}})
+											.catch( reason => ({'translator': 'translation failed'}))
 
 			Object.keys(translations).forEach( lang => {
 
