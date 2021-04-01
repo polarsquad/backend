@@ -1,14 +1,28 @@
 import	{ readFileSync				}	from 'fs'
 import	{ default as express 		}	from 'express'
 import	{ getLocalDB				}	from '../connect_db.mjs'
-import	{ getItems					}	from './items.js'
+import	{ ItemImporter				}	from './items.js'
+import	{ Translator				}	from './translations.js'
 import	{ fileURLToPath				}	from 'url'
+
 import	path							from 'path'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const config	= JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
-const db 		= await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password)
-const app		= express()
+const __dirname 		=	path.dirname(fileURLToPath(import.meta.url))
+const itemConfig		=	await import('./ic-item-config.cjs')
+const config			=	JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
+const db 				=	await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password)
+const app				=	express()
+const publicApiConfig	=	config.publicApi
+const translationKeys	=	(({googleTranslateApiKey, deepLApiKey}) => ({googleTranslateApiKey, deepLApiKey}))(config)
+
+const translator		=	new Translator(db, translationKeys)
+
+const itemImporter		=	new ItemImporter({
+								db,
+								publicApiConfig,
+								translator,
+								itemConfig
+							})
 
 
 function handle(fn, ...params){
@@ -32,10 +46,11 @@ app.use(function(req, res, next) {
 
 
 if(config.publicApi){
-	app.get('/items', handle(getItems, db, config.publicApi) )
+	app.get('/items', handle( () => itemImporter.getItems()  ) )
 }
 
 console.log('Listening on port', config.publicApi.port)
+
 app.listen(config.publicApi.port)
 
 

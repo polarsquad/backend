@@ -1,11 +1,19 @@
-import fetch from 'node-fetch'
+import fetch 				from 'node-fetch'
 
-export async function getRemoteItems(config){	
+import {	Translator	}	from '../translations.js'
+
+
+export async function getRemoteItems(config, translator){	
 
 	
+	const target_languages 	= ['en']
+	const base_language		= 'de'
+
+
 	function cleanString(x){
 		return String(x||'').trim() || undefined
 	}
+
 
 	function cleanNumber(x){
 
@@ -14,6 +22,10 @@ export async function getRemoteItems(config){
 		if(typeof x != 'number') return undefined
 
 		return x	
+	}
+
+	function translationFill(x){
+		return [base_language, ...target_languages]. reduce( (acc,lang) => { acc[lang] = cleanString(x); return acc }, {})
 	}
 
 
@@ -43,7 +55,7 @@ export async function getRemoteItems(config){
 		if(!location) return null
 
 		const title 		=	cleanString(location.name)
-		const brief			=	{de: cleanString(location.subtitle)}
+		const brief			=	translationFill(location.subtitle)
 		const description	=	{de: cleanString(location.description)}
 		const address		=	cleanString(location.street)
 		const zip			=	cleanString(location.zipcode)
@@ -86,7 +98,7 @@ export async function getRemoteItems(config){
 
 
 		const title 		= 	cleanString(offer.title)
-		const brief 		= 	{de: cleanString(offer.subtitle || config.sourceName) }	
+		const brief			=	translationFill(offer.subtitle || config.sourceName)
 		const description	= 	{de: cleanString(offer.description) }
 
 		const manager		= 		offer.manager_id 
@@ -149,9 +161,16 @@ export async function getRemoteItems(config){
 		return hours 
 	}
 
+
+
+
+
+
+
+
 	const data 		= 	await fetch( config.url )
 						.then( result 	=> result.json() )
-					
+	
 
 	const locations = 	data.locations.map( ({location_id, url}) => {
 
@@ -205,16 +224,23 @@ export async function getRemoteItems(config){
 
 	})
 
-	return	[...locations, ...services]
-			.filter( item => !!item)
-			.map( item =>	({
-								...item, 
-								remoteItem:{
-									...item.remoteItem, 
-									type: 'raumplaner'
-								}
-							})
-			)
+
+
+	const items				=	[...locations, ...services]
+								.filter( item => !!item)
+								
+								.map( item =>	({
+													...item, 
+													remoteItem:{
+														...item.remoteItem, 
+														type: 'raumplaner'
+													}
+												})
+								)
 
 	
+	const translatedItems	=  await Promise.all(items.map( item => translator.translateItem(item, base_language, target_languages) ))
+
+
+	return translatedItems
 }

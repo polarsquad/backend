@@ -56,28 +56,28 @@ exports.get = function(url){
 }
 
 
-exports.getTranslation = function(from, to ,text){
-
+exports.getTranslation = function(from, to ,text, config){
 
 	if(from == 'none' || to == 'none') return Promise.resolve({message: "Language 'none' ignored."})
 	if(from == to ) return Promise.resolve({message:"Source and target language cannot be the same."})
 	if(!text) return Promise.resolve({message:"Missing text."})
 
-
 	return 	Promise.reject()
-			.catch( () => getDeepLTranslation(from, to, text))
-			.catch( () => getGoogleTranslation(from, to, text))
+			.catch( () => exports.getDeepLTranslation(from, to, text, config))
+			.catch( () => exports.getGoogleTranslation(from, to, text, config))
 }
 
-function getGoogleTranslation(from, to, text){
+exports.getGoogleTranslation = function(from, to, text, config){
 
-	if(!icConfig.googleTranslateApiKey) Promise.reject('missing google translation api key.')
+	config = config || icConfig
+
+	if(!config.googleTranslateApiKey) Promise.reject('missing google translation api key.')
 
 	return 	Promise.resolve(request.get(
 				'https://translation.googleapis.com/language/translate/v2', 
 				{
 					qs:{
-						key:	icConfig.googleTranslateApiKey,
+						key:	config.googleTranslateApiKey,
 						q:		text,
 						source:	from,
 						target:	to
@@ -91,16 +91,17 @@ function getGoogleTranslation(from, to, text){
 								:	Promise.reject('Google Translate: reponse yields no translation'))
 }
 
-function getDeepLTranslation(from, to, text){
+exports.getDeepLTranslation = function (from, to, text, config){
+	
+	config = config || icConfig
 
 	console.log('Translating with deepl:', from, ' => ', to, '\"'+text.substr(0,20)+'\"\n')
 
-	if(!icConfig.deepLApiKey) Promise.reject('missing deepL api key.')
-
+	if(!config.deepLApiKey) Promise.reject('missing deepL api key.')
 
 	return 	Promise.resolve(request.post(
 				' https://api.deepl.com/v2/translate?auth_key='
-				+ icConfig.deepLApiKey
+				+ config.deepLApiKey
 				+ '&text=' + text
 				+ '&source_lang=' + from
 				+ '&target_lang=' + to
@@ -110,7 +111,6 @@ function getDeepLTranslation(from, to, text){
 			.then( 	text	=> 	text
 								?	{text, translator: 'DeepL'}
 								:	Promise.reject('DeepL: reponse yields no translation'))
-			.catch( x => console.log(x))
 }
 
 exports.mail = function(to, subject, content){
@@ -142,6 +142,7 @@ exports.mail = function(to, subject, content){
 
 
 exports.diff = function(property, old_value, new_value, key){
+	
 	if(old_value == new_value) 			return false
 
 	if(property.type == "string"){
