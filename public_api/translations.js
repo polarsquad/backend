@@ -3,22 +3,6 @@ import	{	getTranslation			}	from '../ic-utils.js'
 import	{	properties as icProperties	}	from './ic-item-config.cjs'
 import	crypto								from 'crypto'	
 
-//remove:
-import	{ fileURLToPath				}	from 'url'
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-import	path							from 'path'
-import	{ readFileSync				}	from 'fs'
-import	{ getLocalDB				}	from '../connect_db.mjs'
-const config	= JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
-
-
-// async function getTranslation(from, to, text){
-// 	//mock
-
-// 	return `mock_${from}_${to}`
-// }
-
-
 
 export class Translator{
 
@@ -70,9 +54,6 @@ export class Translator{
 
 
 	async getNewTranslation(from, to, text, hash){
-
-
-		return {translator: 'mock', text: 'mocked'}
 
 		console.log('Getting new translation for ', hash)
 
