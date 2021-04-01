@@ -108,15 +108,15 @@ exports.getDeepLTranslation = function (from, to, text, config){
 	if(!config.deepLApiKey) Promise.reject('missing deepL api key.')
 
 	return 	Promise.resolve(request.post(
-				' https://api.deepl.com/v2/translate?auth_key='
+				'https://api.deepl.com/v2/translate?auth_key='
 				+ config.deepLApiKey
-				+ '&text=' + text
+				+ '&text=' + encodeURIComponent(text)
 				+ '&source_lang=' + from
 				+ '&target_lang=' + to
 			))
 			.catch( req => {
 
-				console.log('POST failed: https://translation.googleapis.com/language/translate/v2')
+				console.log('POST failed: https://api.deepl.com/v2/translate?auth_key')
 				console.log(req.error)
 
 				return Promise.reject(req)				
