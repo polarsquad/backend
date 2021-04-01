@@ -85,6 +85,14 @@ exports.getGoogleTranslation = function(from, to, text, config){
 					json: true
 				}
 			))
+			.catch( req => {
+
+				console.log('GET failed: https://translation.googleapis.com/language/translate/v2')
+				console.log(req.error)
+
+				return Promise.reject(req)				
+
+			})
 			.then( 	result 	=> result.data && result.data.translations && result.data.translations[0] && result.data.translations[0].translatedText)
 			.then( 	text	=> 	text
 								?	{text, translator: 'Google Translate'}
@@ -95,7 +103,7 @@ exports.getDeepLTranslation = function (from, to, text, config){
 	
 	config = config || icConfig
 
-	console.log('Translating with deepl:', from, ' => ', to, '\"'+text.substr(0,20)+'\"\n')
+	console.log('Translating with deepL:', from, ' => ', to, '\"'+text.substr(0,20)+'\"\n')
 
 	if(!config.deepLApiKey) Promise.reject('missing deepL api key.')
 
