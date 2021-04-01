@@ -114,6 +114,14 @@ exports.getDeepLTranslation = function (from, to, text, config){
 				+ '&source_lang=' + from
 				+ '&target_lang=' + to
 			))
+			.catch( req => {
+
+				console.log('POST failed: https://translation.googleapis.com/language/translate/v2')
+				console.log(req.error)
+
+				return Promise.reject(req)				
+
+			})
 			.then( 	json	=>	{ try{ return JSON.parse(json) } catch(e) { return Promise.reject(e) } })
 			.then( 	result 	=> 	result && result.translations && result.translations[0] && result.translations[0].text)
 			.then( 	text	=> 	text
