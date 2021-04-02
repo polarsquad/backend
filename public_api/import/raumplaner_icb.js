@@ -3,12 +3,19 @@ import fetch 				from 'node-fetch'
 import {	Translator	}	from '../translations.js'
 
 
-export async function getRemoteItems(config, translator){	
 
-	
-	const target_languages 	= ['en']
-	const base_language		= 'de'
+export async function getRemoteVersion(config){
 
+	//return some value to identify the version of the remote content
+
+	const response 	= await fetch( config.url, { method:'HEAD' } )	
+	const headers	= response.headers
+
+	return headers.get('Last-Modified')
+}
+
+
+export async function getRemoteItems(config){	
 
 	function cleanString(x){
 		return String(x||'').trim() || undefined
@@ -25,7 +32,7 @@ export async function getRemoteItems(config, translator){
 	}
 
 	function translationFill(x){
-		return [base_language, ...target_languages]. reduce( (acc,lang) => { acc[lang] = cleanString(x); return acc }, {})
+		return [config.baseLanguage, ...config.targetLanguages]. reduce( (acc,lang) => { acc[lang] = cleanString(x); return acc }, {})
 	}
 
 
@@ -169,7 +176,8 @@ export async function getRemoteItems(config, translator){
 
 
 	const data 		= 	await fetch( config.url )
-						.then( result 	=> result.json() )
+						.then( response => { console.log(response.headers); return response })
+						.then( response => response.json() )
 	
 
 	const locations = 	data.locations.map( ({location_id, url}) => {
@@ -239,8 +247,6 @@ export async function getRemoteItems(config, translator){
 								)
 
 	
-	const translatedItems	=  await Promise.all(items.map( item => translator.translateItem(item, base_language, target_languages) ))
-
-
-	return translatedItems
+	
+	return items
 }

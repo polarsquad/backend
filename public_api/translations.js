@@ -53,7 +53,7 @@ export class Translator{
 
 
 
-	async getNewTranslation(from, to, text, hash){
+	async getNewTranslation(from, to, text, hash, key){
 
 		console.log('Getting new translation for ', hash)
 
@@ -64,7 +64,7 @@ export class Translator{
 
 		this.collection.updateOne(
 			{ hash }, 
-			{ $set:{ hash, [to]: translation, lastRequest } }, 
+			{ $set:{ hash, [to]: translation, lastRequest}, $addToSet :{ tags: key } }, 
 			{ upsert:true }
 		)
 
@@ -85,7 +85,7 @@ export class Translator{
 		return await	Promise.all(to_languages.map( to_language => {
 							return 	Promise.resolve(
 											stored_translations[to_language] 
-										|| 	this.getNewTranslation(from_language, to_language, text, hash)
+										|| 	this.getNewTranslation(from_language, to_language, text, hash, key)
 									)
 									.then( translation => result[to_language] = translation)
 						}))
@@ -94,7 +94,7 @@ export class Translator{
 
 	}
 
-	async translateItem(item, from_language, to_languages){
+	async translateItem(item, from_language, to_languages, key){
 
 		to_languages = 	Array.isArray(to_languages)
 						?	to_languages
@@ -120,7 +120,8 @@ export class Translator{
 			const translations	= 	await 	this.translate(
 												from_language, 
 												to_languages.filter( lang => !item[translatable][lang] ), 
-												trimmed_value
+												trimmed_value,
+												key
 											)
 											.catch( reason => ({'translator': 'translation failed'}))
 

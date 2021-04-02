@@ -11,8 +11,12 @@ export class ItemImporter {
 	}
 
 
-	get collection(){
+	get localItems(){
 		return this.db.collection('items')
+	}
+
+	get remoteMeta(){
+		return this.db.collection('remote-meta')
 	}
 
 
@@ -36,7 +40,7 @@ export class ItemImporter {
 
 	async getLocalItems(){
 
-		const items = 	await 	this.collection
+		const items = 	await 	this.localItems
 								.find({
 									state:'public',
 									proposalFor:null,
@@ -98,36 +102,57 @@ export class ItemImporter {
 		 
 	}
 
-	async invokeImportScript(key, config){
+	async invokeImportScript(key){
 
-		const importModule 	= await import(`./import/${config.script}`)
-		const items			= await importModule.getRemoteItems(config, this.translator)
+		console.log(key, this.publicApiConfig)
 
-		return 	items.map( (item, index) => {
+		const config			=	this.publicApiConfig.remoteItems[key]
+		const importModule 		= 	await import(`./import/${config.script}`)
+		const remoteVersion		= 	await importModule.getRemoteVersion(config)
+		const localVersion		= 	await this.remoteMeta.findOne({ key }).then( doc => doc && doc.version )
+		const noUpdateNeeded	=	localVersion === remoteVersion
 
-					this.itemConfig.properties.forEach( property => {
-						let buf = this.sanatizeProperty(item[property.name]) || null
-						if( buf !== null || item[property.name] !== undefined ) item[property.name] = buf
-					})	
 
-					const preliminary_id = item.id 
+		console.log(remoteVersion, localVersion, noUpdateNeeded)
 
-					item.id = 	preliminary_id
-								?	'--r-'+key+preliminary_id
-								:	'--r-'+key+Date.now()+index+Math.random()
+		if(noUpdateNeeded) return await this.db.collection(`remote-items-${key}`).find().toArray()
 
-					item.state = 'public'
+		console.log('update needed ', key)	
 
-					item.remoteItem = 	{
-											...item.remoteItem,
-											key,
-											...config
-										}
+		const items				= 	await importModule.getRemoteItems(config, this.translator)
 
-					return item
-				})
-				.filter( item => !!item)
+		const extendedItems		=	items.map( (item, index) => {
+
+										this.itemConfig.properties.forEach( property => {
+											let buf = this.sanatizeProperty(item[property.name]) || null
+											if( buf !== null || item[property.name] !== undefined ) item[property.name] = buf
+										})	
+
+										const preliminary_id = item.id 
+
+										item.id = 	preliminary_id
+													?	'--r-'+key+preliminary_id
+													:	'--r-'+key+Date.now()+index+Math.random()
+
+										item.state = 'public'
+
+										item.remoteItem = 	{
+																...item.remoteItem,
+																key,
+																...config
+															}
+
+										return item
+
+									})
+									.filter( item => !!item)
 		
+		await this.db.collection(`remote-items-${key}`).drop().catch( error => error.code == 26 ? Promise.resolve : Promise.reject(error)) //ignore error if colelction does not yet exists
+		await this.db.collection(`remote-items-${key}`).insertMany(extendedItems)
+
+		this.remoteMeta.updateOne({ key }, {$set: { version: remoteVersion } }, { upsert: true })									
+
+		return extendedItems
 	}
 
 
@@ -146,6 +171,16 @@ export class ItemImporter {
 				}
 	}
 
+	async translateItem(item, key){
+
+		const { baseLanguage, targetLanguages } = this.publicApiConfig.remoteItems[key]
+
+		return await this.translator.translateItem(item, baseLanguage, targetLanguages, key)
+	}
+
+	async translateItems(items, key){
+		return await Promise.all(  items.map( item => this.translateItem(item, key) ) ) 
+	}
 
 	async getRemoteItems(){
 	
@@ -156,7 +191,8 @@ export class ItemImporter {
 		return 	await	Promise.all(
 							Object.entries(remoteItemsConfig)
 							.map( 
-								([key, config]) =>	this.invokeImportScript(key, config) 
+								([key, config]) =>	this.invokeImportScript(key) 
+													.then( items => this.translateItems(items, key) )
 													.then(
 														this.wrapSuccess(key),
 														this.wrapFailure(key)
@@ -164,7 +200,6 @@ export class ItemImporter {
 							)				
 						)				
 						.then( results => this.mergeResults(results) )
-						//.then( result => {console.log(JSON.stringify(result.items, null, 4)); return result} )
 	}
 
 	async getItems(){
@@ -177,7 +212,7 @@ export class ItemImporter {
 										),
 										this.getRemoteItems()
 									])
-							
+				
 		return this.mergeResults(results)
 
 	}
