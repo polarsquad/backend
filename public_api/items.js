@@ -175,6 +175,9 @@ export class ItemImporter {
 
 		const { baseLanguage, targetLanguages } = this.publicApiConfig.remoteItems[key]
 
+		if(!baseLanguage) 		return item
+		if(!targetLanguages)	return item
+
 		return await this.translator.translateItem(item, baseLanguage, targetLanguages, key)
 	}
 

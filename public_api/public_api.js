@@ -25,6 +25,24 @@ const itemImporter		=	new ItemImporter({
 							})
 
 
+
+function checkConfigs(){
+	Object.entries(config.remoteItems)
+	.forEach( ([key, remoteItemConfig]) => {
+		if(!remoteItemConfig.script) 			console.error(`Missing config.remoteItems.${key}.script 		(must be a filename)`)
+		if(!remoteItemConfig.url) 				console.error(`Missing config.remoteItems.${key}.url			(must be a url)`)
+		if(!remoteItemConfig.sourceName) 		console.error(`Missing config.remoteItems.${key}.sourceName		(must be a string)`)
+		if(!remoteItemConfig.sourceUrl) 		console.error(`Missing config.remoteItems.${key}.sourceUrl		(must be a url)`)
+		if(!remoteItemConfig.baseLanguage) 		console.warn(`Missing config.remoteItems.${key}.baseLanguage	(must be a string; de, en, fr ... )`)
+		if(!remoteItemConfig.targetLanguages) 	console.warn(`Missing config.remoteItems.${key}.targetLanguages	(must be an Array; ['de', 'en', 'fr', ... ]`)
+
+		if(remoteItemConfig.targetLanguages && !Array.isArry(remoteItemConfig.targetLanguages)) 
+												console.error(`config.remoteItems.${key}.targetLanguages must be an Array; ['de', 'en', 'fr', ... ]`)
+
+	})
+}
+
+
 function handle(fn, ...params){
 	return async (req, res) => {
 		try{
