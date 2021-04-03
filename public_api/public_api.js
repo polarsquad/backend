@@ -28,6 +28,8 @@ const itemImporter		=	new ItemImporter({
 
 function checkConfigs(){
 
+	console.log(config)
+
 	Object.entries(config.remoteItems)
 	.forEach( ([key, remoteItemConfig]) => {
 		if(!remoteItemConfig.script) 			console.error(`Missing config.remoteItems.${key}.script 		(must be a filename)`)
