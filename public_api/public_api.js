@@ -45,9 +45,11 @@ function checkPublicApiConfig(config){
 
 
 function handle(fn, ...params){
+	const t0 = Date.now()
 	return async (req, res) => {
 		try{
 			res.send(await fn(...params))
+			console.log('Duration: ', (Date.now()-t0 /1000))
 		} catch(e) {
 			console.log(e)
 			res.status(500).send(e)
