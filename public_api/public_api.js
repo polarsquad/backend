@@ -26,9 +26,7 @@ const itemImporter		=	new ItemImporter({
 
 
 
-function checkConfigs(){
-
-	console.log(config)
+function checkPublicApiConfig(config){
 
 	Object.entries(config.remoteItems)
 	.forEach( ([key, remoteItemConfig]) => {
@@ -58,7 +56,7 @@ function handle(fn, ...params){
 }
 
 
-checkConfigs()
+checkPublicApiConfig(publicApiConfig)
 
 app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 	true)
