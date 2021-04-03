@@ -27,6 +27,7 @@ const itemImporter		=	new ItemImporter({
 
 
 function checkConfigs(){
+
 	Object.entries(config.remoteItems)
 	.forEach( ([key, remoteItemConfig]) => {
 		if(!remoteItemConfig.script) 			console.error(`Missing config.remoteItems.${key}.script 		(must be a filename)`)
@@ -53,6 +54,9 @@ function handle(fn, ...params){
 		}
 	}
 }
+
+
+checkConfigs()
 
 app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 	true)
