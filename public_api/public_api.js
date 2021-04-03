@@ -49,7 +49,7 @@ function handle(fn, ...params){
 	return async (req, res) => {
 		try{
 			res.send(await fn(...params))
-			console.log('Duration: ', (Date.now()-t0) /1000)
+			console.log('Duration: ', (Date.now()-t0) /1000, t0)
 		} catch(e) {
 			console.log(e)
 			res.status(500).send(e)
