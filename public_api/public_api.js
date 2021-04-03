@@ -37,7 +37,7 @@ function checkPublicApiConfig(config){
 		if(!remoteItemConfig.baseLanguage) 		console.warn(`Missing config.remoteItems.${key}.baseLanguage	(must be a string; de, en, fr ... )`)
 		if(!remoteItemConfig.targetLanguages) 	console.warn(`Missing config.remoteItems.${key}.targetLanguages	(must be an Array; ['de', 'en', 'fr', ... ]`)
 
-		if(remoteItemConfig.targetLanguages && !Array.isArry(remoteItemConfig.targetLanguages)) 
+		if(remoteItemConfig.targetLanguages && !Array.isArray(remoteItemConfig.targetLanguages)) 
 												console.error(`config.remoteItems.${key}.targetLanguages must be an Array; ['de', 'en', 'fr', ... ]`)
 
 	})
