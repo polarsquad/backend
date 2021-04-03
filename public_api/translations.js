@@ -38,12 +38,15 @@ export class Translator{
 
 
 
-	async getStoredTranslations(hash){
+	async getStoredTranslations(hash, key){
 
 		const result = 	await 	this.collection
 								.findOneAndUpdate(
 									{ hash },
-									{ $set:		{lastRequest: Date.now() } },
+									{ 
+										$set:		{ lastRequest: Date.now() }, 
+										$addToSet:	{ tags: key } 
+									},
 									{ upsert:	false }
 								)
 
@@ -64,7 +67,10 @@ export class Translator{
 
 		this.collection.updateOne(
 			{ hash }, 
-			{ $set:{ hash, [to]: translation, lastRequest}, $addToSet :{ tags: key } }, 
+			{ 
+				$set:		{ hash, [to]: translation, lastRequest}, 
+				$addToSet: 	{ tags: key } 
+			}, 
 			{ upsert:true }
 		)
 
