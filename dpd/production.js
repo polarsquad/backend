@@ -23,7 +23,7 @@ var icUtils 		= 	require('../ic-utils.js'),
 	internalClient	=	require('deployd/lib/internal-client'),
 	import_json		=	process.argv
 						.map( arg => { const matches = arg.match(/import=(.*)/); return matches && matches[1] })
-						.find( arg => !!arg)
+						.find( arg => !!arg),
 
 	clear_items		=	process.argv
 						.map( arg => { const matches = arg.match(/--clear-items/); return matches && matches[1] })
