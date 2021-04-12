@@ -59,6 +59,8 @@ server.on('error', function(err) {
 function importJSON(dpd, import_json, clear_before_import){
 
 
+	console.log('clear itens', clear_before_import)
+
 	if(clear_before_import){
 
 		console.log('Clearing items...')
