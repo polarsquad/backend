@@ -72,7 +72,7 @@ async function importJSON(dpd, import_json, clear_before_import){
 		console.log('Clearing items [done]')			
 	}
 
-	let to_import_items []
+	let to_import_items = []
 
 	try{
 		to_import_items = JSON.parse(readFileSync(import_json, 'utf8'))
