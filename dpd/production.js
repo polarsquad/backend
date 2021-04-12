@@ -65,9 +65,7 @@ async function importJSON(dpd, import_json, clear_before_import){
 		const current_items = await dpd.items.get()
 
 
-		await 	Promise.all(current_items.map( item => {
-					dpd.del(item.id)
-				}))
+		await 	Promise.all(current_items.map( item => dpd.del(item.id) ))
 		
 		console.log('Clearing items [done]')			
 	}
