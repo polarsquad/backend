@@ -25,6 +25,9 @@ var icUtils 		= 	require('../ic-utils.js'),
 						.map( arg => { const matches = arg.match(/import=(.*)/); return matches && matches[1] })
 						.find( arg => !!arg)
 
+	clear_items		=	process.argv
+						.map( arg => { const matches = arg.match(/--clear-items/); return matches && matches[1] })
+						.find( arg => !!arg)
 
 
 server.listen()
