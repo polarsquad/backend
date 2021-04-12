@@ -79,7 +79,7 @@ async function importJSON(dpd, import_json, clear_before_import){
 		throw e
 	}
 
-	console.log('Importing '+json.length+' items...')
+	console.log('Importing '+to_import_items.length+' items...')
 
 	await 	Promise.all(to_import_items.map( item => {
 				dpd.items.post(item)
