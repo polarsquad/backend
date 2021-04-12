@@ -26,7 +26,7 @@ var icUtils 		= 	require('../ic-utils.js'),
 						.find( arg => !!arg),
 
 	clear_items		=	process.argv
-						.map( arg => { const matches = arg.match(/--clear-items/); return matches && matches[1] })
+						.map( arg => arg.match(/--clear-items/) )
 						.find( arg => !!arg)
 
 
