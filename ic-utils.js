@@ -286,6 +286,7 @@ exports.getEffectiveValues = function(sheet){
 												)
 
 								)
+								.filter( row => row.some( value => value !== undefined) )
 	return effective_values
 }
 

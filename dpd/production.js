@@ -53,7 +53,25 @@ server.on('error', function(err) {
 
 
 
-function importJSON(dpd, import_json){
+function importJSON(dpd, import_json, clear_before_import){
+
+
+	if(clear_before_import){
+
+		console.log('Clearing items...')
+
+		try{
+			dpd.items.get()
+			.then(console.log)
+		}catch(e){
+			console.log(e)
+			process.exit(1)
+		}
+
+	}
+
+	return null
+
 	try{
 		const	json = JSON.parse(readFileSync(import_json, 'utf8'))
 
