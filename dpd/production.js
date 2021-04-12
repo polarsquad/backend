@@ -37,7 +37,7 @@ server.on('listening', function() {
 
 	var dpd = internalClient.build(server)
 
-	if(import_json) importJSON(dpd, import_json)
+	if(import_json) importJSON(dpd, import_json, clear_items)
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
