@@ -26,7 +26,7 @@ var icUtils 		= 	require('../ic-utils.js'),
 						.find( arg => !!arg),
 
 	clear_items		=	process.argv
-						.map( arg => arg.match(/--clear-items/) )
+						.map( arg => !!arg.match(/--clear-items/) )
 						.find( arg => !!arg)
 
 
@@ -37,7 +37,7 @@ server.on('listening', function() {
 
 	var dpd = internalClient.build(server)
 
-	if(import_json) importJSON(dpd, import_json, clear_items)
+	if(import_json) importJSON(dpd, import_json, clear_items).catch( console.log)
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
@@ -56,42 +56,39 @@ server.on('error', function(err) {
 
 
 
-function importJSON(dpd, import_json, clear_before_import){
-
-
-	console.log('clear itens', clear_before_import)
+async function importJSON(dpd, import_json, clear_before_import){
 
 	if(clear_before_import){
 
 		console.log('Clearing items...')
 
-		try{
-			dpd.items.get()
-			.then(console.log)
-		}catch(e){
-			console.log(e)
-			process.exit(1)
-		}
+		const current_items = await dpd.items.get()
 
+
+		await 	Promise.all( item => {
+					dpd.del(item.id)
+				})
+		
+		console.log('Clearing items [done]')			
 	}
 
-	return null
+	let to_import_items []
 
 	try{
-		const	json = JSON.parse(readFileSync(import_json, 'utf8'))
-
-		console.log('Importing '+json.length+' items...')
-
-		Promise.all(json.map( item => {
-			dpd.items.post(item)
-		}))
-		.then(
-			() => {console.log('Import: [ok]')},
-			console.log
-		)
-	} catch(e) {
-		console.log(e)
+		to_import_items = JSON.parse(readFileSync(import_json, 'utf8'))
+	} catch(e){
+		console.log('Unable to read inoput JSON at '+import_json)
+		throw e
 	}
+
+	console.log('Importing '+json.length+' items...')
+
+	await 	Promise.all(to_import_items.map( item => {
+				dpd.items.post(item)
+			}))
+		
+	console.log('Import: [ok]')
+
 }
 
 
