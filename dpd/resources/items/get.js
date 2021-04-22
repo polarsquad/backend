@@ -4,7 +4,7 @@ cancelUnless(
     || (me && me.privileges && me.privileges.indexOf('edit_items') != -1) 
 )
 
-cancelIf(this.proposalFor)
+cancelIf(!internal && this.proposalFor)
 
 var self = this
 
@@ -40,10 +40,9 @@ if(me && me.privileges.indexOf('edit_items') != -1 ){
     this.proposals = this.proposals || []
 
     $addCallback()
-    dpd.items.get({proposalFor: this._id})
+    dpd.items.get({proposalFor: this.id})
     .then(
         proposals => { 
-            console.log(proposals)
             this.proposals.push(...proposals)
             $finishCallback()
         },
