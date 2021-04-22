@@ -9,6 +9,7 @@ cancelIf(this.proposalFor)
 var self = this
 
 if(me && me.privileges.indexOf('edit_items') != -1 ){
+
     if(this.lastEditor){
         $addCallback()
         dpd.users.get(this.lastEditor)
@@ -35,6 +36,21 @@ if(me && me.privileges.indexOf('edit_items') != -1 ){
             }
         )
     }
+
+    this.proposals = this.proposals || []
+
+    $addCallback()
+    dpd.items.get({proposalFor: this._id})
+    .then(
+        proposals => { 
+            console.log(proposals)
+            this.proposals.push(...proposals)
+            $finishCallback()
+        },
+
+        $finishCallback()
+    )
+
 } else {
     this.note           = undefined
     this.lastEditor     = undefined
