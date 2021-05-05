@@ -146,5 +146,8 @@ dpd.items.get({})
 	return  JSON.stringify(items.map( item => keys.reduce( (result, key) => {result[key] = item[key]; return result}, {})))
 
 })
-.then( result =>  ctx.res.end(result))
+.then( 
+	result =>  ctx.res.end(result),
+	console.log
+)
 .finally($finishCallback)
