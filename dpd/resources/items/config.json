@@ -231,6 +231,20 @@
             "typeLabel": "string",
             "id": "lastEditor",
             "order": 32
+        },
+        "remoteItem": {
+            "name": "remoteItem",
+            "type": "object",
+            "typeLabel": "object",
+            "id": "remoteItem",
+            "order": 33
+        },
+        "proposals": {
+            "name": "proposals",
+            "type": "array",
+            "typeLabel": "array",
+            "id": "proposals",
+            "order": 34
         }
     }
 }

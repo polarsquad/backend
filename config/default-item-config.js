@@ -385,5 +385,10 @@
 			defaultValue:	"",
 			internal:		true
 		}),
+		new Property({
+			name:			"proposals",
+			defaultValue:	[],
+			internal:		true
+		})
 
 	]

@@ -243,7 +243,7 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 		const translatedPropertyName = exports.getInterfaceTranslation(`ITEMS.${property.name}.${lang}`) || property.name
 
 
-		content += `\n\n*--- ${translatedPropertyName}:*\n`
+		content += `\n\n *${translatedPropertyName}*\n`
 
 
 		if(property.translatable){
@@ -258,9 +258,7 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 
 				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}.${lang}`) || property.name
 
-				content += '\n'
-
-				content += `\t/(${translatedLanguagesName})/ `
+				content += `\t/${translatedLanguagesName}/ `
 
 				content += `${value}\n`
 			})
