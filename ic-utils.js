@@ -331,7 +331,7 @@ exports.getEffectiveValues = function(sheet){
 
 	const effective_values	= 	rows.map(  
 
-									rowData =>	(rowData.values || []).map( 
+									rowData =>	rowData.values.map( 
 
 													value => {
 
@@ -455,6 +455,8 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 	if(!sheets || sheets.length == 0) throw "updateInterfaceTranslations: missing sheets."
 	
 	interfaceTranslationTable = {}
+
+	console.log(sheets)
 
 	sheets.forEach( sheet => {
 
