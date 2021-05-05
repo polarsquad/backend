@@ -10,8 +10,7 @@ var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
 function sanetizePropertiy(prop){
 	if(!prop) return ""
-	if(typeof prop != 'string') prop = JSON.stringify(prop)
-	return prop.replace(",", "\\COMMA")
+	JSON.stringify(prop)	
 }
 
 $addCallback()
