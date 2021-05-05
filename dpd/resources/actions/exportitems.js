@@ -8,7 +8,7 @@ var query   	= ctx.query,
 	response	= this
 
 
-console.log("Exporting items...", keys.join(', '))
+console.log("\nExporting items...", keys.join(', '), '\n')
 
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
@@ -133,7 +133,7 @@ dpd.items.get({})
 		console.log('CSV', items.length)
 
 		return      keys.join(',')+'\n'
-				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',') ).join('\n')
+				   +items.map( item => keys.map( key => (item[key])).join(',') ).join('\n')
 	}
 	
 
