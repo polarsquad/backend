@@ -8,12 +8,12 @@ var query   	= ctx.query,
 	response	= this
 
 
-console.log("\nExporting items...", keys.join(', '), '\n')
 
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
 keys = keys.filter( key => icItemConfig.properties.find( prop => prop.name == key) )
 
+console.log("\nExporting items...", keys.join(', '), '\n')
 
 
 
@@ -130,7 +130,7 @@ dpd.items.get({})
 		ctx.res.setHeader('Content-Type', 'text/csv; charset=utf-8')
 		ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (icUtils.config.title||'ic').toLowerCase()+"_items.csv\"")
 
-		console.log('CSV', items.length)
+		console.log('CSV', items.length, keys.length)
 
 		return      keys.join(',')+'\n'
 				   +items.map( item => keys.map( key => (item[key])).join(',') ).join('\n')
