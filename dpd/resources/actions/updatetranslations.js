@@ -16,7 +16,7 @@ const sheet_credentials = 	icConfig.translationSpreadsheet
 							?	[ icConfig.translationSpreadsheet.id, icConfig.translationSpreadsheet.apiKey ]
 							:	icUtils.splitSpreadsheetUrl(icConfig.translationSpreadsheetUrl)
 
-
+console.log(sheet_credentials)
 
 icUtils.updateInterfaceTranslations(...sheet_credentials)
 .then(
