@@ -69,6 +69,7 @@
 		this.max			=	data.max
 		this.mandatory		= 	data.mandatory
 		this.match			=	data.match
+		this.internal		=	data.internal
 
 		this.getErrors		= 	function(value, key){
 
