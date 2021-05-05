@@ -473,7 +473,7 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 			Object.entries(dic).forEach( ([lang, value])=> {
 				interfaceTranslationTable[lang] 				= interfaceTranslationTable[lang] || {}
 				interfaceTranslationTable[lang][section]		= interfaceTranslationTable[lang][section] || {}
-				interfaceTranslationTable[lang][section][str] 	= value
+				interfaceTranslationTable[lang][section][str] 	= value || ""
 			})
 		})
 
