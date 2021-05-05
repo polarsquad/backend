@@ -1,12 +1,14 @@
 'use strict'
 
-var nodemailer  = require('nodemailer'),
+let nodemailer  = require('nodemailer'),
 	path		= require('path'),
 	request		= require('request-promise'),
 	fetch		= require('node-fetch'),
 	Promise		= require('bluebird'),
 	icConfig	= {},
-	itemConfig	= {}
+	itemConfig	= {},
+
+	interfaceTranslationTable = {}
 
 
 fetch.Promise = Promise
@@ -23,6 +25,8 @@ try{
 catch(e){
 	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')	
 }
+
+
 
 exports.config = icConfig
 
@@ -54,6 +58,7 @@ exports.get = function(url){
 
 	})
 }
+
 
 
 exports.getTranslation = function(from, to ,text, config){
@@ -198,7 +203,9 @@ exports.diff = function(property, old_value, new_value, key){
 }
 
 
-exports.mailSuggestion = function(to, suggestion, target){
+exports.mailSuggestion = function(to, suggestion, target, lang){
+
+	lang = lang || 'DE'
 
 	var subject = 	"Neuer Vorschlag eingegangen",
 		link	= 	this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
@@ -215,33 +222,91 @@ exports.mailSuggestion = function(to, suggestion, target){
 
 
 	itemConfig.properties.forEach(function(property){
-		if(property.name in suggestion){
-			if(property.name == 'state') 			return null
-			if(property.name == 'proposalFor') 		return null
-			if(property.name == 'creator') 			return null
-			if(property.name == 'creationDate') 	return null
-			if(property.name == 'lastEditor') 		return null
-			if(property.name == 'lastEditDate') 	return null
+
+		if(!(property.name in suggestion)) 		return null
+		if(property.internal) 					return null
+
+		if(property.name == 'state') 			return null
+		if(property.name == 'proposalFor') 		return null
+		if(property.name == 'creator') 			return null
+		if(property.name == 'creationDate') 	return null
+		if(property.name == 'lastEditor') 		return null
+		if(property.name == 'lastEditDate') 	return null
+
+
+		//If there are no actual changes proposed:
+		if( target 	&& !exports.diff(property, suggestion[property.name], target[property.name]) ) return null
+
+		//If property is empty;	
+		if( !target && !suggestion[property.name] )	 return null
+
+		const translatedPropertyName = exports.getInterfaceTranslation(`ITEMS.${property.name}.${lang}`) || property.name
+
+
+		content += `\n\n*--- ${translatedPropertyName}:*\n`
+
+
+		if(property.translatable){
+
+			Object.entries(suggestion[property.name]).forEach( ([key, value]) => {
+
+				// no entries for this language:
+				if(!target 	&& !suggestion[property.name][key].trim() ) return null
+
+				//no updates for this language:
+				if( target	&& !exports.diff(property, suggestion[property.name], target[property.name], key)  ) return null
+
+				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}.${lang}`) || property.name
+
+				content += '\n'
+
+				content += `\t/(${translatedLanguagesName})/ `
+
+				content += `${value}\n`
+			})
+
+			content += '\n'
+
+
+			return null
+		} 
 
 
 
-			if(property.type != 'object'){
-				if(target ? exports.diff(property, suggestion[property.name], target[property.name]) : !!suggestion[property.name]){
-					content += property.name+': \t'	+ JSON.stringify(suggestion[property.name])	+ '\n'				
-				}
-			} else {
-				if(!target || exports.diff(property, suggestion[property.name], target[property.name])){
-					content += property.name+': \n'
-				}
+		if(property.type == 'array'){
 
-				for(var key in suggestion[property.name]){
-					if(target ? exports.diff(property, suggestion[property.name], target[property.name], key) : !!suggestion[property.name][key]){
-						content += "\t"+key+': \t'+ suggestion[property.name][key] + '\n'
-					}
-				}
-			}
-			
+			suggestion[property.name].forEach( value => {
+
+				const translatedValue = 	exports.getInterfaceTranslation(`TYPES.${value}.${lang}`)
+										||	exports.getInterfaceTranslation(`CATEGORIES.${value}.${lang}`) 
+										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${value}.${lang}`)
+										||	value
+
+				content += `\t${translatedValue}\n`
+			})
+
+			return null
 		}
+
+
+
+		if(['string', 'number'].includes(property.type)){
+
+			const translatedValue = 		exports.getInterfaceTranslation(`TYPES.${suggestion[property.name]}.${lang}`)
+										||	exports.getInterfaceTranslation(`CATEGORIES.${suggestion[property.name]}.${lang}`) 
+										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${suggestion[property.name]}.${lang}`)
+										||	suggestion[property.name]
+
+
+			content += `\t${translatedValue}\n`
+
+			return null
+		}
+
+		
+		content += `${translatedPropertyName}: \n\t ${JSON.stringify(suggestion[property.name])}\n`				
+
+			
 	})
 
 	exports.mail(to, subject, content)
@@ -251,8 +316,6 @@ exports.fetchGoogleSheets = async function(sheet_id, api_key){
 
 	const base		= 'https://sheets.googleapis.com/v4/spreadsheets'
 	const url		= `${base}/${sheet_id}?key=${api_key}&includeGridData=true`
-
-	console.log(url)
 
 	const result	= await fetch(url)
 	const data		= await result.json()
@@ -317,7 +380,7 @@ exports.trimEffectiveValues = function(effective_values, skip_rows, skip_columns
 
 }
 
-exports.evHashArray = function(effective_values){
+exports.evHashArray = function(effective_values, normalize_keys, ignore_empty_columns){
 
 
 	const properties 	= 	effective_values[0]
@@ -325,7 +388,11 @@ exports.evHashArray = function(effective_values){
 
 	const hash_array	= 	data.map( row => 	row.reduce( (acc, value, index) => {
 
-													const property_name = properties[index]
+													if(!properties[index]) return acc
+
+													const property_name = 	normalize_keys
+																			?	properties[index].toUpperCase().replace(/\s/g, "_")
+																			:	properties[index]
 
 													if(property_name) acc[property_name] = value
 
@@ -338,11 +405,20 @@ exports.evHashArray = function(effective_values){
 
 }
 
-exports.evDictionary = function(effective_values){	
+exports.evDictionary = function(effective_values, normalize_keys, ignore_empty_rows){	
 
-	const keys			= 	effective_values.slice(1).map( row => row[0] )			
-	const data			= 	effective_values.map( row => row.slice(1) )
-	const hashes		=	exports.evHashArray(data)
+
+	const rows			= 	ignore_empty_rows 
+							?	effective_values.filter( 
+									(row, index) => 
+											row.slice(1).some(value => !!value) 
+										&& 	(index == 0 ||row[0] )	// row for hash keys  has no frist entry, every other line should have at least one beyond the first element used as key 
+								)
+							:	effective_values
+
+	const keys			= 	rows.slice(1).map( row => normalize_keys ? row[0].toUpperCase().replace(/\s/g, "_") :row[0] )			
+	const data			= 	rows.map( row => row.slice(1) )
+	const hashes		=	exports.evHashArray(data, true)
 
 	const dictionary	= 	keys.reduce( (acc, key, index ) => {
 
@@ -358,4 +434,47 @@ exports.evDictionary = function(effective_values){
 
 
 
-exports
+exports.splitSpreadsheetUrl = function(spreadsheetUrl){
+
+	let match = spreadsheetUrl.match(/\/spreadsheets\/([^?]+)\?.*key=([^\&]+)/)	
+
+	return match && match.slice(1,3)
+
+}
+
+exports.getInterfaceTranslation = function(str){
+
+	const path = str.split('.').map(section => section.replace(/([a-z])([A-Z])/,'$1_$2').toUpperCase().replace(/\s/g, "_"))
+
+	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable)
+}
+
+exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
+
+	const sheets 	= await exports.fetchGoogleSheets(sheet_id, api_key)
+	const errors	= []
+
+	if(!sheets || sheets.length == 0) throw "updateInterfaceTranslations: missing sheets."
+	
+	interfaceTranslationTable = {}
+
+	sheets.forEach( sheet => {
+
+
+		const title 		= sheet && sheet.properties && sheet.properties.title
+
+		if(!title) throw "updateInterfaceTranslations: Missing sheet title."
+
+		const section 		= title.toUpperCase().replace(/\s/g, "_")
+
+		const values		= exports.getEffectiveValues(sheet)
+
+		const dictionary	= exports.evDictionary(values, true, true)
+
+		interfaceTranslationTable[section] = dictionary
+
+	})	
+
+	return interfaceTranslationTable
+}
+

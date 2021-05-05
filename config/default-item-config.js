@@ -355,13 +355,6 @@
 		}),
 
 		new Property({
-			name: 			"resubmissionNotification",			
-			defaultValue:	"",
-			searchable:		false,
-		}),
-
-
-		new Property({
 			name:			"legacyId",
 			defaultValue:	"",
 			internal:		true
