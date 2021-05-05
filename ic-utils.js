@@ -333,7 +333,7 @@ exports.getEffectiveValues = function(sheet){
 
 	const effective_values	= 	rows.map(  
 
-									rowData =>	rowData.values.map( 
+									rowData =>	(rowData.values||[]).map( 
 
 													value => {
 
