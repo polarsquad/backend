@@ -347,7 +347,7 @@ exports.getEffectiveValues = function(sheet){
 												)
 
 								)
-								.filter( row => row.some( value => value !== undefined) )
+								.filter( row => row.some( value => !!value) )
 	return effective_values
 }
 
@@ -467,7 +467,7 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 
 		const values		= exports.getEffectiveValues(sheet)
 
-		const dictionary	= exports.evDictionary(values, true, true)
+		const dictionary	= exports.evDictionary(values, true, false)
 
 		Object.entries(dictionary).forEach( ([str, dic]) => {			
 			Object.entries(dic).forEach( ([lang, value])=> {
