@@ -126,10 +126,13 @@ dpd.items.get({})
 		ctx.res.setHeader('Content-Type', 'text/csv; charset=utf-8')
 		ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (icUtils.config.title||'ic').toLowerCase()+"_items.csv\"")
 
+		console.log('CSV', items.length)
+
 		return      keys.join(',')+'\n'
-				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',')).join('\n')
+				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',') ).join('\n')
 	}
 	
+
 	ctx.res.setHeader('Content-Type', 'application/json')   
 	return  JSON.stringify(items.map( item => keys.reduce( (result, key) => {result[key] = item[key]; return result}, {})))
 
