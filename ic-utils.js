@@ -335,14 +335,14 @@ exports.getEffectiveValues = function(sheet){
 
 													value => {
 
-														if(!value) 					return undefined
-														if(!value.effectiveValue)	return undefined
+														if(!value) 					return ""
+														if(!value.effectiveValue)	return ""
 														
 														return  value.effectiveValue.stringValue
 																|| 
 																value.effectiveValue.numberValue
 																||
-																undefined 
+																""
 													}
 												)
 
