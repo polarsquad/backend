@@ -1,6 +1,6 @@
 var query   	= ctx.query,
 	format  	= (query.format	|| 'json').toUpperCase(),
-	lang  		= (query.lang	|| 'DE').toUpperCase(),
+	lang  		= (query.lang	|| 'de').toLowerCase(),
 	keys    	= (query.keys	|| 'title').split(','),
 	states		= query.states	? query.states.split(',') 	: [],
 	tags        = query.tags 	? query.tags.split(',')		: [],
@@ -25,7 +25,7 @@ function sanetizePropertiy(prop){
 	if(!prop) return ""
 	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 	if(['string', 'number'].includes(typeof prop)) return encase(prop)
-	//if(typeof prop == 'object')	return sanetizeProperty(prop[lang])
+	if(typeof prop == 'object')	return sanetizeProperty(prop[lang]||JSON.stringify(prop))
 
 	return encase(prop)
 }
