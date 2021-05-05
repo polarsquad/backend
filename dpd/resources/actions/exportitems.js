@@ -1,12 +1,17 @@
 var query   	= ctx.query,
 	format  	= (query.format	|| 'json').toUpperCase(),
+	lang  		= (query.lang	|| 'DE').toUpperCase(),
 	keys    	= (query.keys	|| 'title').split(','),
 	states		= query.states	? query.states.split(',') 	: [],
 	tags        = query.tags 	? query.tags.split(',')		: [],
 	search		= (query.search	|| ''),
 	response	= this
 
+
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
+
+keys = keys.filter( key => icItemConfig.properties.find( prop => prop.name == key) )
+
 
 function encase(str){
 	return `"${String(str).replace('"',"'")}"`
@@ -16,7 +21,7 @@ function sanetizePropertiy(prop){
 	if(!prop) return ""
 	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 	if(['string', 'number'].includes(typeof prop)) return encase(prop.replace("'",'"'))
-	if(typeof prop == 'object')	return encase( Object.entries(prop).map( ([key,value]) => `${key}:${value}`) .join(', ') )
+	if(typeof prop == 'object')	return sanetizeProperty(prop[lang])
 
 	return `"${prop}"`
 }
@@ -120,6 +125,7 @@ dpd.items.get({})
 	if(format =='CSV'){
 		ctx.res.setHeader('Content-Type', 'text/csv; charset=utf-8')
 		ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (icUtils.config.title||'ic').toLowerCase()+"_items.csv\"")
+
 		return      keys.join(',')+'\n'
 				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',')).join('\n')
 	}
