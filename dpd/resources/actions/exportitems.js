@@ -27,6 +27,9 @@ function sanetizePropertiy(prop){
 	if(!prop) return ""
 	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 	if(['string', 'number'].includes(typeof prop)) return encase(prop)
+
+	console.log('prop[lang]', prop[lang])	
+
 	if(typeof prop == 'object')	return sanetizeProperty(prop[lang]||JSON.stringify(prop))
 
 	return encase(prop)
