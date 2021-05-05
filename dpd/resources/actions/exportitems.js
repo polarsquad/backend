@@ -13,7 +13,9 @@ var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
 keys = keys.filter( key => icItemConfig.properties.find( prop => prop.name == key) )
 
-console.log("\nExporting items...", 'keys:', keys.join(', '), 'lang:', lang, '\n')
+console.log("\nExporting items...",'\n')
+console.log("\tKeys:", ...keys, '\n')
+console.log("\tlang:", lang, '\n')
 
 
 
