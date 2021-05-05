@@ -329,9 +329,7 @@ exports.getEffectiveValues = function(sheet){
 	const data 				= 	sheet.data[0]
 	const rows				= 	data.rowData
 
-	console.log(sheet)
-
-	console.log(sheet.data)
+	console.log(rows)
 
 	const effective_values	= 	rows.map(  
 
