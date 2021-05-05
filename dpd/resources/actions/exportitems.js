@@ -133,7 +133,7 @@ dpd.items.get({})
 		console.log('CSV', items.length, keys.length)
 
 		return      keys.join(',')+'\n'
-				   +items.map( item => keys.map( key => (item[key])).join(',') ).join('\n')
+				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',') ).join('\n')
 	}
 	
 
