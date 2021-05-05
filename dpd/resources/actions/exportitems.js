@@ -23,7 +23,7 @@ function encase(str){
 	return `"${String(str).replace('"',"'")}"`
 }
 
-function sanetizePropertiy(prop){
+function sanetizeProperty(prop){
 	if(!prop) return ""
 	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 	if(['string', 'number'].includes(typeof prop)) return encase(prop)
@@ -138,7 +138,7 @@ dpd.items.get({})
 		console.log('CSV', items.length, keys.length)
 
 		return      keys.join(',')+'\n'
-				   +items.map( item => keys.map( key => sanetizePropertiy(item[key]) ).join(',') ).join('\n')
+				   +items.map( item => keys.map( key => sanetizeProperty(item[key]) ).join(',') ).join('\n')
 	}
 	
 
