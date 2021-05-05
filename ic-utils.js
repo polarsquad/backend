@@ -256,7 +256,7 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 				//no updates for this language:
 				if( target	&& !exports.diff(property, suggestion[property.name], target[property.name], key)  ) return null
 
-				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}.${lang}`) || property.name
+				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}.${lang}`) || lang
 
 				content += `\t/${translatedLanguagesName}/ `
 
