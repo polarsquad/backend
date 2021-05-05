@@ -8,9 +8,13 @@ var query   	= ctx.query,
 	response	= this
 
 
+console.log("Exporting items...", keys.join(', '))
+
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
 keys = keys.filter( key => icItemConfig.properties.find( prop => prop.name == key) )
+
+
 
 
 function encase(str){
