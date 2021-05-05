@@ -8,9 +8,17 @@ var query   	= ctx.query,
 
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
+function encase(str){
+	return `"${String(str).replace('"',"'")}"`
+}
+
 function sanetizePropertiy(prop){
 	if(!prop) return ""
-	JSON.stringify(prop)	
+	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
+	if(['string', 'number'].includes(typeof prop)) return encase(prop.replace("'",'"'))
+	if(typeof prop == 'object')	return encase( Object.entries(prop).map( ([key,value]) => `${key}:${value}`) .join(', ') )
+
+	return `"${prop}"`
 }
 
 $addCallback()
