@@ -20,13 +20,13 @@ console.log("\tlang:", lang, '\n')
 
 
 function encase(str){
-	return `"${String(str).replace('"',"'")}"`
+	return `"${String(str).replace(/"/g,"'")}"`
 }
 
 function sanetizeProperty(prop){
 	if(!prop) return ""
 	if(['string', 'number'].includes(typeof prop)) return encase(prop)
-	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
+	if(Array.isArray(prop))	return encase(prop.map( value => value.replace(/"/g,"'")).join(', '))
 
 	console.log('prop[lang]', prop[lang])	
 
