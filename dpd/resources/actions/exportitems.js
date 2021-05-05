@@ -25,8 +25,8 @@ function encase(str){
 
 function sanetizeProperty(prop){
 	if(!prop) return ""
-	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 	if(['string', 'number'].includes(typeof prop)) return encase(prop)
+	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
 
 	console.log('prop[lang]', prop[lang])	
 
