@@ -240,7 +240,7 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 		//If property is empty;	
 		if( !target && !suggestion[property.name] )	 return null
 
-		const translatedPropertyName = exports.getInterfaceTranslation(`ITEMS.${property.name}.${lang}`) || property.name
+		const translatedPropertyName = exports.getInterfaceTranslation(`ITEMS.${property.name}`,lang) || property.name
 
 
 		content += `\n\n *${translatedPropertyName}*\n`
@@ -256,7 +256,7 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 				//no updates for this language:
 				if( target	&& !exports.diff(property, suggestion[property.name], target[property.name], key)  ) return null
 
-				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}.${lang}`) || lang
+				const translatedLanguagesName = exports.getInterfaceTranslation(`LANGUAGES.${key}`,lang) || lang
 
 				content += `\t/${translatedLanguagesName}/ `
 
@@ -275,9 +275,9 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 
 			suggestion[property.name].forEach( value => {
 
-				const translatedValue = 	exports.getInterfaceTranslation(`TYPES.${value}.${lang}`)
-										||	exports.getInterfaceTranslation(`CATEGORIES.${value}.${lang}`) 
-										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${value}.${lang}`)
+				const translatedValue = 	exports.getInterfaceTranslation(`TYPES.${value}`,lang)
+										||	exports.getInterfaceTranslation(`CATEGORIES.${value}`,lang) 
+										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${value}`,lang)
 										||	value
 
 				content += `\t${translatedValue}\n`
@@ -290,9 +290,9 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 
 		if(['string', 'number'].includes(property.type)){
 
-			const translatedValue = 		exports.getInterfaceTranslation(`TYPES.${suggestion[property.name]}.${lang}`)
-										||	exports.getInterfaceTranslation(`CATEGORIES.${suggestion[property.name]}.${lang}`) 
-										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${suggestion[property.name]}.${lang}`)
+			const translatedValue = 		exports.getInterfaceTranslation(`TYPES.${suggestion[property.name]}`,lang)
+										||	exports.getInterfaceTranslation(`CATEGORIES.${suggestion[property.name]}`,lang) 
+										||	exports.getInterfaceTranslation(`UNSORTED_TAGS.${suggestion[property.name]}`,lang)
 										||	suggestion[property.name]
 
 
@@ -328,8 +328,6 @@ exports.getEffectiveValues = function(sheet){
 
 	const data 				= 	sheet.data[0]
 	const rows				= 	data.rowData
-
-	console.log(rows)
 
 	const effective_values	= 	rows.map(  
 
@@ -442,11 +440,11 @@ exports.splitSpreadsheetUrl = function(spreadsheetUrl){
 
 }
 
-exports.getInterfaceTranslation = function(str){
+exports.getInterfaceTranslation = function(str, lang){
 
 	const path = str.split('.').map(section => section.replace(/([a-z])([A-Z])/,'$1_$2').toUpperCase().replace(/\s/g, "_"))
 
-	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable)
+	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable[lang])
 }
 
 exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
@@ -471,7 +469,12 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 
 		const dictionary	= exports.evDictionary(values, true, true)
 
-		interfaceTranslationTable[section] = dictionary
+		Object.entries(dictionary).forEach( ([str, dic]) => {			
+			Object.entries(dic).forEach( ([lang, value])=> {
+				interfaceTranslationTable[lang][section][str] = value
+			})
+		})
+
 
 	})	
 
