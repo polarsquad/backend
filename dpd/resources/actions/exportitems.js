@@ -24,10 +24,10 @@ function encase(str){
 function sanetizePropertiy(prop){
 	if(!prop) return ""
 	if(Array.isArray(prop))	return encase(prop.map( value => value.replace('"',"'")).join(', '))
-	if(['string', 'number'].includes(typeof prop)) return encase(prop.replace("'",'"'))
-	if(typeof prop == 'object')	return sanetizeProperty(prop[lang])
+	if(['string', 'number'].includes(typeof prop)) return encase(prop)
+	//if(typeof prop == 'object')	return sanetizeProperty(prop[lang])
 
-	return `"${prop}"`
+	return encase(prop)
 }
 
 $addCallback()
@@ -133,7 +133,7 @@ dpd.items.get({})
 		console.log('CSV', items.length, keys.length)
 
 		return      keys.join(',')+'\n'
-				   +items.map( item => keys.map( key => sanetizePropertiy(item[key])).join(',') ).join('\n')
+				   +items.map( item => keys.map( key => sanetizePropertiy(item[key]) ).join(',') ).join('\n')
 	}
 	
 
