@@ -51,7 +51,7 @@ if(me && me.privileges.indexOf('edit_items') != -1 ){
     )
 
 } else {
-    this.note           = undefined
+    this.editingNote    = undefined
     this.lastEditor     = undefined
     this.lastEditDate   = undefined
     this.creator        = undefined
