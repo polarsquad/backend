@@ -14,20 +14,21 @@ if(
 
 		if(!property){
 
-			return 	error(
-						key, 
-						{
-							message: 	"Unknown property: "+key
-							code:		"UNKNOWN_PROPERTY"
-						}
-					)
+			error(
+				key, 
+				{
+					message: 	"Unknown property: "+key
+					code:		"UNKNOWN_PROPERTY"
+				}
+			)
 
 		} else{
 
+			var e = property.getErrors(data[property.name])
+        	if(e) error(property.name, e)
+
 		}
 
-		var e = property.getErrors(data[property.name])
-        if(e) error(property.name, e)
 
 	})
 
