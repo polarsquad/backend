@@ -17,15 +17,15 @@ if(
 			error(
 				key, 
 				{
-					message: 	"Unknown property: "+key
+					message: 	"Unknown property: "+key,
 					code:		"UNKNOWN_PROPERTY"
 				}
 			)
 
 		} else{
 
-			var e = property.getErrors(data[property.name])
-        	if(e) error(property.name, e)
+			var e = property.getErrors(value)
+        	if(e) error(key, e)
 
 		}
 
