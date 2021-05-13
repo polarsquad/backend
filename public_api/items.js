@@ -189,7 +189,7 @@ export class ItemImporter {
 	
 		const remoteItemsConfig = this.publicApiConfig.remoteItems
 
-		if(!remoteItemsConfig) return wrapResult('unknown', 'failed', 'missing config', [])
+		if(!remoteItemsConfig) return this.wrapResult('unknown', 'failed', 'missing config', [])
 
 		return 	await	Promise.all(
 							Object.entries(remoteItemsConfig)
