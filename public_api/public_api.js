@@ -28,7 +28,7 @@ const itemImporter		=	new ItemImporter({
 
 function checkPublicApiConfig(config){
 
-	Object.entries(config.remoteItems)
+	Object.entries(config.remoteItems || {})
 	.forEach( ([key, remoteItemConfig]) => {
 		if(!remoteItemConfig.script) 			console.error(`Missing config.remoteItems.${key}.script 		(must be a filename)`)
 		if(!remoteItemConfig.url) 				console.error(`Missing config.remoteItems.${key}.url			(must be a url)`)

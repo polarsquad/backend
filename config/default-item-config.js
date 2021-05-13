@@ -280,7 +280,6 @@
 			defaultValue:	"",
 			searchable:		false,
 		}),
-
 		new Property({
 			name: 			"startDate",
 			getErrors:		function(value, key){	
