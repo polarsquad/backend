@@ -9,8 +9,26 @@ if(
 	&&	!(me && me.privileges && me.privileges.indexOf('edit_items') != -1 && ctx.method == 'PUT')
 ){ 
 
-    icItemConfig.properties.forEach(function(property){
-        var e = property.getErrors(data[property.name])
+	Object.entries(data).forEach( ([key,value]) => {
+		const property = icItemConfig.properties.find( property => property.name == key)
+
+		if(!property){
+
+			return 	error(
+						key, 
+						{
+							message: 	"Unknown property: "+key
+							code:		"UNKNOWN_PROPERTY"
+						}
+					)
+
+		} else{
+
+		}
+
+		var e = property.getErrors(data[property.name])
         if(e) error(property.name, e)
-    })
+
+	})
+
 }
