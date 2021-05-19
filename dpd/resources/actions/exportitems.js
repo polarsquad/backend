@@ -47,7 +47,7 @@ dpd.items.get({})
 	// TAGS
 	if(tags && tags.length > 0){
 		items =	items.filter( function(item){
-					return tags.every( function(tag){ return item.tags.includes(tag) } )
+					return tags.every( function(tag){ return (item.tags|| []).includes(tag) } )
 				})
 	}
 
