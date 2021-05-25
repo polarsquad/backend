@@ -95,7 +95,7 @@ export class ItemImporter {
 		if(typeof property != 'string') return property
 
 		return	sanitizeHtml(property, {
-					allowedTags: ['p', 'em', 'strong', 'br', 'ul', 'li'],
+					allowedTags: ['p', 'em', 'strong', 'br', 'ul', 'li', 'b', 'i'],
 					allowedAttributes: {}
 				}).replace('&amp;', '&') 
 
@@ -131,8 +131,8 @@ export class ItemImporter {
 										const preliminary_id = item.id 
 
 										item.id = 	preliminary_id
-													?	'--r-'+key+preliminary_id
-													:	'--r-'+key+Date.now()+index+Math.random()
+													?	'r-'+key+preliminary_id
+													:	'r-'+key+Date.now()+index+Math.random()
 
 										item.state = 'public'
 
