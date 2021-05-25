@@ -95,7 +95,7 @@ export class ItemImporter {
 		if(typeof property != 'string') return property
 
 		return	sanitizeHtml(property, {
-					allowedTags: [],
+					allowedTags: ['p', 'em', 'strong', 'br', 'ul', 'li'],
 					allowedAttributes: {}
 				}).replace('&amp;', '&') 
 
