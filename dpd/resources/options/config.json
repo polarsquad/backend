@@ -1,0 +1,25 @@
+{
+    "type": "Collection",
+    "properties": {
+    	"key":	{
+    		"name": 	"key",
+    		"type": 	"string",
+    		"id":		"key",
+    		"order":	0    		
+    	},
+    	"label": {
+            "name": "label",
+            "type": "string",
+            "typeLabel": "string",
+            "id": "label",
+            "order": 1
+        },
+        "link": {
+            "name": "link",
+            "type": "string",
+            "typeLabel": "string",
+            "id": "link",
+            "order": 2
+        }
+    }
+}

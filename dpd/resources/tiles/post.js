@@ -1,1 +1,7 @@
-cancelUnless(internal || me && ( me.id == this.id), "Unauthorized", 401)
+cancelUnless(
+	internal 
+	|| 
+	(me && me.privileges && me.privileges.indexOf('edit_items') != -1),
+	"Unauthorized",
+	401
+)
