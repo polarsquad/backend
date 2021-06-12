@@ -96,8 +96,11 @@ async function importJSON(dpd, import_json, clear_before_import){
 				if(item.location_ref){
 					const ref = items.find( i => i.title == item.location_ref)
 
-					if(!ref) console.log('Bad location_ref ', item.location_ref)
-					console.log(ref.id)	
+					if(!ref){
+						console.log('Bad location_ref ', item.location_ref)
+						return Promise.resolve()
+					}
+					
 					return dpd.items.put(item.id, {location_ref: ref.id })
 				}
 
