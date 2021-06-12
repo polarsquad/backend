@@ -87,7 +87,7 @@ async function importJSON(dpd, import_json, clear_before_import){
 			}))
 		
 
-	const items = dpd.items.get()
+	const items = await dpd.items.get()
 
 	await 	Promise.all( items.map( item => {
 
