@@ -2012,8 +2012,16 @@ function getLanguages(str){
 const items	= raw.slice(5).map( (data, index) => {	
 
 	const type						= 	getType(data[0])
-	const institutionName			= 	data[1] //TODO
-	const title						= 	data[2] || institutionName
+
+	const location_ref				= 	type == 'location' 
+										?	undefined
+										:	data[1]
+
+	const title						= 	type == 'location' 
+										?	data[1] 
+										:	data[2]
+
+	if(type == 'location' && data[2]) console.warn('Location title misplaced oO')
 
 	const brief						= 	{de:data[3]}
 	const description				= 	{de:data[4]}
@@ -2101,16 +2109,17 @@ const items	= raw.slice(5).map( (data, index) => {
 										]
 
 
-	const latitude 					=	data[39] && parseFloat(data[39]) 
-	const longitude 				=	data[40] && parseFloat(data[40]) 
+	let latitude 					=	data[39] && parseFloat(data[39]) || undefined
+	let longitude 					=	data[40] && parseFloat(data[40]) || undefined
+
+	console.log(typeof latitude)
 
 	const state		= 'public'
 
 
-	console.log(tags)
-
 	return {
 		title,
+		location_ref,
 		brief,
 		description,
 		charge,
@@ -2143,6 +2152,14 @@ const items	= raw.slice(5).map( (data, index) => {
 
 	}
 
+})
+
+
+
+items.forEach( item => {
+	if(item.location_ref){
+		if(items.every( i => i.title != item.location_ref)) console.error('LocationRef mismatch: ', item.location_ref)
+	}
 })
 
 //console.log(items.slice(0,5))

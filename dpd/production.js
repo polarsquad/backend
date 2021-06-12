@@ -86,6 +86,19 @@ async function importJSON(dpd, import_json, clear_before_import){
 				dpd.items.post(item)
 			}))
 		
+
+	const items = dpd.items.get()
+
+	await 	Promise.all( items.map( item => {
+
+				if(item.location_ref){
+					const ref = items.find( i => i.title == item.location_ref)
+					return dpd.put(item.id, {location_ref: ref.id })
+				}
+
+				return Promise.resolve()
+			}))
+
 	console.log('Import: [ok]')
 
 }
