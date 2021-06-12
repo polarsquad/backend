@@ -89,10 +89,15 @@ async function importJSON(dpd, import_json, clear_before_import){
 
 	const items = await dpd.items.get()
 
+
+	//TODO: generalize; dont use location_ref use itemConfig
 	await 	Promise.all( items.map( item => {
 
 				if(item.location_ref){
 					const ref = items.find( i => i.title == item.location_ref)
+
+					if(!ref) console.log('Bad location_ref ', item.location_ref)
+						
 					return dpd.items.put(item.id, {location_ref: ref.id })
 				}
 
