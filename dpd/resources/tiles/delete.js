@@ -1,7 +1,7 @@
 cancelUnless(
-	internal 
-	|| 
-	(me && me.privileges && me.privileges.indexOf('edit_items') != -1),
-	"Unauthorized",
-	401
+            internal 
+        ||  me &&  me.privileges.includes('edit_options')
+        
+        , "Unauthorized", 
+        401
 )

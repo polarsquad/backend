@@ -39,8 +39,10 @@ var taxonomy = {}
 						'encounters_conversations',	// Offene Gesprächskreise
 						'encounters_tanztee',		// Tanztee
 						'encounters_dating',		// Kennenlerntreffen (Dating)
-						'encounters_gardening'		// Gemeinsames Gärtnern
+						'encounters_gardening',		// Gemeinsames Gärtnern
 
+						'encounters_collectors',	// Sammelleidenschaften !!
+						'encounters_parties'		// Feste und Feiern !!
 					]
 		},
 
@@ -54,7 +56,10 @@ var taxonomy = {}
 						'counseling_housing',	// Wohnberatung
 						'counseling_migration',	// Migrationsberatung
 						'counseling_pension',	// Rentenberatung
-						'counseling_police'		// Polizeiberatung
+						'counseling_police',	// Polizeiberatung
+
+						'counseling_volunteers',// Ehrenamtsberatung !!
+						'counseling_legal'		// Rechtsberatung !!
 					]
 		},
 
@@ -91,7 +96,7 @@ var taxonomy = {}
 			tags: 	[
 						'arts_paint_craft', // Mal- und Bastelkurse
 						'arts_choir', 		// Singen und Chor
-						'arts_sewing', 		// Nähen und Schneidern
+						'arts_handicrafts',	// Handarbeit !!
 						'arts_cosmetic',	// Kosmetik
 						'arts_misc'			// Andere künstlerische Angebote
 					]
@@ -135,7 +140,7 @@ var taxonomy = {}
 						'it_courses',	// Kurse und Lernmöglichkeiten
 						'it_seniors',	// Technik und Alter
 						'it_lending',	// Leihmöglichkeiten von Tablets und Smartphones
-						'it_free_wifi'	// Kostenlose WLAN - Hotspots
+						//'it_free_wifi'	// Kostenlose WLAN - Hotspots
 					]
 		},
 
@@ -1533,6 +1538,9 @@ const sub_categories = {
 		'encounters_tanztee':				"Tanztee",
 		'encounters_dating':		 		"Kennenlerntreffen (Dating)",
 		'encounters_gardening':				"Gemeinsames Gärtnern",
+		'encounters_collectors':			"Sammelleidenschaften",
+		'encounters_parties':				"Feste und Feiern",
+		
 		'counseling_social': 		 		"Sozialberatung",
 		'counseling_debt': 					"Schuldnerberatung",
 		'counseling_tenant':				"Mieterberatung",
@@ -1540,6 +1548,10 @@ const sub_categories = {
 		'counseling_migration':		 		"Migrationsberatung",
 		'counseling_pension':		 		"Rentenberatung",
 		'counseling_police':				"Polizeiberatung",
+
+		'counseling_volunteers':			"Ehrenamtsberatung",
+		'counseling_legal':					"Rechtsberatung",
+
 		'exercise_motor':					"Bewegungsangebote",
 		'exercise_dance':			 		"Tanzgruppe",
 		'exercise_walking':			 		"Spazieren gehen und wandern",
@@ -1552,7 +1564,9 @@ const sub_categories = {
 		'intercultural_encounters':			"Interkulturelle Treffen",
 		'arts_paint_craft':  				"Mal- und Bastelkurse",
 		'arts_choir': 		 				"Singen und Chor",
-		'arts_sewing': 		 				"Nähen und Schneidern",
+
+		'arts_handicrafts':  				"Handarbeit",		
+
 		'arts_cosmetic':	 				"Kosmetik",
 		'arts_misc':			 			"Andere künstlerische Angebote",
 		'culture_trips':					"Ausflüge und Exkursionen",
@@ -1575,7 +1589,7 @@ const sub_categories = {
 		'it_courses':	 					"Kurse und Lernmöglichkeiten",
 		'it_seniors':	 					"Technik und Alter",
 		'it_lending':	 					"Leihmöglichkeiten von Tablets und Smartphones",
-		'it_free_wifi':						"Kostenlose WLAN - Hotspots",
+		//'it_free_wifi':						"Kostenlose WLAN - Hotspots",
 		'housing_assisted': 	 			"Wohnen mit Service",
 		'housing_smart':		 			"Smart Wohnen",
 		'housing_project':		 			"Wohnprojekte",
@@ -1768,12 +1782,14 @@ function getCategories(str){
 
 
 	a = a.replace('gesellschaftundpolitik', 'gesellschaftkulturpolitik')
+	a = a.replace('naehenundschneidern', 'handarbeit')
+	a = a.replace("gesellschaftundkultur", "gesellschaftkulturpolitik")
 
 	const matches = []
 
 	;[
+		...Object.entries(sub_categories),
 		...Object.entries(main_categories),
-		...Object.entries(sub_categories)
 	]
 	.forEach( ([key,value]) => {
 
@@ -1788,7 +1804,7 @@ function getCategories(str){
 
 
 	if(a !==''){
-		console.log('getCatgeories', str, matches, a)
+		console.log('getCategories', str, matches, a)
 		throw "unable to match categories"
 	}
 
@@ -1798,23 +1814,37 @@ function getCategories(str){
 
 function getCategory(str){
 
-	const matches = []	
-
-	;[
-		...Object.entries(main_categories),
-		...Object.entries(sub_categories)
-	]
-	.forEach( ([key,value]) => {
-		if(matchSimplfied(value, str)) matches.push(key)
-	})
-
+	const matches = getCategories(str)
 
 	if(matches.length != 1){
-		console.log('getCategory()', `"${str}"`, matches)
-		throw "Unable to match categories"
+		console.log('getCategory() should be exactly 1:', matches)
+		throw "unable to match single category"
 	}
 
 	return matches[0]
+
+// if(!str) return []
+
+// 	let	a = simplifyString(str)
+
+
+// 	const matches = []	
+
+// 	;[
+// 		...Object.entries(main_categories),
+// 		...Object.entries(sub_categories)
+// 	]
+// 	.forEach( ([key,value]) => {
+// 		if(matchSimplfied(value, a)) matches.push(key)
+// 	})
+
+
+// 	if(matches.length != 1){
+// 		console.log('getCategory()', `"${a}"`, matches)
+// 		throw "Unable to match categories"
+// 	}
+
+// 	return matches[0]
 }
 
 function getTargetGroups(str){
@@ -1850,15 +1880,21 @@ function getTargetGroups(str){
 
 function getInstitutionType(str){
 	
+	if(!str) return undefined	
+
+
+	let a = simplifyString(str)
+
+	a = a.replace("stadteilzentrum", "stadtteilzentrum")
+
 	const matches = []	
 
 	Object.entries(institutionTypes).forEach( ([key,value]) => {
-		if(matchSimplfied(value, str)) matches.push(key)
+		if(matchSimplfied(value, a)) matches.push(key)
 	})
 
 	if(matches.length != 1){
-		console.log('getInstitutionType()', `"${str}"`, matches)
-		throw "Unable to match institutionType"
+		console.warn('getInstitutionType() unable to regognize any institution type:', `"${a}"`, matches)
 	}
 
 	return matches[0]
@@ -1876,12 +1912,14 @@ function getDistrict(str){
 
 	const matches = []
 
+	if(simplifyString(str) == 'allebezirke') return 'lor-all'
+
 	taxonomy.lor.forEach( district => {
 		if( matchSimplfied(district.name, str) ) matches.push(district.tag)
 	})
 
 	if(matches.length != 1){
-		console.log('getDestrict()', str, matches)
+		console.log('getDestrict() unable to recognize any district', str, matches)
 		throw "Unable to match district"
 	}
 
@@ -2041,20 +2079,21 @@ const items	= raw.slice(5).map( (data, index) => {
 	const sponsors					=	[data[38]]
 
 
-	//TODO
+	//TODO()
 	const tags						= 	[
 											primaryTopic, 
+											...[type],
 											...subCategories, 
 											...extraCategories, 
 											...targetGroups,
-											institutionType,
+											...( institutionType	? [institutionType]				: [] ),
 											bezirk,
 											...( accessibleWC 		? ['wheelchair_accessible_wc']	: [] ),
 											...( accessibleParking 	? ['accessible_parking']		: [] ),
 											...( accessibleEntrance ? ['wheelchair_accessible']		: [] ),
 											...( elevator 			? ['elevator_present']			: [] ),
-											prognoseraum,
-											bezirksregion,
+											...( prognoseraum		? [prognoseraum]				: [] ),
+											...( bezirksregion		? [bezirksregion]				: [] ),
 											...( freeWifiUse 		? ['free_wifi_usage']			: [] ),
 											...( freePCUse 			? ['free_pc_usage']				: [] ),
 
@@ -2062,14 +2101,15 @@ const items	= raw.slice(5).map( (data, index) => {
 										]
 
 
-	
-	const latitude 					=	data[4] && parseFloat(data[40]) 
-	const longitude 				=	data[41] && parseFloat(data[41]) 
+	const latitude 					=	data[39] && parseFloat(data[39]) 
+	const longitude 				=	data[40] && parseFloat(data[40]) 
 
 	const state		= 'public'
 
+
+	console.log(tags)
+
 	return {
-		type,		
 		title,
 		brief,
 		description,
@@ -2105,6 +2145,6 @@ const items	= raw.slice(5).map( (data, index) => {
 
 })
 
-console.log(items.slice(0,5))
+//console.log(items.slice(0,5))
 
 if(out) writeFileSync(out, JSON.stringify(items), 'utf8')
