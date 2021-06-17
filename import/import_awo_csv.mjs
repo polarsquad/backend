@@ -1699,6 +1699,13 @@ function matchSimplfied(str1, str2){
 	return a && b && a == b
 }
 
+function fixMarkdown(str) {
+	return 	str
+			.replace(/\*\* /, '**')
+			.replace(/ \*\*/, '**')
+
+}
+
 /**
  * CSVToArray parses any String of Data including '\r' '\n' characters,
  * and returns an array with the rows of data.
@@ -1912,7 +1919,10 @@ function getDistrict(str){
 
 	const matches = []
 
-	if(simplifyString(str) == 'allebezirke') return 'lor-all'
+	if(simplifyString(str) == 'allebezirke'){
+		console.warn('getDistrict() bad entry:', str)
+		return undefined
+	}
 
 	taxonomy.lor.forEach( district => {
 		if( matchSimplfied(district.name, str) ) matches.push(district.tag)
@@ -2024,10 +2034,10 @@ const items	= raw.slice(5).map( (data, index) => {
 	if(type == 'location' && data[2]) console.warn('Location title misplaced oO')
 
 	const brief						= 	{de:data[3]}
-	const description				= 	{de:data[4]}
-	const charge					= 	{de:data[5]}
+	const description				= 	{de:fixMarkdown(data[4]) }
+	const charge					= 	{de:fixMarkdown(data[5]) }
 
-	const acessibility				=	{de:data[15]}
+	const acessibility				=	{de:fixMarkdown(data[15]) }
 
 	const primaryTopic				= 	getCategory(data[6])
 
@@ -2040,11 +2050,11 @@ const items	= raw.slice(5).map( (data, index) => {
 	if(data[24] && !data[24].match('^http')){
 		console.warn('Website missing protocol!')
 	}
-	const website					=	data[24].match('^http') 
+	const website					=	!data[24] || data[24].match('^http') 
 										?	data[24]
 										:	'https://'+data[24]
 
-	const hours						=	{de:data[25]}
+	const hours						=	{de:fixMarkdown(data[25]) }
 	const email						=	data[26]
 	const contact					=	data[27]
 	const phone						=	data[28]
@@ -2073,7 +2083,7 @@ const items	= raw.slice(5).map( (data, index) => {
 	const prognoseraum				=	data[17] && getPGR(data[17])
 	const bezirksregion				=	data[18] && getBZR(data[18])
 
-	const venue						=	{de: data[19] }
+	const venue						=	{de: fixMarkdown(data[19]) }
 
 
 	const languages					=	data[34] && getLanguages(data[34])
@@ -2083,9 +2093,8 @@ const items	= raw.slice(5).map( (data, index) => {
 
 
 	//TODO
-	const responsibleInstituation	=	data[37]
+	const responsibleInstitution	=	data[37]
 	const sponsors					=	[data[38]]
-
 
 	//TODO()
 	const tags						= 	[
@@ -2112,7 +2121,6 @@ const items	= raw.slice(5).map( (data, index) => {
 	let latitude 					=	data[39] && parseFloat(data[39]) || undefined
 	let longitude 					=	data[40] && parseFloat(data[40]) || undefined
 
-	console.log(typeof latitude)
 
 	const state		= 'public'
 
@@ -2140,7 +2148,7 @@ const items	= raw.slice(5).map( (data, index) => {
 		twitter,
 		whatsapp,
 		nebenanDe,
-		responsibleInstituation,
+		responsibleInstitution,
 		sponsors,
 
 		longitude,
@@ -2158,7 +2166,15 @@ const items	= raw.slice(5).map( (data, index) => {
 
 items.forEach( item => {
 	if(item.location_ref){
-		if(items.every( i => i.title != item.location_ref)) console.error('LocationRef mismatch: ', item.location_ref)
+		const l = items.filter( i => matchSimplfied(i.title, item.location_ref) ).length
+
+		if( l != 1){
+			console.error('LocationRef mismatch: ', item.location_ref, `(${l})`)
+			item.location_ref = undefined
+		}else{
+			item.location_ref = items.find( i => matchSimplfied(i.title, item.location_ref) ).title
+		}
+
 	}
 })
 

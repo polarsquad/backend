@@ -452,7 +452,13 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 	const sheets 	= await exports.fetchGoogleSheets(sheet_id, api_key)
 	const errors	= []
 
-	if(!sheets || sheets.length == 0) throw "updateInterfaceTranslations: missing sheets."
+	if(!sheets || sheets.length == 0){
+		console.log('updateInterfaceTranslations():')
+		console.log('\t sheet_id:\t', sheet_id)
+		console.log('\t sheets:\t', sheets)		
+
+		throw "updateInterfaceTranslations: missing sheets."
+	}
 	
 	interfaceTranslationTable = {}
 
