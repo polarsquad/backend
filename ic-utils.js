@@ -322,7 +322,8 @@ exports.fetchGoogleSheets = async function(sheet_id, api_key){
 
 	if(!sheets){
 		console.log('fetchGoogleSheets():')
-		console.log('\t fetch result:\t', result)		
+		console.log('\tfetch result:\t', result)		
+	}
 
 	return sheets
 }
