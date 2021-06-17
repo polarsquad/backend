@@ -320,6 +320,10 @@ exports.fetchGoogleSheets = async function(sheet_id, api_key){
 
 	const sheets	= data.sheets
 
+	if(!sheets){
+		console.log('fetchGoogleSheets():')
+		console.log('\t fetch result:\t', result)		
+
 	return sheets
 }
 
@@ -454,7 +458,7 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 
 	if(!sheets || sheets.length == 0){
 		console.log('updateInterfaceTranslations():')
-		console.log('\t sheet_id:\t', sheet_id)
+		console.log('\t sheet_id:\t', sheet_id)		
 		console.log('\t sheets:\t', sheets)		
 
 		throw "updateInterfaceTranslations: missing sheets."
