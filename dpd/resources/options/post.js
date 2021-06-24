@@ -1,12 +1,13 @@
-cancelUnless(internal || me && ( me.id == this.id), "Unauthorized", 401)
+cancelUnless(internal || me && ( me.id == this.id) && me.privileges.includes('edit_options'), "Unauthorized", 401)
 
 
 $addCallback()
+
 dpd.options.get({tag: this.tag})
 .then( 
 
-	items => {
-		if(items.length > 0) cancel("Duplicate tag", 400)
+	options => {
+		if(options.length > 0) cancel("Duplicate tag "+ this.tag, 400)
 		$finishCallback()	
 	},
 
