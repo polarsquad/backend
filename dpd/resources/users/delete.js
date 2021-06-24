@@ -1,1 +1,1 @@
-cancelUnless(internal || me && (me.id == this.id), "Unauthorized", 401)
+cancelUnless(internal, "Unauthorized", 401)
