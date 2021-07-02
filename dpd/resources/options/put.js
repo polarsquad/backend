@@ -8,7 +8,10 @@ dpd.options.get({tag: this.tag})
 .then( 
 
 	options => {
-		if(options.length > 0 && this.id != tag.id) cancel("Duplicate tag: "+this.tag, 400)
+		if(options.length == 0) finishCallback()
+
+		if(options[0].id != this.id) cancel("Duplicate tag: "+this.tag, 400)
+
 		$finishCallback()	
 	},
 
