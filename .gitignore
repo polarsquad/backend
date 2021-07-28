@@ -1,7 +1,7 @@
 /node_modules
 /dump
 /import/*
-!/import/*awo*
+!/import/*.mjs
 
 /config/*
 !/config/default-item-config.js

@@ -1586,10 +1586,11 @@ const sub_categories = {
 		'support_repairs':				 	"Reparaturhilfe",
 		'support_helpline': 			 	"Telefonseelsorge",
 		'support_public_restrooms':		 	"Öffentliche Toiletten",
+		'support_mobility':					"Mobilitätshilfedienste",
 		'it_courses':	 					"Kurse und Lernmöglichkeiten",
 		'it_seniors':	 					"Technik und Alter",
 		'it_lending':	 					"Leihmöglichkeiten von Tablets und Smartphones",
-		//'it_free_wifi':						"Kostenlose WLAN - Hotspots",
+		//'it_free_wifi':					"Kostenlose WLAN - Hotspots",
 		'housing_assisted': 	 			"Wohnen mit Service",
 		'housing_smart':		 			"Smart Wohnen",
 		'housing_project':		 			"Wohnprojekte",
@@ -1699,8 +1700,8 @@ function matchSimplfied(str1, str2){
 	return a && b && a == b
 }
 
-function fixMarkdown(str) {
-	return 	str
+function fixMarkdown(str, errors) {
+	return 	(str||'')
 			.replace(/\*\* /, '**')
 			.replace(/ \*\*/, '**')
 
@@ -1756,7 +1757,7 @@ function CSVToArray (CSV_string, delimiter) {
 }
 
 
-function getType(str){
+function getType(str, errors){
 
 	const matches = []
 
@@ -1772,15 +1773,14 @@ function getType(str){
 
 
 	if(matches.length != 1){
-		console.log('getType()', `"${str}"`, matches)
-		throw "Unable to match type"
+		errors.push(`Kann Typ nicht zuordnen: "${str}"`)		
 	}
 
 	return matches[0]
 
 }
 
-function getCategories(str){
+function getCategories(str, errors){
 
 	if(!str) return []
 
@@ -1791,6 +1791,8 @@ function getCategories(str){
 	a = a.replace('gesellschaftundpolitik', 'gesellschaftkulturpolitik')
 	a = a.replace('naehenundschneidern', 'handarbeit')
 	a = a.replace("gesellschaftundkultur", "gesellschaftkulturpolitik")
+	a = a.replace("ehrenamtberatung", "ehrenamtsberatung")
+
 
 	const matches = []
 
@@ -1798,41 +1800,42 @@ function getCategories(str){
 		...Object.entries(sub_categories),
 		...Object.entries(main_categories),
 	]
+	.sort( (a, b) =>  (a[1].length < b[1].length) ? 1 : -1 ) // sort by length of category name, longer matches should be done earlier
 	.forEach( ([key,value]) => {
 
 		const b = simplifyString(value)
 
-		if(a.match(b)) {
-			matches.push(key)
-			a = a.replace(b,'')
-		}
 
+		if(a.match(b)) {
+			matches.push(key)			
+			a = a.replace(new RegExp(b,'g'),'')
+		}
 	})
 
 
 	if(a !==''){
-		console.log('getCategories', str, matches, a)
-		throw "unable to match categories"
+		errors.push(`Kann Thema nicht zuordnen: "${a}"; ursprünglich: "${str}"`)
+
 	}
 
 	return matches
 
 }
 
-function getCategory(str){
+function getCategory(str, errors){
 
-	const matches = getCategories(str)
+	const matches = getCategories(str, errors)
 
 	if(matches.length != 1){
-		console.log('getCategory() should be exactly 1:', matches)
-		throw "unable to match single category"
+		errors.push(`Kann Thema nicht zuordnen (muss genau 1 Thema enthalten) "${str}"; ursprünglich: "${str}"`)
+		return undefined
 	}
 
 	return matches[0]
 
 }
 
-function getTargetGroups(str){
+function getTargetGroups(str, errors){
 
 
 	if(!str) return []
@@ -1856,14 +1859,14 @@ function getTargetGroups(str){
 
 
 	if(a !== ''){
-		console.log('getCatgeories', str, matches, a)
-		throw "unable to match categories"
+		errors.push(`Kann Zielgruppe nicht zuordnen "${str}"`)
+		return []
 	}
 
 	return matches
 }
 
-function getInstitutionType(str){
+function getInstitutionType(str, errors){
 	
 	if(!str) return undefined	
 
@@ -1879,44 +1882,40 @@ function getInstitutionType(str){
 	})
 
 	if(matches.length != 1){
-		console.warn('getInstitutionType() unable to regognize any institution type:', `"${a}"`, matches)
+		errors.push(`Kann Art der Einrichtung nicht zuordnen: "${a}"`)
 	}
 
 	return matches[0]
 
 }
 
-function getBoolean(str){
+function getBoolean(str, errors){
 
 	return 	simplifyString(str) === 'ja'
 			?	true
 			:	false
 }
 
-function getDistrict(str){
+function getDistrict(str, errors){
 
 	const matches = []
-
-	if(simplifyString(str) == 'allebezirke'){
-		console.warn('getDistrict() bad entry:', str)
-		return undefined
-	}
 
 	taxonomy.lor.forEach( district => {
 		if( matchSimplfied(district.name, str) ) matches.push(district.tag)
 	})
 
 	if(matches.length != 1){
-		console.log('getDestrict() unable to recognize any district', str, matches)
-		throw "Unable to match district"
+		errors.push(`Kann Bezirk nicht zuordnen: "${str}"`)
 	}
 
 	return matches[0]
 	
 }
 
-function getPGR(str){
+function getPGR(str, errors){
 	const matches = []
+
+	str = str.replace('Neukoelln_BR', 'Neukoelln')
 
 	taxonomy.lor
 	.map( district => district.pgr)
@@ -1926,15 +1925,15 @@ function getPGR(str){
 	})
 
 	if(matches.length != 1){
-		console.log('getPGR()', str, matches)
-		throw "Unable to match pgr"
+		errors.push(`Kann Prognoseraum nicht zuordnen: "${str}"`)		
+		return undefined
 	}
 
 	return matches[0]
 }
 
 
-function getBZR(str){
+function getBZR(str, errors){
 	const matches = []
 
 	if(str.match('Rollbergesiedlung MV Nord'))	console.log("Kaputte BZR: Rollbergesiedlung MV Nord")
@@ -1956,22 +1955,26 @@ function getBZR(str){
 	})
 
 	if(matches.length != 1){
-		console.log('getBZR()', str, matches)
-		throw "Unable to match bzr"
+		errors.push('getBZR() Unable to match bzr ', str, matches)
+		return undefined
 	}
 
 	return matches[0]
 }
 
-function getLanguages(str){
+function getLanguages(str, errors){
 
-	if(!str) return []
+	if(!str) return [];
+
+	str = str.replace(/kroatisch/, 'Bosnisch/Kroatisch/Serbisch')
+	str = str.replace(/Polisch/, 'Polnisch')
 
 	let	a = simplifyString(str)
 
+
 	if(a.match('deutsch')){
 		a = a.replace('deutsch', '')
-		console.warn('deutsch in spoken languages')
+		errors.push('Gesprochene Sprachen enthält "deutsch" (soll aber nicht extra angebeben werden)')
 		if(a.length == 0) return []
 	}
 
@@ -1990,16 +1993,17 @@ function getLanguages(str){
 
 
 	if(a !== ''){
-		console.log('getLanguages', str, matches, a)
-		throw "unable to match language"
+		errors.push(`Kann sprache nicht zuordnen "${str}"`)		
 	}
 
 	return matches
 }
 
-const items	= raw.slice(5).map( (data, index) => {	
+const items	= raw.slice(4).map( (data, index) => {	
 
-	const type						= 	getType(data[0])
+	const errors = []
+
+	const type						= 	getType(data[0], errors)
 
 	const location_ref				= 	type == 'location' 
 										?	undefined
@@ -2009,15 +2013,15 @@ const items	= raw.slice(5).map( (data, index) => {
 										?	data[1] 
 										:	data[2]
 
-	if(type == 'location' && data[2]) console.warn('Location title misplaced oO')
+	if(type == 'location' && data[2]) errors.push('Ort oder Einrichtung hat Angebotsnamen')
 
 	const brief						= 	{de:data[3]}
-	const description				= 	{de:fixMarkdown(data[4]) }
-	const charge					= 	{de:fixMarkdown(data[5]) }
+	const description				= 	{de:fixMarkdown(data[4], errors) }
+	const charge					= 	{de:fixMarkdown(data[5], errors) }
 
-	const acessibility				=	{de:fixMarkdown(data[15]) }
+	const acessibility				=	{de:fixMarkdown(data[15], errors) }
 
-	const primaryTopic				= 	getCategory(data[6])
+	const primaryTopic				= 	getCategory(data[6], errors)
 
 	const address					=	data[20]
 	const location					=	data[21]
@@ -2026,13 +2030,13 @@ const items	= raw.slice(5).map( (data, index) => {
 
 
 	if(data[24] && !data[24].match('^http')){
-		console.warn('Website missing protocol!')
+		errors.push(`Website muss mit "http" oder "https" beginnen: "${data[24]}"`)
 	}
 	const website					=	!data[24] || data[24].match('^http') 
 										?	data[24]
 										:	'https://'+data[24]
 
-	const hours						=	{de:fixMarkdown(data[25]) }
+	const hours						=	{de:fixMarkdown(data[25], errors) }
 	const email						=	data[26]
 	const contact					=	data[27]
 	const phone						=	data[28]
@@ -2045,30 +2049,30 @@ const items	= raw.slice(5).map( (data, index) => {
 	//tags:
 
 
-	const subCategories				= 	getCategories(data[7])
-	const extraCategories			= 	getCategories(data[8])
+	const subCategories				= 	getCategories(data[7], errors)
+	const extraCategories			= 	getCategories(data[8], errors)
 
-	const targetGroups				= 	getTargetGroups(data[9])
-	const institutionType			=	getInstitutionType(data[10])
+	const targetGroups				= 	getTargetGroups(data[9], errors)
+	const institutionType			=	getInstitutionType(data[10], errors)
 
-	const accessibleWC 				=	getBoolean(data[11])
-	const accessibleParking			=	getBoolean(data[12])
-	const accessibleEntrance		=	getBoolean(data[13])
-	const elevator					=	getBoolean(data[14])
+	const accessibleWC 				=	getBoolean(data[11], errors)
+	const accessibleParking			=	getBoolean(data[12], errors)
+	const accessibleEntrance		=	getBoolean(data[13], errors)
+	const elevator					=	getBoolean(data[14], errors)
 
 	const accessibility				=	{de:data[15]}
 
-	const bezirk					=	data[16] && getDistrict(data[16])
-	const prognoseraum				=	data[17] && getPGR(data[17])
-	const bezirksregion				=	data[18] && getBZR(data[18])
+	const bezirk					=	data[16] && getDistrict(data[16], errors)
+	const prognoseraum				=	data[17] && getPGR(data[17], errors)
+	const bezirksregion				=	data[18] && getBZR(data[18], errors)
 
-	const venue						=	{de: fixMarkdown(data[19]) }
+	const venue						=	{de: fixMarkdown(data[19], errors) }
 
 
-	const languages					=	data[34] && getLanguages(data[34])
+	const languages					=	data[34] && getLanguages(data[34], errors)
 
-	const freeWifiUse				=	getBoolean(data[35])
-	const freePCUse					=	getBoolean(data[36])
+	const freeWifiUse				=	getBoolean(data[35], errors)
+	const freePCUse					=	getBoolean(data[36], errors)
 
 
 	//TODO
@@ -2102,6 +2106,12 @@ const items	= raw.slice(5).map( (data, index) => {
 
 
 	const state		= 'public'
+
+	if(errors.length > 0){
+		console.log('Zeile', index+5, ':')
+		errors.forEach( e => console.log('- ', e))
+		console.log('\n')
+	}
 
 
 	return {
