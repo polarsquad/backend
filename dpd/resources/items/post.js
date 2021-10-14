@@ -11,6 +11,8 @@ var icUtils = require(process.cwd()+'/../ic-utils.js'),
 this.creationDate   = new Date().getTime()
 this.creator        = me ? me.id : undefined
 
+//proposal will allway be generated on get
+delete this.proposals
 
 if(this.state == 'suggestion') {
     var next =  this.proposalFor

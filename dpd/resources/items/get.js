@@ -37,7 +37,7 @@ if(me && me.privileges.indexOf('edit_items') != -1 ){
         )
     }
 
-    this.proposals = this.proposals || []
+    this.proposals = []
 
     $addCallback()
     dpd.items.get({proposalFor: this.id})
