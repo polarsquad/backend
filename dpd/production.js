@@ -37,7 +37,7 @@ server.on('listening', function() {
 
 	var dpd = internalClient.build(server)
 
-	if(import_json) importJSON(dpd, import_json, clear_items).catch( console.log)
+	// if(import_json) importJSON(dpd, import_json, clear_items).catch( console.log)
 
 	dpd.actions.post('updateTranslations')
 	.then(console.log, console.log)
@@ -57,57 +57,57 @@ server.on('error', function(err) {
 
 
 
-async function importJSON(dpd, import_json, clear_before_import){
+// async function importJSON(dpd, import_json, clear_before_import){
 
-	if(clear_before_import){
+// 	if(clear_before_import){
 
-		console.log('Clearing items...')
+// 		console.log('Clearing items...')
 
-		const current_items = await dpd.items.get()
+// 		const current_items = await dpd.items.get()
 
 
-		await 	Promise.all(current_items.map( item => dpd.items.del(item.id) ))
+// 		await 	Promise.all(current_items.map( item => dpd.items.del(item.id) ))
 		
-		console.log('Clearing items [done]')			
-	}
+// 		console.log('Clearing items [done]')			
+// 	}
 
-	let to_import_items = []
+// 	let to_import_items = []
 
-	try{
-		to_import_items = JSON.parse(readFileSync(import_json, 'utf8'))
-	} catch(e){
-		console.log('Unable to read inoput JSON at '+import_json)
-		throw e
-	}
+// 	try{
+// 		to_import_items = JSON.parse(readFileSync(import_json, 'utf8'))
+// 	} catch(e){
+// 		console.log('Unable to read inoput JSON at '+import_json)
+// 		throw e
+// 	}
 
-	console.log('Importing '+to_import_items.length+' items...')
+// 	console.log('Importing '+to_import_items.length+' items...')
 
-	await 	Promise.all(to_import_items.map( item => dpd.items.post(item) ))
+// 	await 	Promise.all(to_import_items.map( item => dpd.items.post(item) ))
 		
 
-	const items = await dpd.items.get()
+// 	const items = await dpd.items.get()
 
 
-	//TODO: generalize; dont use location_ref use itemConfig
-	await 	Promise.all( items.map( item => {
+// 	//TODO: generalize; dont use location_ref use itemConfig
+// 	await 	Promise.all( items.map( item => {
 
-				if(item.location_ref){
-					const ref_by_title 	= items.find( i => i.title == item.location_ref)
-					const ref_by_id 	= items.find( i => i.id == item.location_ref)
+// 				if(item.location_ref){
+// 					const ref_by_title 	= items.find( i => i.title && icUtils.simplifyString(i.title) == icUtils.simplifyString(item.location_ref))
+// 					const ref_by_id 	= items.find( i => i.id == item.location_ref)
 
-					if(!ref_by_title && !ref_by_title) console.log('Bad location_ref ', item.location_ref)
+// 					if(!ref_by_title && !ref_by_id) console.log('Bad location_ref ', item.location_ref)
 					
-					return 	ref_by_title
-							?	dpd.items.put(item.id, {location_ref: (ref_by_title||{}).id || '' })
-							:	Promise.resolve()
-				}
+// 					return 	ref_by_title
+// 							?	dpd.items.put(item.id, {location_ref: (ref_by_title||{}).id || '' })
+// 							:	Promise.resolve()
+// 				}
 
-				return Promise.resolve()
-			}))
+// 				return Promise.resolve()
+// 			}))
 
-	console.log('Import: [ok]')
+// 	console.log('Import: [ok]')
 
-}
+// }
 
 
 //ad hoc, todo extra script:

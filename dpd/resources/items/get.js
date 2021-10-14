@@ -53,7 +53,7 @@ if(me && me.privileges.indexOf('edit_items') != -1 ){
 } else {
     this.editingNote    = undefined
     this.lastEditor     = undefined
-    this.lastEditDate   = undefined
+    //this.lastEditDate   = undefined
     this.creator        = undefined
     this.creationDate   = undefined
 }

@@ -26,6 +26,7 @@ catch(e){
 	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')	
 }
 
+exports.itemConfig = itemConfig
 
 
 exports.config = icConfig
@@ -494,3 +495,15 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 	return interfaceTranslationTable
 }
 
+exports.simplifyString = function (str){
+
+	if(!str) return undefined
+
+	return 	str
+			.toLowerCase()
+			.replace(/ß/g, 'ss')
+			.replace(/(ü|ü)/g, 'ue')
+			.replace(/(ö|ö)/g, 'oe')
+			.replace(/ä/g, 'ae')
+			.replace(/[^a-zA-Z]/g,'')
+}

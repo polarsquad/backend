@@ -4,14 +4,15 @@ import	{	readFileSync		}	from 'fs'
 
 
 
-const out = process.argv[2]
+const out 	= process.argv[3] || process.argv[2]
+const src 	= process.argv[3] ? process.argv[2] : 'awo.csv'
 
 function clearString(str){
 	return str.replace('"','').trim()
 }
 
 
-const csv 	= readFileSync('./awo.csv', 'utf8')
+const csv 	= readFileSync(src, 'utf8')
 const raw 	= CSVToArray(csv,',')
 
 var taxonomy = {}
@@ -2152,6 +2153,8 @@ const items	= raw.slice(4).map( (data, index) => {
 })
 
 
+let locationRefMismatches = []
+
 
 items.forEach( item => {
 	if(item.location_ref){
@@ -2159,7 +2162,7 @@ items.forEach( item => {
 
 		if( l != 1){
 			console.error('LocationRef mismatch: ', item.location_ref, `(${l})`)
-			item.location_ref = undefined
+			locationRefMismatches.push({itemTitle: item.title, itemRef: item.location_ref})
 		}else{
 			item.location_ref = items.find( i => matchSimplfied(i.title, item.location_ref) ).title
 		}
@@ -2167,6 +2170,8 @@ items.forEach( item => {
 	}
 })
 
+
 //console.log(items.slice(0,5))
 
 if(out) writeFileSync(out, JSON.stringify(items), 'utf8')
+if(out) writeFileSync('mismatch_'+out, JSON.stringify(locationRefMismatches), 'utf8')
