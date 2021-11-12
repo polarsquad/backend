@@ -8,7 +8,7 @@ cancelIf(!internal && this.proposalFor)
 
 var self = this
 
-if(me && me.privileges.indexOf('edit_items') != -1 ){
+if(internal || (me && me.privileges.indexOf('edit_items') != -1 )) {
 
     if(this.lastEditor){
         $addCallback()
