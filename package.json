@@ -7,7 +7,7 @@
 		"bluebird": "^3.7.2",
 		"deployd": "^1.2.0",
 		"express": "^4.17.1",
-		"forever": "^3.0.4",
+		"forever": "^4.0.1",
 		"fs-extra": "^10.0.0",
 		"mongodb": "^3.6.6",
 		"node-fetch": "^2.6.1",
@@ -16,7 +16,6 @@
 		"request-promise": "^4.2.2",
 		"sanitize-html": "^2.3.3"
 	},
-	"devDependencies": {},
 	"scripts": {
 		"setup": "node setup.js",
 		"prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",

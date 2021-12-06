@@ -6,8 +6,11 @@ process.chdir(__dirname);
 var icUtils 		= 	require('../ic-utils.js'),
 	{readFileSync}	=	require('fs'),
 	config			= 	JSON.parse(readFileSync('../config/config.json', 'utf8')),
-	deployd			= 	require('deployd'),
-	server 			= 	deployd({
+	deployd			= 	require('deployd')
+
+console.log(deployd)
+
+var	server 			= 	deployd({
 							port:	config.port,
 							env: 	'production',
 							db: {
