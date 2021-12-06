@@ -27,7 +27,7 @@ const itemImporter		=	new ItemImporter({
 								itemConfig
 							})
 
-const voiceReader		=	new VoiceReader({
+const voiceReader		=	voiceReaderConfig && new VoiceReader({
 								db,
 								voiceReaderConfig,
 								itemConfig
