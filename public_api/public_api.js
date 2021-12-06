@@ -76,7 +76,7 @@ app.use(function(req, res, next) {
 })
 
 
-app.get('/items', handle( () => res.status(200).send( await itemImporter.getItems()  ) ) )
+app.get('/items', handle( async (req, res) => res.status(200).send( await itemImporter.getItems()  ) ) )
 
 
 if(voiceReaderConfig){
