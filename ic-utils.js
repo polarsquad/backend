@@ -8,7 +8,11 @@ let nodemailer  = require('nodemailer'),
 	icConfig	= {},
 	itemConfig	= {},
 
-	interfaceTranslationTable = {}
+	interfaceTranslationTable = {},
+
+	adminMessages 		= [],
+	lastAdminMessage	= undefined
+
 
 
 fetch.Promise = Promise
@@ -135,31 +139,81 @@ exports.getDeepLTranslation = function (from, to, text, config){
 								:	Promise.reject('DeepL: reponse yields no translation'))
 }
 
-exports.mail = function(to, subject, content){
+exports.mail = async function(to, subject, content, config){
+
+	var config = config || this.config
+
 
 	var transporter = nodemailer.createTransport({
-		host: 	this.config.mail.host,
-		port: 	this.config.mail.port,
-		secure: this.config.mail.secure, 
+		host: 	config.mail.host,
+		port: 	config.mail.port,
+		secure: config.mail.secure, 
 		auth: 	{
-					user: this.config.mail.user,
-					pass: this.config.mail.pass
+					user: config.mail.user,
+					pass: config.mail.pass
 				}
 	})
 
 	var mailOptions = {
-	    from: 		this.config.mail.from,
+	    from: 		config.mail.from,
 	    to: 		to, 
 	    subject: 	subject, 
 	    text: 		content
 	};
 
-	transporter.sendMail(mailOptions, (error, info) => {
-	    if (error) {
-	        return console.log(error);
-	    }
-	    console.log('Mail %s sent: %s', info.messageId, info.response);
-	});
+	try{
+		await transporter.sendMail(mailOptions)
+		console.log(`Mail with subject '${subject}' sent to: ${to}`)
+	} catch(e) {
+		console.log('icUtils.mail: failed to send massage.', e)
+	}
+}
+
+
+exports.mailToAdmin = async function(content, config){
+
+
+	config = config || icConfig
+
+	if(!config.adminMail){
+		console.error('mailToAdmin: missing config.adminMail')
+		return null
+	}
+
+	content && adminMessages.push(content)
+
+	const delay = 1000 * 60 * 10
+
+	if(lastAdminMessage - Date.now() < delay) {		
+		setTimeout( () => exports.mailToAdmin(null, config), delay + 1)
+		return null
+	}
+
+	lastAdminMessage = Date.now()
+
+
+
+	const adminMails = 	Array.isArray(config.adminMail)
+	 					?	config.adminMail
+	 					:	[config.adminMail]
+
+
+	await 	Promise.any( adminMails.map( 
+				email 	=> 	exports.mail(
+								email, 
+
+								`InfoCompass Error(s) [${adminMessages.length}]: `+config.title, 
+
+								adminMessages
+								.map( (content, index) => `**(${index})**:\n ${content}`)
+								.join('\n\n'),
+
+								config 
+							)
+			))
+
+	adminMessages = []
+
 }
 
 
