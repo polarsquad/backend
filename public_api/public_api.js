@@ -76,9 +76,7 @@ app.use(function(req, res, next) {
 })
 
 
-if(publicApiConfig){
-	app.get('/items', handle( () => itemImporter.getItems()  ) )
-}
+app.get('/items', handle( () => itemImporter.getItems()  ) )
 
 
 if(voiceReaderConfig){
