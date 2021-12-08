@@ -54,7 +54,6 @@ export class VoiceReader {
 										customerid:		customerId,
 										rsjs_ver:		'3.5.0_rev1632-wr',
 										sync:			'wordsent',
-										readid:			'read-me'
 									}
 		const query_string		=	Object.entries(params)
 									.map( ([key,value]) => `${key}=${encodeURI(value)}`)
