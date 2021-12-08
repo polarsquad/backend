@@ -54,6 +54,7 @@ export class VoiceReader {
 										customerid:		customerId,
 										rsjs_ver:		'3.5.0_rev1632-wr',
 										sync:			'wordsent',
+										readclass:		'read-me'
 									}
 		const query_string		=	Object.entries(params)
 									.map( ([key,value]) => `${key}=${encodeURI(value)}`)
@@ -99,7 +100,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><head></head><body>blub \n<!-- RSPEAK_START -->\n${text}\n<!-- RSPEAK_STOP --></body></html>`
+		return	`<html><head></head><body class ="read-me"> \n${text}\n</body></html>`
 
 
 	}
