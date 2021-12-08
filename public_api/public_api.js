@@ -80,8 +80,8 @@ app.get('/items', handle( async (req, res) => res.status(200).send( await itemIm
 
 
 if(voiceReaderConfig){
-	app.get('/voice-reader/html/:itemId/:lang',		handle( async (req,res)	=> 	res.status(200).send(await voiceReader.getHtmlToRead(req.params.itemId, req.params.lang) )))
-	app.get('/voice-reader/audio/:itemId/:lang',	handle( async (req,res) => 	{
+	app.get('/voice-reader/:itemId/html/:lang',		handle( async (req,res)	=> 	res.status(200).send(await voiceReader.getHtmlToRead(req.params.itemId, req.params.lang) )))
+	app.get('/voice-reader/:itemId/audio/:lang',	handle( async (req,res) => 	{
 																					const itemId 			= req.params.itemId
 																					const lang				= req.params.itemId
 																					const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/html/${itemId}/${lang}`, lang)
