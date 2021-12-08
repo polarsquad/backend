@@ -97,7 +97,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><body class ="read-me">\n${text}\n</body></html>`
+		return	`<html><body><div class ="read-me">\n<!-- RSPEAK_START -->${text}<!-- RSPEAK_STOP --></div>\n</body></html>`
 
 
 	}
