@@ -84,7 +84,7 @@ if(voiceReaderConfig){
 	app.get('/voice-reader/:itemId/audio/:lang',	handle( async (req,res) => 	{
 																					const itemId 			= req.params.itemId
 																					const lang				= req.params.itemId
-																					const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/html/${itemId}/${lang}`, lang)
+																					const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/${itemId}/html/${lang}`, lang)
 
 																					Object.entries(headers).forEach( ([header, value]) =>  res.header(header, value) ) 
 
