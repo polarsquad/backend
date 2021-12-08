@@ -61,6 +61,10 @@ export class VoiceReader {
 									.join('&')
 									
 		//const audio_url			= 	`http://app-eu.readspeaker.com/cgi-bin/rsent?customerid=${}&lang=de_de&url=${encodeURI(contentUrl)}&rsjs_ver=3.5.0_rev1632-wr&synccontainer=rs:span&wrc=10140109&audioformat=${encodeURI(file_fromat)}&sync=wordsent`		
+
+
+		console.log(audio_url)		
+		
 		const audio_url			= 	'http://app-eu.readspeaker.com/cgi-bin/rsent?'+query_string		
 		const audio_response	= 	await fetch(audio_url)
 
@@ -97,7 +101,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><body><div class ="read-me">\n${text}</div>\n</body></html>`
+		return	`<html><head></head><body><div class ="read-me">\n${text}</div>\n</body></html>`
 
 
 	}
