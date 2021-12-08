@@ -99,7 +99,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><head></head><body><div id ="read-me">\n${text}</div>\n</body></html>`
+		return	`<html><head></head><body>\n${text}\n</body></html>`
 
 
 	}
