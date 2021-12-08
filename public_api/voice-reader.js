@@ -54,7 +54,7 @@ export class VoiceReader {
 										customerid:		customerId,
 										rsjs_ver:		'3.5.0_rev1632-wr',
 										sync:			'wordsent',
-										readclass:		'read-me'
+										readid:			'read-me'
 									}
 		const query_string		=	Object.entries(params)
 									.map( ([key,value]) => `${key}=${encodeURI(value)}`)
@@ -63,9 +63,8 @@ export class VoiceReader {
 		//const audio_url			= 	`http://app-eu.readspeaker.com/cgi-bin/rsent?customerid=${}&lang=de_de&url=${encodeURI(contentUrl)}&rsjs_ver=3.5.0_rev1632-wr&synccontainer=rs:span&wrc=10140109&audioformat=${encodeURI(file_fromat)}&sync=wordsent`		
 
 
-		
+
 		const audio_url			= 	'http://app-eu.readspeaker.com/cgi-bin/rsent?'+query_string		
-		console.log(audio_url)		
 		const audio_response	= 	await fetch(audio_url)
 
 		if(!audio_response.headers.get('content-type') ) 				throw "VoiceReader.getAudio() failed: "+audio_url+" "+(await audio_response.text() ) 
@@ -101,7 +100,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><head></head><body><div class ="read-me">\n${text}</div>\n</body></html>`
+		return	`<html><head></head><body><div id ="read-me">\n${text}</div>\n</body></html>`
 
 
 	}
