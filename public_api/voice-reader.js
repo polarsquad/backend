@@ -53,7 +53,8 @@ export class VoiceReader {
 										audioformat:	'mp3',
 										customerid:		customerId,
 										rsjs_ver:		'3.5.0_rev1632-wr',
-										sync:			'wordsent'
+										sync:			'wordsent',
+										readclass:		'read-me'
 									}
 		const query_string		=	Object.entries(params)
 									.map( ([key,value]) => `${key}=${encodeURI(value)}`)
@@ -96,7 +97,7 @@ export class VoiceReader {
 						.join('\n<br/>\n')
 
 
-		return	`<html><body>\n${text}\n</body></html>`
+		return	`<html><body class ="read-me">\n${text}\n</body></html>`
 
 
 	}
