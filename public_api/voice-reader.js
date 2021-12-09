@@ -1,7 +1,11 @@
 import 	mongodb 			from 'mongodb'
 import	fetch				from 'node-fetch'
+import	MarkdownIt			from 'markdown-it'
+
 
 const { ObjectId } = mongodb
+
+const md = new MarkdownIt()
 
 export class VoiceReader {
 
@@ -97,10 +101,11 @@ export class VoiceReader {
 									:	item[property.name]
 						})	
 						.filter( x => !!x)				
-						.join('\n<br/>\n')
+						.join('\n\n')
 
 
-		return	`<html><head></head><body class ="read-me"> \n${text}\n</body></html>`
+
+		return	`<html><head></head><body class ="read-me"> \n${md.render(text)}\n</body></html>`
 
 
 	}
