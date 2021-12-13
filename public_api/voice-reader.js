@@ -64,8 +64,6 @@ export class VoiceReader {
 									.map( ([key,value]) => `${key}=${encodeURI(value)}`)
 									.join('&')
 									
-		//const audio_url			= 	`http://app-eu.readspeaker.com/cgi-bin/rsent?customerid=${}&lang=de_de&url=${encodeURI(contentUrl)}&rsjs_ver=3.5.0_rev1632-wr&synccontainer=rs:span&wrc=10140109&audioformat=${encodeURI(file_fromat)}&sync=wordsent`		
-
 
 
 		const audio_url			= 	'http://app-eu.readspeaker.com/cgi-bin/rsent?'+query_string		
@@ -90,7 +88,7 @@ export class VoiceReader {
 		const item =	await	this.db.collection('items')
 								.findOne({_id: itemId})
 
-		
+		if(!item) throw `VoiceReader.getHtmlToRead() unable to find item: ${itemId}, ${lang}` 
 
 		const text = 	this.itemConfig.properties.map( property => {
 

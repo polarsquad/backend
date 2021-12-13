@@ -58,7 +58,7 @@ function handle(fn){
 			await fn(req, res, ...args)
 		} catch(e) {
 			console.log(e)
-			mailToAdmin(e , config)
+			mailToAdmin(e + JSON.stringify(req) , config)
 			res.status(500).send(e)
 		}
 	}
