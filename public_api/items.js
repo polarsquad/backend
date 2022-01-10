@@ -163,7 +163,7 @@ export class ItemImporter {
 
 		return 	{
 					results: 	results
-								.map( ({items, ...meta }) => meta.results || [ meta ] )
+								.map( ({items, ...meta }) => meta.results || meta )
 								.flat(),
 
 					items:		results.map( ({items}) => items || [])

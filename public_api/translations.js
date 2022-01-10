@@ -123,10 +123,6 @@ export class Translator{
 
 			if(!trimmed_value) return null
 
-			if(to_languages.filter( lang => String(item[translatable][lang]).trim() != "" ).length == 0 ){
-				console.log("value present!", to_language )
-			}
-
 			const avaible_to_languages = to_languages.filter( lang => String(item[translatable][lang]).trim() != "" )
 
 			const translations	= 	await 	this.translate(
