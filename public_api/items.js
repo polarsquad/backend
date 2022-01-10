@@ -191,17 +191,17 @@ export class ItemImporter {
 
 		if(!remoteItemsConfig) return this.wrapResult('unknown', 'failed', 'missing remote item config', [])
 
-		const result = 	await	Promise.all(
-									Object.entries(remoteItemsConfig)
-									.map( 
-										([key, config]) =>	this.invokeImportScript(key) 
-															.then( items => this.translateItems(items, key) )
-															.then(
-																this.wrapSuccess(key),
-																this.wrapFailure(key)
-															)
-									)				
-								)		
+		const results	= 	await	Promise.all(
+										Object.entries(remoteItemsConfig)
+										.map( 
+											([key, config]) =>	this.invokeImportScript(key) 
+																.then( items => this.translateItems(items, key) )
+																.then(
+																	this.wrapSuccess(key),
+																	this.wrapFailure(key)
+																)
+										)				
+									)		
 
 		return this.mergeResults(results)
 	}
