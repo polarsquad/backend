@@ -20,7 +20,7 @@ fetch.Promise = Promise
 try{ 
 	icConfig = JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
 }catch(e){
-	console.log('Missing config file...')
+	console.log('Missing config file... at' + path.resolve('../config/config.json' )
 }
 
 try{
