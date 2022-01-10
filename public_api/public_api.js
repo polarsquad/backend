@@ -5,9 +5,13 @@ import	{ ItemImporter				}	from './items.js'
 import	{ VoiceReader				}	from './voice-reader.js'
 import	{ Translator				}	from './translations.js'
 import	{ fileURLToPath				}	from 'url'
-import	{ mailToAdmin				}	from '../ic-utils.js'
 
+
+import	icUtils							from '../ic-utils.js'
 import	path							from 'path'
+
+const { mailToAdmin }	=	icUtils
+
 
 const __dirname 		=	path.dirname(fileURLToPath(import.meta.url))
 const itemConfig		=	await import('./ic-item-config.cjs')
