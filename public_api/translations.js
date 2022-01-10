@@ -127,7 +127,7 @@ export class Translator{
 
 			const translations	= 	await 	this.translate(
 												from_language, 
-												available_to_lanuages, 
+												available_to_languages, 
 												trimmed_value,
 												key
 											)
