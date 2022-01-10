@@ -123,7 +123,7 @@ export class Translator{
 
 			if(!trimmed_value) return null
 
-			const avaible_to_languages = to_languages.filter( lang => String(item[translatable][lang]).trim() != "" )
+			const available_to_languages = to_languages.filter( lang => String(item[translatable][lang]).trim() != "" )
 
 			const translations	= 	await 	this.translate(
 												from_language, 
@@ -136,7 +136,7 @@ export class Translator{
 
 												let translation_failures = {}	
 
-												avaible_to_languages.forEach( lang => { translation_failures[lang] = {'translator': 'translation failed'} })
+												available_to_languages.forEach( lang => { translation_failures[lang] = {'translator': 'translation failed'} })
 
 												return translation_failures
 											})
