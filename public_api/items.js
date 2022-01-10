@@ -159,7 +159,7 @@ export class ItemImporter {
 	mergeResults(results){
 
 		console.log('Merging results:')
-		results.forEach( ({key, status, message, items}) => console.log({key, status, message, size: items.length}))
+		results.forEach( ({key, status, message, items, results}) => console.log(results || {key, status, message, size: items.length}))
 
 		return 	{
 					results: 	results
@@ -191,18 +191,19 @@ export class ItemImporter {
 
 		if(!remoteItemsConfig) return this.wrapResult('unknown', 'failed', 'missing remote item config', [])
 
-		return 	await	Promise.all(
-							Object.entries(remoteItemsConfig)
-							.map( 
-								([key, config]) =>	this.invokeImportScript(key) 
-													.then( items => this.translateItems(items, key) )
-													.then(
-														this.wrapSuccess(key),
-														this.wrapFailure(key)
-													)
-							)				
-						)				
-						.then( results => this.mergeResults(results) )
+		const result = 	await	Promise.all(
+									Object.entries(remoteItemsConfig)
+									.map( 
+										([key, config]) =>	this.invokeImportScript(key) 
+															.then( items => this.translateItems(items, key) )
+															.then(
+																this.wrapSuccess(key),
+																this.wrapFailure(key)
+															)
+									)				
+								)		
+
+		return this.mergeResults(results)
 	}
 
 	async getItems(){
