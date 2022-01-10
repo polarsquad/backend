@@ -10,7 +10,8 @@
 
 	exports.utils.getType = function(val){
 		var matches = Object.prototype.toString.call(val).match(/\[object\s(.*)\]/)
-		return matches && matches[1].toLowerCase()
+		const type 	= matches && matches[1].toLowerCase()
+		return type
 	}
 
 	exports.utils.getTypeError = function(property, value){
