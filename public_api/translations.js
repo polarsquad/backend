@@ -77,7 +77,7 @@ export class Translator{
 		return translation
 	}
 
-	async translate(from_language, to_languages, text){
+	async translate(from_language, to_languages, text, key){
 
 		to_languages = 	Array.isArray(to_languages)
 						?	to_languages
@@ -123,13 +123,27 @@ export class Translator{
 
 			if(!trimmed_value) return null
 
+			if(to_languages.filter( lang => String(item[translatable][lang]).trim() != "" ).length == 0 ){
+				console.log("value present!", to_language )
+			}
+
+			const avaible_to_languages = to_languages.filter( lang => String(item[translatable][lang]).trim() != "" )
+
 			const translations	= 	await 	this.translate(
 												from_language, 
-												to_languages.filter( lang => !item[translatable][lang] ), 
+												available_to_lanuages, 
 												trimmed_value,
 												key
 											)
-											.catch( reason => ({'translator': 'translation failed'}))
+											.catch( reason => {
+												console.log("Translation failed: \n\t ", translatable, trimmed_value.slice(0,20),'...', reason)
+
+												let translation_failures = {}	
+
+												avaible_to_languages.forEach( lang => { translation_failures[lang] = {'translator': 'translation failed'} })
+
+												return translation_failures
+											})
 
 			Object.keys(translations).forEach( lang => {
 
@@ -137,7 +151,7 @@ export class Translator{
 
 				if(!t) return null
 
-				item[translatable][lang] = `[${t.translator}:] ${t.text}`
+				item[translatable][lang] = `[${t.translator}:] ${t.text || ''}`
 
 			})
 
