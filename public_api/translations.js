@@ -1,8 +1,8 @@
-import	{	getTranslation			}	from '../ic-utils.js'
-
+import	icUtils from '../ic-utils.js'
 import	{	properties as icProperties	}	from './ic-item-config.cjs'
 import	crypto								from 'crypto'	
 
+const	{ getTranslation }	= icUtils
 
 export class Translator{
 

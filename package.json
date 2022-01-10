@@ -2,7 +2,7 @@
 	"name": "infocompass-backend",
 	"version": "1.0.0",
 	"description": "",
-	"main": "setup_items.js",
+	"main": "setup.js",
 	"dependencies": {
 		"bluebird": "^3.7.2",
 		"deployd": "^1.2.0",
