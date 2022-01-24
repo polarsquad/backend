@@ -138,7 +138,7 @@ export class ItemImporter {
 
 										const preliminary_id = item.id 
 
-										item.id = getFinalId(preliminary_id, key, index)
+										item.id = this.getFinalId(preliminary_id, key, index)
 
 										id_tracks[preliminary_id] = item.id
 
