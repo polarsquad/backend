@@ -230,8 +230,6 @@ export async function getRemoteItems(config){
 								}
 							}
 
-							console.log(item.location_ref, locationData)
-
 			item.tags = item.tags ||[]				
 
 			services.push(item)
