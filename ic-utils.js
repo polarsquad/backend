@@ -98,7 +98,9 @@ exports.getGoogleTranslation = function(from, to, text, config){
 			.catch( req => {
 
 				console.log('GET failed: https://translation.googleapis.com/language/translate/v2')
-				console.log(req.error)
+				console.log(req.error.statusCode)
+				console.log(req.error.error)
+				console.log(req.error.options)
 
 				return Promise.reject(req)				
 
