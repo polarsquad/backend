@@ -163,7 +163,7 @@ export class ItemImporter {
 		const projectedItems	=	extendedItems.map( (item, index) => {
 										if(item.location_ref){
 											item.location_ref = id_tracks[item.location_ref]
-											console.log(item.location_ref)
+											console.log(item.type, item.title, item.location_ref)
 										}
 										return item
 									})							
