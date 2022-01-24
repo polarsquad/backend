@@ -190,7 +190,7 @@ export async function getRemoteItems(config){
 
 							const locationData = getLocationData(data, location_id)
 
-							console.log('LocationData', locationData)
+							console.log('LocationIs', location_id)
 
 							return	locationData
 									?	{
