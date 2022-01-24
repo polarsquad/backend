@@ -203,8 +203,6 @@ export async function getRemoteItems(config){
 
 						})					
 
-	console.log(locations.map( l => l.id ))
-
 	const services = []
 
 	data.offers.forEach( ({offer_id, url}) => {
@@ -234,7 +232,7 @@ export async function getRemoteItems(config){
 								}
 							}
 
-							console.log(item.location_ref)
+							console.log(item.location_ref, locationData)
 
 			item.tags = item.tags ||[]				
 
