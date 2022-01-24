@@ -170,11 +170,11 @@ export async function getRemoteItems(config){
 
 
 	function getLocationId(raumplaner_location_id){
-		return 'location_'+location_id
+		return 'location_'+raumplaner_location_id
 	}
 
 	function getServiceId(raumplaner_offer_id, index){
-		return 'offer_'+offer_id+'-'+index
+		return 'offer_'+raumplaner_offer_id+'-'+index
 	}
 
 
