@@ -38,7 +38,7 @@ const voiceReader		=	voiceReaderConfig && new VoiceReader({
 							})
 
 
-const force_remote_item_update = 	process.argv.find( arg => arg.match(/--force-remote-item-update/) )
+const force_remote_item_update = 	!!process.argv.find( arg => arg.match(/--force-remote-item-update/) )
 
 function checkPublicApiConfig(config){
 

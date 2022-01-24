@@ -108,7 +108,7 @@ export class ItemImporter {
 				:	'r-'+key+'_'+Date.now()+index+Math.random()
 	}
 
-	async invokeImportScript(key){
+	async invokeImportScript(key, force_update_items){
 
 		console.log("Public item config for:", key, this.publicApiConfig[key])
 
@@ -118,8 +118,6 @@ export class ItemImporter {
 		const localVersion		= 	await this.remoteMeta.findOne({ key }).then( doc => doc && doc.version )
 		const noUpdateNeeded	=	!force_update_items && localVersion === remoteVersion
 
-
-		console.log(remoteVersion, localVersion, noUpdateNeeded)
 
 		if(noUpdateNeeded) return await this.db.collection(`remote-items-${key}`).find().toArray()
 
