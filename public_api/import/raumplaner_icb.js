@@ -223,7 +223,7 @@ export async function getRemoteItems(config){
 			const item = 	{
 								...offerData,
 								id:	getServiceId(offer_id, index),	
-								location_ref: location_id
+								location_ref: location_id,
 								hours,
 								remoteItem: {
 									original:	url
