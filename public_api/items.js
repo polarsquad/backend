@@ -121,9 +121,12 @@ export class ItemImporter {
 
 		if(noUpdateNeeded) return await this.db.collection(`remote-items-${key}`).find().toArray()
 
-		if(force_update_items) console.log('Update forced.')
+		console.log('\n')
+
+		if(force_update_items) console.log('Update forced:')
 
 		console.log('Update needed for ', key)	
+
 
 		const items				= 	await importModule.getRemoteItems(config, this.translator)
 
@@ -164,6 +167,8 @@ export class ItemImporter {
 		await this.db.collection(`remote-items-${key}`).insertMany(projectedItems)
 
 		this.remoteMeta.updateOne({ key }, {$set: { version: remoteVersion } }, { upsert: true })									
+
+		console.log(projectedItems[37])
 
 		return projectedItems
 	}
