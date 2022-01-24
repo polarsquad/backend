@@ -213,19 +213,17 @@ export async function getRemoteItems(config){
 	
 		const dates			= 	getOfferDates(data, offer_id) || []
 		const location_ids	=	Array.from( new Set(dates.map( ({location_id}) => location_id )) )
-		const locations		= 	getLocationData(data, location_ids)
 
 		const hours			=	{ de : dates.map( date => getHoursFromDate(date) ).join('\n\n') }
 
 		if(locations.length == 0) locations.push({})
 
-		locations.forEach( (locationData, index) => {
+		location_ids.forEach( (location_id, index) => {
 
 			const item = 	{
-								//...locationData,
 								...offerData,
 								id:	getServiceId(offer_id, index),	
-								location_ref: locationData.id,
+								location_ref: location_id
 								hours,
 								remoteItem: {
 									original:	url
