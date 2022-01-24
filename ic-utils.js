@@ -97,7 +97,7 @@ exports.getGoogleTranslation = function(from, to, text, config){
 			))
 			.catch( req => {
 
-				console.log('GET failed: https://translation.googleapis.com/language/translate/v2', req.statusCode, req.message)
+				console.log('GET failed: https://translation.googleapis.com/language/translate/v2', req.statusCode, text.slice(0,100))
 
 				return Promise.reject('googleTranslate failed.')				
 
@@ -125,7 +125,7 @@ exports.getDeepLTranslation = function (from, to, text, config){
 			))
 			.catch( req => {
 
-				console.log('POST failed: https://api.deepl.com/v2/translate?auth_key', req.statusCode, req.message)
+				console.log('POST failed: https://api.deepl.com/v2/translate?auth_key', req.statusCode, text.slice(0,100))
 
 				return Promise.reject('DeepL failed.')				
 
