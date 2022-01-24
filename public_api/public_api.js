@@ -38,6 +38,8 @@ const voiceReader		=	voiceReaderConfig && new VoiceReader({
 							})
 
 
+const force_remote_item_update = 	process.argv.find( arg => arg.match(/--force-remote-item-update/) )
+
 function checkPublicApiConfig(config){
 
 	Object.entries(config.remoteItems || {})
@@ -80,7 +82,7 @@ app.use(function(req, res, next) {
 })
 
 
-app.get('/items', handle( async (req, res) => res.status(200).send( await itemImporter.getItems()  ) ) )
+app.get('/items', handle( async (req, res) => res.status(200).send( await itemImporter.getItems(force_remote_item_update)  ) ) )
 
 
 if(voiceReaderConfig){

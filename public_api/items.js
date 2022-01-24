@@ -102,24 +102,34 @@ export class ItemImporter {
 		 
 	}
 
+	getFinalId(preliminary_id, key, index){
+		return 	preliminary_id
+				?	'r-'+key+'_'+preliminary_id
+				:	'r-'+key+'_'+Date.now()+index+Math.random()
+	}
+
 	async invokeImportScript(key){
 
-		console.log(key, this.publicApiConfig)
+		console.log("Public item config for:", key, this.publicApiConfig[key])
 
 		const config			=	this.publicApiConfig.remoteItems[key]
 		const importModule 		= 	await import(`./import/${config.script}`)
 		const remoteVersion		= 	await importModule.getRemoteVersion(config)
 		const localVersion		= 	await this.remoteMeta.findOne({ key }).then( doc => doc && doc.version )
-		const noUpdateNeeded	=	localVersion === remoteVersion
+		const noUpdateNeeded	=	!force_update_items && localVersion === remoteVersion
 
 
 		console.log(remoteVersion, localVersion, noUpdateNeeded)
 
 		if(noUpdateNeeded) return await this.db.collection(`remote-items-${key}`).find().toArray()
 
-		console.log('update needed ', key)	
+		if(force_update_items) console.log('Update forced.')
+
+		console.log('Update needed for ', key)	
 
 		const items				= 	await importModule.getRemoteItems(config, this.translator)
+
+		const id_tracks			=	{}
 
 		const extendedItems		=	items.map( (item, index) => {
 
@@ -130,9 +140,9 @@ export class ItemImporter {
 
 										const preliminary_id = item.id 
 
-										item.id = 	preliminary_id
-													?	'r-'+key+preliminary_id
-													:	'r-'+key+Date.now()+index+Math.random()
+										item.id = getFinalId(preliminary_id, key, index)
+
+										id_tracks[preliminary_id] = item.id
 
 										item.state = 'public'
 
@@ -146,20 +156,24 @@ export class ItemImporter {
 
 									})
 									.filter( item => !!item)
+
+		const projectedItems	=	extendedItems.map( (item, index) => {
+										if(item.location_ref) item.location_ref = id_tracks[item.location_ref]
+										return item
+									})							
 		
-		await this.db.collection(`remote-items-${key}`).drop().catch( error => error.code == 26 ? Promise.resolve : Promise.reject(error)) //ignore error if colelction does not yet exists
-		await this.db.collection(`remote-items-${key}`).insertMany(extendedItems)
+		await this.db.collection(`remote-items-${key}`).drop().catch( error => error.code == 26 ? Promise.resolve : Promise.reject(error)) //ignore error if collection does not yet exists
+		await this.db.collection(`remote-items-${key}`).insertMany(projectedItems)
 
 		this.remoteMeta.updateOne({ key }, {$set: { version: remoteVersion } }, { upsert: true })									
 
-		return extendedItems
+		return projectedItems
 	}
 
 
 	mergeResults(results){
 
 		console.log('Merging results:')
-		results.forEach( ({key, status, message, items, results}) => console.log(results || {key, status, message, size: items.length}))
 
 		return 	{
 					results: 	results
@@ -185,7 +199,7 @@ export class ItemImporter {
 		return await Promise.all(  items.map( item => this.translateItem(item, key) ) ) 
 	}
 
-	async getRemoteItems(){
+	async getRemoteItems(force_update_items){
 	
 		const remoteItemsConfig = this.publicApiConfig.remoteItems
 
@@ -194,7 +208,7 @@ export class ItemImporter {
 		const results	= 	await	Promise.all(
 										Object.entries(remoteItemsConfig)
 										.map( 
-											([key, config]) =>	this.invokeImportScript(key) 
+											([key, config]) =>	this.invokeImportScript(key, force_update_items) 
 																.then( items => this.translateItems(items, key) )
 																.then(
 																	this.wrapSuccess(key),
@@ -206,7 +220,7 @@ export class ItemImporter {
 		return this.mergeResults(results)
 	}
 
-	async getItems(){
+	async getItems(force_update_items){
 
 		const results	=  	await	Promise.all([
 										this.getLocalItems()
@@ -214,7 +228,7 @@ export class ItemImporter {
 											this.wrapSuccess('local'),
 											this.wrapFailure('local')
 										),
-										this.getRemoteItems()
+										this.getRemoteItems(force_update_items)
 									])
 				
 		return this.mergeResults(results)

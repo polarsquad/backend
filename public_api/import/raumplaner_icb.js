@@ -169,14 +169,20 @@ export async function getRemoteItems(config){
 	}
 
 
+	function getLocationId(raumplaner_location_id){
+		return 'location_'+location_id
+	}
 
+	function getServiceId(raumplaner_offer_id, index){
+		return 'offer_'+offer_id+'-'+index
+	}
 
 
 
 
 
 	const data 		= 	await fetch( config.url )
-						.then( response => { console.log(response.headers); return response })
+						//.then( response => { console.log(response.headers); return response })
 						.then( response => response.json() )
 	
 
@@ -187,7 +193,7 @@ export async function getRemoteItems(config){
 							return	locationData
 									?	{
 											...locationData,
-											id:	'location'+location_id, //preliminary	
+											id:	getLocationId(location_id),
 											remoteItem: {
 												original:	url
 											}
@@ -216,9 +222,10 @@ export async function getRemoteItems(config){
 		locations.forEach( (locationData, index) => {
 
 			const item = 	{
-								...locationData,
+								//...locationData,
 								...offerData,
-								id:	'offer'+offer_id+'-'+index,		//preliminary	
+								id:	getServiceId(offer_id, index),	
+								location_ref: locationData.id,
 								hours,
 								remoteItem: {
 									original:	url
