@@ -158,6 +158,8 @@ export class ItemImporter {
 									})
 									.filter( item => !!item)
 
+		consooe.log(id_tracks)
+
 		const projectedItems	=	extendedItems.map( (item, index) => {
 										if(item.location_ref) item.location_ref = id_tracks[item.location_ref]
 										return item
