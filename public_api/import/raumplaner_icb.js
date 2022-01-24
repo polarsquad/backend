@@ -190,8 +190,6 @@ export async function getRemoteItems(config){
 
 							const locationData = getLocationData(data, location_id)
 
-							console.log('LocationIs', location_id)
-
 							return	locationData
 									?	{
 											...locationData,
@@ -204,6 +202,8 @@ export async function getRemoteItems(config){
 							
 
 						})					
+
+	console.log(locations.map( l => l.id ))
 
 	const services = []
 
