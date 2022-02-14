@@ -158,13 +158,10 @@ export class ItemImporter {
 									})
 									.filter( item => !!item)
 
-		console.log(id_tracks)
 
 		const projectedItems	=	extendedItems.map( (item, index) => {
 										if(item.location_ref){
-											console.log('before',item.location_ref)
 											item.location_ref = id_tracks[item.location_ref]
-											console.log('after',item.location_ref)
 										}
 										return item
 									})							
@@ -174,7 +171,6 @@ export class ItemImporter {
 
 		this.remoteMeta.updateOne({ key }, {$set: { version: remoteVersion } }, { upsert: true })									
 
-		console.log(projectedItems[37])
 
 		return projectedItems
 	}

@@ -137,7 +137,11 @@ exports.getDeepLTranslation = function (from, to, text, config){
 								:	Promise.reject('DeepL: reponse yields no translation'))
 }
 
-exports.mail = async function(to, subject, content, config){
+exports.mail = async function(to, subject, content, config, bcc){
+
+	bcc = bcc || []
+
+	if(typeof bcc == 'string') bcc = [bcc]
 
 	var config = config || this.config
 
@@ -153,17 +157,18 @@ exports.mail = async function(to, subject, content, config){
 	})
 
 	var mailOptions = {
-	    from: 		config.mail.from,
-	    to: 		to, 
+	    from: 		config.mail.from || 'info@place-making.org',
+	    to: 		to,
+	    bcc:		bcc, 
 	    subject: 	subject, 
 	    text: 		content
-	};
+	}
 
 	try{
 		await transporter.sendMail(mailOptions)
-		console.log(`Mail with subject '${subject}' sent to: ${to}`)
+		console.log(`Mail with subject '${subject}' sent to: ${to}, bcc: ${bcc.join(', ')}`)
 	} catch(e) {
-		console.log('icUtils.mail: failed to send massage.', e)
+		console.log('icUtils.mail: failed to send massage.', e, mailOptions)
 	}
 }
 
@@ -205,7 +210,6 @@ exports.mailToAdmin = async function(content, config){
 								adminMessages
 								.map( (content, index) => `**(${index})**:\n ${content}`)
 								.join('\n\n'),
-
 								config 
 							)
 			))
@@ -256,23 +260,12 @@ exports.diff = function(property, old_value, new_value, key){
 }
 
 
-exports.mailSuggestion = function(to, suggestion, target, lang){
+
+exports.mailBodyChanges = function(suggestion, target, lang){
 
 	lang = lang || 'DE'
 
-	var subject = 	"Neuer Vorschlag eingegangen",
-		link	= 	this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
-		content	= 	suggestion.proposalFor
-					?	"Der Änderungsvorschlag betrifft diesen Eintrag:\n\n"
-					:	"Ein neuer Eintrag wurde vorgeschlagen:\n\n" 
-
-
-	content += link + '\n\n'
-
-	content += 	suggestion.proposalFor
-				?	"Der Vorschlag enthält folgende Änderungen:\n\n"
-				:	"Der Vorschlag enthält folgende Daten:\n\n"
-
+	let content = ''
 
 	itemConfig.properties.forEach(function(property){
 
@@ -360,8 +353,76 @@ exports.mailSuggestion = function(to, suggestion, target, lang){
 			
 	})
 
-	exports.mail(to, subject, content)
+	return content
+
 }
+
+exports.mailSuggestion = function(to, suggestion, target, lang){
+
+	lang = lang || 'DE'
+
+	var subject = 	"Neuer Vorschlag eingegangen",
+		link	= 	this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
+		content	= 	suggestion.proposalFor
+					?	"Der Änderungsvorschlag betrifft diesen Eintrag:\n\n"
+					:	"Ein neuer Eintrag wurde vorgeschlagen:\n\n" 
+
+
+	content += link + '\n\n'
+
+	content += 	suggestion.proposalFor
+				?	"Der Vorschlag enthält folgende Änderungen:\n\n"
+				:	"Der Vorschlag enthält folgende Daten:\n\n"
+
+
+	content += exports.mailBodyChanges(suggestion, target, lang)
+
+	exports.mail(to, subject, content)
+
+	console.log('mailTo', to, subject, content)
+}
+
+exports.mailConfirmSuggestion = function(to_or_meta, suggestion, target, lang, bcc){
+
+	lang = lang || 'DE'
+
+	const suggestionMeta 	= 	typeof to_or_meta == 'string'
+								?	{ mail : to_or_meta }
+								:	to_or_meta || {}
+
+	const fullTo			=	`${suggestionMeta.name}<${suggestionMeta.mail}>`
+	const auth				=	suggestionMeta.apiKey == icConfig.suggestions.apiKey
+
+	var subject = 	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_SUBJECT`,lang, true)} (${this.config.title})`+(auth ? ' [auth]' : ''),
+		link	= 	this.config.frontendUrl+"/item/"+(suggestion.proposalFor || suggestion.id),
+		content	= 	''	
+
+
+	content	+=	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_INTRO`,lang, true)} \n\n`.replace('%s', suggestionMeta.name || suggestionMeta.mail )
+
+	content	+= 	suggestion.proposalFor
+					?	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_LINK_EDIT`,lang, true)}\n\n`
+					:	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_LINK_NEW`,lang, true)}\n\n`
+
+	content +=	link + '\n\n'
+
+	content += `${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_AUTHOR`,lang, true)} \n\n`.replace('%s', fullTo )
+
+	content += 	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_DSGVO`,lang, true)}\n\n`
+					
+
+	content += 	suggestion.proposalFor
+				?	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_DATA_EDIT`,lang, true)}\n\n`
+				:	`${exports.getInterfaceTranslation(`EMAIL.CONFIRMATION_DATA_NEW`,lang, true)}\n\n`
+
+
+	content += exports.mailBodyChanges(suggestion, target, lang)
+
+	exports.mail(fullTo, subject, content, undefined, bcc)
+
+}
+
+
 
 exports.fetchGoogleSheets = async function(sheet_id, api_key){
 
@@ -498,11 +559,11 @@ exports.splitSpreadsheetUrl = function(spreadsheetUrl){
 
 }
 
-exports.getInterfaceTranslation = function(str, lang){
+exports.getInterfaceTranslation = function(str, lang, return_missing_key){
 
 	const path = str.split('.').map(section => section.replace(/([a-z])([A-Z])/,'$1_$2').toUpperCase().replace(/\s/g, "_"))
 
-	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable[lang])
+	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable[lang]) || (return_missing_key ? str : undefined)
 }
 
 exports.updateInterfaceTranslations = async function(sheet_id, api_key) {

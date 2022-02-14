@@ -1,16 +1,21 @@
 var icItemConfig    = require(process.cwd()+'/public/ic-item-config.js'),
-	data			= ctx.body
+	data			= ctx.body,
+	self			= this
 
 
 if(
-
 		!internal
 	&&	!data.proposalFor //partial suggestions dont need to be validated at this point
 	&&	!(me && me.privileges && me.privileges.indexOf('edit_items') != -1 && ctx.method == 'PUT')
 ){ 
 
 	Object.entries(data).forEach( ([key,value]) => {
+
+		if(key = 'suggestionMeta') return null 
+
 		const property = icItemConfig.properties.find( property => property.name == key)
+
+
 
 		if(!property){
 
