@@ -92,7 +92,7 @@ app.get('/items', 					handle( async (req, res) => res.status(200).send( await i
 
 app.get('/items/export/:lang/csv', 	handle( async (req, res) => {
 										res.setHeader('Content-Type', 'text/csv; charset=utf-8')
-										res.setHeader('content-disposition', "attachment; filename=\"" + itemExporter.getCsvFilename() )
+										res.setHeader('content-disposition', "attachment; filename=\"" + itemExporter.getCsvFilename(req.params.lang) )
 										res.status(200).send (await itemExporter.getCSV(req.params.lang) ) 	
 									}))
 

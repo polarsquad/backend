@@ -189,7 +189,8 @@ export class ItemExporter {
 		const csv_str	= 	csv_data.map( row => 
 								row.map( entry => {
 									entry = entry || ""
-									entry =  entry.replace(/"/g, "'")	 
+									entry = entry.replace(/"/g, "'")	 
+									entry = entry.trim()
 									entry = `"${entry}"`
 
 									return entry
@@ -197,8 +198,6 @@ export class ItemExporter {
 								.join(',')
 							)
 							.join('\r\n')
-
-		console.log(csv_str)
 
 		return csv_str
 	}
@@ -217,8 +216,8 @@ export class ItemExporter {
 		return [year, month, day].join('-')
 	}
 
-	getCsvFilename() {
-		return 	(this.icConfig.title ||'infocompass').replace(/[^a-zA-Z0-9äüöß], '_'/gi,).toLowerCase()
+	getCsvFilename(lang) {
+		return 	(this.translate('INTERFACE.TITLE', lang) ||'infocompass').replace(/[^a-zA-Z0-9äüöß], '_'/gi,).toLowerCase()
 				+ '_'
 				+ this.getTodayStr()
 				+ '.csv'

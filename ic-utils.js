@@ -5,10 +5,11 @@ let nodemailer  = require('nodemailer'),
 	request		= require('request-promise'),
 	fetch		= require('node-fetch'),
 	Promise		= require('bluebird'),
-	icConfig	= {},
-	itemConfig	= {},
+	fs			= require('fs'),
+	icConfig	= undefined,
+	itemConfig	= undefined,
 
-	interfaceTranslationTable = {},
+	interfaceTranslationTable = undefined,
 
 	adminMessages 		= [],
 	lastAdminMessage	= undefined
@@ -17,18 +18,38 @@ let nodemailer  = require('nodemailer'),
 
 fetch.Promise = Promise
 
-try{ 
-	icConfig = JSON.parse(require('fs').readFileSync(path.resolve('../config/config.json'), 'utf8'))
-}catch(e){
-	console.log('Missing config file... at' + path.resolve('../config/config.json' ) )
-}
 
-try{
-	itemConfig	= require(path.resolve('../dpd/public/ic-item-config.js'))
-}
-catch(e){
-	console.log('Missing dpd/public/ic-item-config.js. Please run `npm run setup` first. \n\n')	
-}
+
+;['..', __dirname].forEach( start => {
+
+	console.log( "--- Looking for files starting from:", start, '\n' )
+	try{
+		icConfig = icConfig || JSON.parse(require('fs').readFileSync(path.resolve(`${start}/config/config.json`), 'utf8'))	
+	}catch(e){
+		console.log('Unable to parse config file... at ' + path.resolve(`${start}/config/config.json`) )
+	}
+
+	try{
+		itemConfig	= itemConfig || require(path.resolve(`${start}/dpd/public/ic-item-config.js`))
+	}
+	catch(e){
+		console.log(`Missing ${start}../dpd/public/ic-item-config.js. Please run 'npm run setup' first. \n\n`)	
+	}
+
+	try{
+		interfaceTranslationTable	= interfaceTranslationTable || JSON.parse(require('fs').readFileSync(path.resolve(`${start}/dpd/public/translations.json`), 'utf8') )
+	}
+	catch(e){
+		console.log('Unable to parse translation file... at ' + path.resolve(`${start}/dpd/public/translations.json` ) )
+
+	}
+	console.log('\n')
+})
+
+
+icConfig = icConfig || {}
+itemConfig	= itemConfig || {}
+interfaceTranslationTable	= interfaceTranslationTable || {}
 
 exports.itemConfig = itemConfig
 
@@ -561,6 +582,8 @@ exports.splitSpreadsheetUrl = function(spreadsheetUrl){
 
 exports.getInterfaceTranslation = function(str, lang, return_missing_key){
 
+	lang = lang && lang.toUpperCase()
+
 	const path = str.split('.').map(section => section.replace(/([a-z])([A-Z])/,'$1_$2').toUpperCase().replace(/\s/g, "_"))
 
 	return path.reduce( (acc, section) => acc && acc[section] ,interfaceTranslationTable[lang]) || (return_missing_key ? str : undefined)
@@ -620,3 +643,5 @@ exports.simplifyString = function (str){
 			.replace(/ä/g, 'ae')
 			.replace(/[^a-zA-Z]/g,'')
 }
+
+
