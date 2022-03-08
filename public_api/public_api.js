@@ -3,9 +3,9 @@ import	{ default as express 		}	from 'express'
 import	{ getLocalDB				}	from '../connect_db.mjs'
 import	{ ItemImporter				}	from './items.js'
 import	{ VoiceReader				}	from './voice-reader.js'
+import	{ ItemExporter				}	from './export.js'
 import	{ Translator				}	from './translations.js'
 import	{ fileURLToPath				}	from 'url'
-
 
 import	icUtils							from '../ic-utils.js'
 import	path							from 'path'
@@ -29,6 +29,11 @@ const itemImporter		=	new ItemImporter({
 								publicApiConfig,
 								translator,
 								itemConfig
+							})
+
+const itemExporter		=	new ItemExporter({
+								db,
+								config
 							})
 
 const voiceReader		=	voiceReaderConfig && new VoiceReader({
@@ -65,7 +70,8 @@ function handle(fn){
 			await fn(req, res, ...args)
 		} catch(e) {
 			console.log(e)
-			mailToAdmin(e + JSON.stringify(req) , config)
+			console.log('STACK', e.stack)
+			mailToAdmin(e.stack , config)
 			res.status(500).send(e)
 		}
 	}
@@ -82,22 +88,26 @@ app.use(function(req, res, next) {
 	next()		
 })
 
+app.get('/items', 					handle( async (req, res) => res.status(200).send( await itemImporter.getItems(force_remote_item_update)  ) ) )
 
-app.get('/items', handle( async (req, res) => res.status(200).send( await itemImporter.getItems(force_remote_item_update)  ) ) )
-
+app.get('/items/export/:lang/csv', 	handle( async (req, res) => {
+										res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+										res.setHeader('content-disposition', "attachment; filename=\"" + itemExporter.getCsvFilename() )
+										res.status(200).send (await itemExporter.getCSV(req.params.lang) ) 	
+									}))
 
 if(voiceReaderConfig){
 	app.get('/voice-reader/:itemId/html/:lang',		handle( async (req,res)	=> 	res.status(200).send(await voiceReader.getHtmlToRead(req.params.itemId, req.params.lang) )))
 	app.get('/voice-reader/:itemId/audio/:lang',	handle( async (req,res) => 	{
-																					const itemId 			= req.params.itemId
-																					const lang				= req.params.lang
-																					const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/${itemId}/html/${lang}`, lang)
+														const itemId 			= req.params.itemId
+														const lang				= req.params.lang
+														const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/${itemId}/html/${lang}`, lang)
 
-																					Object.entries(headers).forEach( ([header, value]) =>  res.header(header, value) ) 
+														Object.entries(headers).forEach( ([header, value]) =>  res.header(header, value) ) 
 
-																					res.status(200)	
-																					res.send(Buffer.from(await blob.arrayBuffer()))
-																				}))
+														res.status(200)	
+														res.send(Buffer.from(await blob.arrayBuffer()))
+													}))
 }
 
 console.log('Listening on port', config.publicApi.port)
