@@ -1,6 +1,11 @@
-import	icUtils from '../ic-utils.js'
-import	icItemConfig	from './ic-item-config.cjs'
+import 	{	OptionLabels	}	from './option-labels.js'
+import	{	
+			writeFileSync,
+			readFileSync	
+		}						from 'fs'
 
+import icUtils 			from '../ic-utils.js'
+import icItemConfig		from './ic-item-config.cjs'
 
 
 function prep(str){
@@ -15,9 +20,15 @@ export class ItemExporter {
 
 
 	constructor({db, config}){
+
 		this.db 			= db
 		this.icConfig		= config
+
+		this.optionLabels	= new OptionLabels(db)		
+
 	}
+
+
 
 	translate(key, lang, returnKey = true){
 		key = 	key || ''
@@ -31,7 +42,7 @@ export class ItemExporter {
 	}
 
 
-	getCsvColumns(lang, tags, av_langs){
+	getCsvColumns(lang, av_langs, {properties, tagGroups, taxonomy}){
 		const columns = []
 
 		columns.push({
@@ -39,8 +50,12 @@ export class ItemExporter {
 			content: 	(item) => item._id
 		})
 
+		properties 	= Array.isArray(properties)	? properties 	: []
+		tagGroups	= Array.isArray(tagGroups)	? tagGroups		: []
+
 		icItemConfig.properties
-		.filter( 	property 	=> !property.internal)
+		.filter( 	property 	=> 	!property.internal)
+		.filter( 	property 	=> 	properties.includes(property.name) )
 		.forEach( 	property 	=> {
 
 			//ignore image
@@ -55,6 +70,14 @@ export class ItemExporter {
 			//ignore resubmissionDate
 			if(property.name 	== 'resubmissionDate') 	return null	
 
+			if(property.name	== 'primaryTopic'){
+				columns.push({
+					label:		this.translate(`ITEMS.${property.name}`, lang),								
+					content:	(item)  => this.translate(`CATEGORIES.${item[property.name]}`, lang)
+				})
+
+				return null
+			}
 		
 
 			// special: .tags
@@ -116,6 +139,7 @@ export class ItemExporter {
 				return null
 			}
 
+
 			if(property.type == 'string'){
 				columns.push({
 					label:		this.translate(`ITEMS.${property.name}`, lang),
@@ -126,32 +150,51 @@ export class ItemExporter {
 
 		})
 
-		tags.forEach( tag => {
+		if(taxonomy){
+			tagGroups.forEach( tagGroup => {
 
-			columns.push({
-				label: 		this.translate('UNSORTED_TAGS.${tag}', 	lang, false)
-						||	this.translate('CATEGORY.${tag}', 		lang, false)
-						||	this.translate('TYPE_TAGS.${tag}', 		lang, false)
-						||	tag,
-				content: (item) => ''+item.tags.includes(tag)
+				const tags = taxonomy.tags && taxonomy.tags[tagGroup]
+
+				if(!Array.isArray(tags)) return;
+
+				columns.push({
+					label:		this.translate(`INTERFACE.TAGS_${tagGroup}`, lang),
+					content: 	(item) => 	item.tags
+											.filter( 	tag => 	tags.includes(tag))
+											.map(		tag => 	this.translate(`UNSORTED_TAGS.${tag}`, lang, false) || this.optionLabels.getLabel(tag) || tag )
+											.join(', ')
+				})			
 			})
+		}
 
-		})
+		// tags.forEach( tag => {
+
+		// 	columns.push({
+		// 		label: 		this.translate('UNSORTED_TAGS.${tag}', 	lang, false)
+		// 				||	this.translate('CATEGORY.${tag}', 		lang, false)
+		// 				||	this.translate('TYPE_TAGS.${tag}', 		lang, false)
+		// 				||	tag,
+		// 		content: (item) => ''+item.tags.includes(tag)
+		// 	})
+		// })
+
+
+		console.log(columns)
 
 		return columns
 
 	}
 
 
-	async getCsvData(lang){
+	async getCsvData(lang, config){
 		const items 		= 	await 	this.db.collection('items')
 										.find({
 											state:'public',
 											proposalFor:null,
 										})
-										.toArray()
+										.toArray()		
 
-		const tags 			= 	Array.from( new Set(items.reduce( (sum, item) => sum.concat(item.tags) , []) ) )		
+		console.log('NUMBER OF ITEMS', items.length)
 
 		const tr_props		= 	icItemConfig.properties.filter( prop => prop.translatable)
 
@@ -167,7 +210,7 @@ export class ItemExporter {
 
 
 
-		const columns 		= this.getCsvColumns(lang, tags, av_langs)
+		const columns 		= this.getCsvColumns(lang, av_langs, config)
 		const rows			= []
 
 		const header_row 	= columns.map( col => col.label )
@@ -182,9 +225,11 @@ export class ItemExporter {
 		return rows
 	}
 
-	async getCSV(lang) {
+	async getCSV(lang, config) {
 
-		const csv_data 	= 	await this.getCsvData(lang)
+		await this.optionLabels.update()
+
+		const csv_data 	= 	await this.getCsvData(lang, config )
 
 		const csv_str	= 	csv_data.map( row => 
 								row.map( entry => {
@@ -201,7 +246,6 @@ export class ItemExporter {
 
 		return csv_str
 	}
-
 
 	getTodayStr(){
 
@@ -221,6 +265,19 @@ export class ItemExporter {
 				+ '_'
 				+ this.getTodayStr()
 				+ '.csv'
+	}
+
+	async storeCsvFile(dir, lang, config){
+
+		const csv 	= await this.getCSV(lang, config)
+
+		await writeFileSync(dir+`/last_export_${lang}.csv`, csv, 'utf8')
+		return this.getCsvFilename(lang)
+	}
+
+	async getCsvFile(dir, lang){
+		const csv	=	readFileSync(dir+`/last_export_${lang}.csv`, 'utf8')
+		return csv
 	}
 
 	

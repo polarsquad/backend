@@ -1,20 +1,19 @@
 'use strict'
 
-let nodemailer  = require('nodemailer'),
-	path		= require('path'),
-	request		= require('request-promise'),
-	fetch		= require('node-fetch'),
-	Promise		= require('bluebird'),
-	fs			= require('fs'),
-	icConfig	= undefined,
-	itemConfig	= undefined,
+const nodemailer  	= require('nodemailer')
+const path			= require('path')
+const request		= require('request-promise')
+const fetch			= require('node-fetch')
+const Promise		= require('bluebird')
+const fs			= require('fs')
 
-	interfaceTranslationTable = undefined,
+let	icConfig		= undefined
+let	itemConfig		= undefined
 
-	adminMessages 		= [],
-	lastAdminMessage	= undefined
+let	interfaceTranslationTable = undefined
 
-
+let	adminMessages 		= []
+let	lastAdminMessage	= undefined
 
 fetch.Promise = Promise
 
@@ -47,8 +46,8 @@ fetch.Promise = Promise
 })
 
 
-icConfig = icConfig || {}
-itemConfig	= itemConfig || {}
+icConfig 					= icConfig || {}
+itemConfig					= itemConfig || {}
 interfaceTranslationTable	= interfaceTranslationTable || {}
 
 exports.itemConfig = itemConfig

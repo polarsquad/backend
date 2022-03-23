@@ -9,6 +9,7 @@ import	{ fileURLToPath				}	from 'url'
 
 import	icUtils							from '../ic-utils.js'
 import	path							from 'path'
+import	bodyParser 						from 'body-parser'
 
 const { mailToAdmin }	=	icUtils
 
@@ -18,6 +19,7 @@ const itemConfig		=	await import('./ic-item-config.cjs')
 const config			=	JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
 const db 				=	await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password)
 const app				=	express()
+const jsonParser 		=	bodyParser.json()
 const publicApiConfig	=	config.publicApi
 const voiceReaderConfig	=	config.voiceReader
 const translationKeys	=	(({googleTranslateApiKey, deepLApiKey}) => ({googleTranslateApiKey, deepLApiKey}))(config)
@@ -83,22 +85,32 @@ checkPublicApiConfig(publicApiConfig)
 app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 	true)
 	res.header('Access-Control-Allow-Origin', 		req.headers.origin)
-	res.header('Access-Control-Allow-Methods', 		'GET, OPTIONS')
+	res.header('Access-Control-Allow-Methods', 		'GET, OPTIONS, POST')
 	res.header('Access-Control-Allow-Headers', 		'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept')
 	next()		
 })
 
 app.get('/items', 					handle( async (req, res) => res.status(200).send( await itemImporter.getItems(force_remote_item_update)  ) ) )
 
-app.get('/items/export/:lang/csv', 	handle( async (req, res) => {
+
+app.post('/items/export/:lang/csv', jsonParser,	
+									handle( async (req, res) => {
+										res.setHeader('Content-Type', 'plain/text; charset=utf-8')
+										const path = req.originalUrl
+										await itemExporter.storeCsvFile(__dirname, req.params.lang, req.body || {})
+										res.status(200).send(`GET ${path}`) 	
+									}))
+
+app.get('/items/export/:lang/csv', handle( async (req, res) => {
 										res.setHeader('Content-Type', 'text/csv; charset=utf-8')
 										res.setHeader('content-disposition', "attachment; filename=\"" + itemExporter.getCsvFilename(req.params.lang) )
-										res.status(200).send (await itemExporter.getCSV(req.params.lang) ) 	
+										res.status(200).send (await itemExporter.getCsvFile(__dirname, req.params.lang) )	
 									}))
 
 if(voiceReaderConfig){
 	app.get('/voice-reader/:itemId/html/:lang',		handle( async (req,res)	=> 	res.status(200).send(await voiceReader.getHtmlToRead(req.params.itemId, req.params.lang) )))
 	app.get('/voice-reader/:itemId/audio/:lang',	handle( async (req,res) => 	{
+
 														const itemId 			= req.params.itemId
 														const lang				= req.params.lang
 														const {headers, blob} 	= await voiceReader.getAudio(`/voice-reader/${itemId}/html/${lang}`, lang)
