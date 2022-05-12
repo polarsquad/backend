@@ -124,6 +124,8 @@ export async function getRemoteItems(config){
 		const target_groups	=	offer.info_target_group_id || []
 		const tags			= 	["service", ...categories, ...target_groups]
 	
+		console.log('CATEGORY', offer.info_category)
+
 
 		return {
 			title,

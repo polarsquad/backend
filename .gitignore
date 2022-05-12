@@ -5,6 +5,7 @@
 
 /config/*
 !/config/default-item-config.js
+!/config/config_example.json
 /npm-debug.log
 
 !/config/.gitkeep 

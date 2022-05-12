@@ -8,8 +8,6 @@ var icUtils 		= 	require('../ic-utils.js'),
 	config			= 	JSON.parse(readFileSync('../config/config.json', 'utf8')),
 	deployd			= 	require('deployd')
 
-console.log(deployd)
-
 var	server 			= 	deployd({
 							port:	config.port,
 							env: 	'production',
