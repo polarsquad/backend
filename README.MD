@@ -1,27 +1,24 @@
-``npm install``
+= Getting started
 
+Clone this repository and run ``npm install``.
 
-
-The instal deletedto important files -.-.
-Get them back:
+The install deletes two important files -.- Get them back:
 
 ```console 
 $ git checkout dpd/node_modules/ic-meta.js 
-```
-
-```console 
 $ git checkout dpd/node_modules/ic-actions.js 
 ```
 
-create db path:
+
+Create a folder for database files:
 
 ```mkdir dpd/data```
 
-install mongod, setup a db at dpd/data:
+Install mongod, setup a db at dpd/data:
 
 ``` mongod --dbpath=dpd/data ```
 
-connect to the db server and add a new database and admin user: For example ```mongo```:
+Connect to the db server and add a new database and admin user: For example ```mongo```:
 ```
 > use deployd
 switched to db deployd
@@ -43,7 +40,7 @@ Successfully added user: {
 } 
 ```
 
-move/rename config/config_example.json to config/config.json
+Move/rename config/config_example.json to config/config.json
 
 Enter the db credentilas into config.json; choose a port to your liking and host: 127.0.0.1.
 
@@ -97,3 +94,5 @@ $ dpd showkey
 ```
 
 Open ```127.0.0.1:2413/dashboard``` in your browser (adjust port if you changed config.json)
+
+Enter the key from above :)
