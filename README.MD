@@ -12,11 +12,11 @@ $ git checkout dpd/node_modules/ic-actions.js
 
 Create a folder for database files:
 
-```mkdir dpd/data```
+```$ mkdir dpd/data```
 
 Install mongod, setup a db at dpd/data:
 
-``` mongod --dbpath=dpd/data ```
+```$ mongod --dbpath=dpd/data ```
 
 Connect to the db server and add a new database and admin user: For example ```mongo``` (probably in a second terminal window);
 _Replace --USERNAME and --PASSWORD._:
@@ -60,7 +60,7 @@ $ npm run setup -- config/default-item-config.js
 Start the server: 
 
 ```
-npm start
+$ npm start
 ```
 
 Open ```127.0.0.1:2413``` in your browser (or use whatever port you changed the config to).
@@ -71,7 +71,7 @@ It should simply say 'works'.
 stop the server:
 
 ```
-npm stop
+$ npm stop
 ```
 
 ---
