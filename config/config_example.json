@@ -15,12 +15,12 @@
         },
 
         "db": {
-                "host":         "127.0.0.1",
-                "port":         "27020",
-                "name":         "deployd",
+                "host":         "--db-host",
+                "port":         "--db-port",
+                "name":         "--db-name",
                 "credentials": {
-                        "username": "--USERNAME",
-                        "password": "--PASSWORD"
+                        "username": "--db-username",
+                        "password": "--db-password"
                 }
         },
         "publicApi":{

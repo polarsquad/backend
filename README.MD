@@ -18,7 +18,9 @@ Install mongod, setup a db at dpd/data:
 
 ``` mongod --dbpath=dpd/data ```
 
-Connect to the db server and add a new database and admin user: For example ```mongo```:
+Connect to the db server and add a new database and admin user: For example ```mongo``` (probably in a second terminal window);
+_Replace --USERNAME and --PASSWORD._:
+
 ```
 > use deployd
 switched to db deployd
@@ -39,6 +41,8 @@ Successfully added user: {
 	]
 } 
 ```
+
+Cancel mongod process.
 
 Move/rename config/config_example.json to config/config.json
 
