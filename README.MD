@@ -84,19 +84,32 @@ $ npm run prestart
 $ node dpd/production.js
 ```
 
+
 ## Enter dashboard
 
 In order to see the dashboard you need a key. To get the key, you need the deployd command line interface.
 Install it globally like this: `` npm install deployd-cli -g ``
 
-If you haven't generated a key yet, got to the dpd sub folder and run ```dpd keygen```; you should only do this once, otherwise the key will be overwritten.
+If you haven't generated a key yet, go to the dpd sub folder and run ```dpd keygen```; you should only do this once, otherwise the key will be overwritten.
 
+First time:
 ```console
 $ cd dpd
+$ mkdir .dpd	#skip if you have done this before
 $ dpd keygen    #skip if you have done this before
 $ dpd showkey
 ```
 
+If you have created a key already:
+
+```
+$ cd dpd
+$ dpd showkey
+```
+
+
 Open ```127.0.0.1:2413/dashboard``` in your browser (adjust port if you changed config.json)
 
 Enter the key from above :)
+
+
