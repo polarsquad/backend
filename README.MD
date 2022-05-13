@@ -1,4 +1,4 @@
-=Getting started
+# Getting started
 
 Clone this repository and run ``npm install``.
 
@@ -50,7 +50,7 @@ Next setup items / database scheme:
 $ npm run setup -- config/default-item-config.js
 ```
 
-==Check if everything works:
+## Check if everything works:
 
 
 Start the server: 
@@ -80,7 +80,7 @@ $ npm run prestart
 $ node dpd/production.js
 ```
 
-==Enter dashboard
+## Enter dashboard
 
 In order to see the dashboard you need a key. To get the key, you need the deployd command line interface.
 Install it globally like this: `` npm install deployd-cli -g ``
