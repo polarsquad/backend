@@ -1,8 +1,6 @@
 ``npm install``
 
-install dpd-cli globally 
 
-`` npm install deployd-cli -g ``
 
 The instal deletedto important files -.-.
 Get them back:
@@ -15,14 +13,87 @@ $ git checkout dpd/node_modules/ic-meta.js
 $ git checkout dpd/node_modules/ic-actions.js 
 ```
 
+create db path:
+
+```mkdir dpd/data```
 
 install mongod, setup a db at dpd/data:
 
 ``` mongod --dbpath=dpd/data ```
 
+connect to the db server and add a new database and admin user: For example ```mongo```:
+```
+> use deployd
+switched to db deployd
+> db.createUser({
+...   user: "--USERNAME",
+...   pwd: "--PASSWORD",
+...   roles: [
+...     { role: "dbAdmin", db: "deployd" } 
+...   ]
+... })
+Successfully added user: {
+	"user" : "--USERNAME",
+	"roles" : [
+		{
+			"role" : "dbOwner",
+			"db" : "deployd"
+		}
+	]
+} 
+```
 
-move config/config_example.json to confif/config.json
+move/rename config/config_example.json to config/config.json
 
-Setup mongoDB and enter credentials into config
+Enter the db credentilas into config.json; choose a port to your liking and host: 127.0.0.1.
 
-Todo...
+Next setup items / database scheme:
+
+```console
+$ npm run setup -- config/default-item-config.js
+```
+
+== Check if everything works:
+
+
+Start the server: 
+
+```
+npm start
+```
+
+Open ```127.0.0.1:2413``` in your browser (or use whatever port you changed the config to).
+
+It should simply say 'works'.
+
+
+stop the server:
+
+```
+npm stop
+```
+
+---
+
+
+Alternatively (to see output like errors logs):
+
+``` console
+$ npm run prestart
+$ node dpd/production.js
+```
+
+== Enter dashboard
+
+In order to see the dashboard you need a key. To get the key, you need the deployd command line interface.
+Install it globally like this: `` npm install deployd-cli -g ``
+
+If you haven't generated a key yet, got to the dpd sub folder and run ```dpd keygen```; you should only do this once, otherwise the key will be overwritten.
+
+```console
+$ cd dpd
+$ dpd keygen    #skip if you have done this before
+$ dpd showkey
+```
+
+Open ```127.0.0.1:2413/dashboard``` in your browser (adjust port if you changed config.json)
