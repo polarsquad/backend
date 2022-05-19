@@ -1,44 +1,43 @@
 {
-        "title":                        "---title",
-        "translationSpreadsheetUrl":    "---translationSpreadsheetUrl",
-        "googleTranslateApiKey":        "---googleTranslateApiKey",
-        "deepLApiKey": 			"---deepLApiKey",
-        "frontendUrl":                  "---frontendUrl",
-        "port":                         "2411",
+        "title":                        "--title",
+        "translationSpreadsheetUrl":    "--translationSpreadsheetUrl",
+        "googleTranslateApiKey":        "--googleTranslateApiKey",
+        "deepLApiKey":                  "--deepLApiKey",
+        "frontendUrl":                  "--frontendUrl",
+        "port":                         "2413",
         "mail": {
-                "host":         "---mail-server",
-                "port":         "---mail-port",
+                "host":         "--mail-host",
+                "port":         "--mail-port",
                 "secure":       true,
-                "user":         "---mail-user",
-                "pass":         "---mail-pass",
-                "from":         "---mail-from"
+                "user":         "--mail-user",
+                "pass":         "--mail-pass",
+                "from":         "--mail-from"
         },
 
         "db": {
-                "host":         "---db-host",
-                "port":         "---dv-port",
-                "name":         "---db-name",
+                "host":         "--db-host",
+                "port":         "--db-port",
+                "name":         "--db-name",
                 "credentials": {
-                        "username": "---db-username",
-                        "password": "---db-password"
+                        "username": "--db-username",
+                        "password": "--db-password"
                 }
         },
-	"adminMail": "--adminMail",
-	"voiceReader":{
-		"properties": 	[ "title", "brief", "description"],
-		"baseUrl": 	"---voiceReader-baseUrl",
-		"customerId": 	"---voiceReader-customerId"
-	},
-	"suggestions":{
-		"apiKey": "abc",
-		"requireMail": false,
-		"requireApiKeyNew": false,
-		"requireName": false,
-		"sendConfirmation": true
-	},
         "publicApi":{
-                "port": 3003                
+                "port": 3003
+        },
+        "adminMail": "--adminMail",
+        "voiceReader":{
+                "properties":   [ "title", "brief", "description"],
+                "baseUrl":      "--voiceReader-baseUrl",
+                "customerId":   "--voiceReader-customerId"
+        },
+        "suggestions":{
+                "apiKey": "--suggestion-apiKey",
+                "requireMail": true,
+                "requireApiKey": "new",
+                "requireName": true,
+                "sendConfirmation": true
         }
 
 }
-
