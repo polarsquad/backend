@@ -1,10 +1,13 @@
 const icUtils	= require('../ic-utils.js')
 
 function hasAutoTranslation(str){
-	return 	str
-			&& 	str.trim()
-			&&	str.match(/^\s*Google Translat/i) //legacy
-			&&	str.match(/^\[[^\]]*:\]/i)
+	return 	str			
+			&&	
+			(
+				str.match(/^\s*Google Translat/i) //legacy
+				||
+				str.match(/^\[[^\]]*:\]/i)
+			)
 }
 
 function isValidFrom(str){
@@ -101,14 +104,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 								if(hasAutoTranslation(to_content) && !force_retranslate){
 
 									stats.skipped++
-
-////
-									console.log(`
-## AT SKIPPING (already auto translated): ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
-   from: ${from_content.slice(0, 20).padEnd(20,' ')}...	to: ${to_content.slice(0, 20)}...
-									`)
-////
-
+									console.log(`## AT SKIPPING (already auto translated): ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]`)
 
 									return null
 								}
@@ -122,7 +118,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 ////
 									console.log(`
 ## AT dry run: ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
-   from: ${from_content.slice(0, 20).padEnd(20,' ')}...	to: ${to_content.slice(0, 20)}...
+   from: ${from_content.slice(0, 20)+'...'.padEnd(23,' ')} to: ${to_content.slice(0, 20)}...
 									`)
 ////
 
