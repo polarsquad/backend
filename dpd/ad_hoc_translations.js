@@ -153,7 +153,8 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 ////
 																throw reason
 
-															}
+															})
+															
 								update[property.name] = item[property.name]
 
 								update[property.name].en = `[${translation.translator}:] ${translation.text}`
