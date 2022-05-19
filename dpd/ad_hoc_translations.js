@@ -138,28 +138,28 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 									return null
 								}
 
-								let translation = 	await icUtils.getTranslation(from_language, to_language, from_content, config) 
-
-								update[property.name] = item[property.name]
-
-								update[property.name].en = `[${translation.translator}:] ${translation.text}`
-								
-							})
-						).catch( reason => {
+								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, config)
+															.catch( reason =>{
 ////
 
-							console.log(`								
+																console.log(`								
 ## AT Translation failed:
 	${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
 	from: 	${from_content.slice(0, 20)}...
 	to: 	${to_content.slice(0, 20)}...
 	
 	reason:	${reason}
-							`)
+																`)
 ////
+																throw reason
 
+															}
+								update[property.name] = item[property.name]
 
-						})
+								update[property.name].en = `[${translation.translator}:] ${translation.text}`
+								
+							})
+						).catch(console.log)
 
 
 				return 	execute
