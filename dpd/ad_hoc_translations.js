@@ -104,13 +104,12 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 	
 			if(use_properties.length == 0) {
 				stats.fullySkipped++
-				console.log(`## AT Skipping (already auto translated): (${item.id}) ${item.title && item.title.slice(0,12)}: ${skipped_properties.map( p => p.name)}`)								
 				return null
 			}
 
 			if(skipped_properties.length > 0) stats.partiallySkipped++
 
-			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${use_properties.map( property => property.name).join(', ')}, skipping: ${skipped_properties}`)								
+			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${use_properties.map( property => property.name).join(', ')}, skipping: ${skipped_properties.map(p=>p.name)}`)								
 			
 			p= p.then( async () => {
 
