@@ -78,8 +78,8 @@ server.on('listening', function() {
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
-	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to, force_retranslate)
-	//if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true)
+	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to, false, 	force_retranslate)
+	if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true,	force_retranslate)
 
 })
 
