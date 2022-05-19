@@ -143,7 +143,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 ////
 
 																console.log(`								
-## AT Translation failed:
+\x1b[31m%s\x1b[0m## AT Translation failed:\x1b[0m
 	${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
 	from: 	${from_content.slice(0, 20)}...
 	to: 	${to_content.slice(0, 20)}...
@@ -157,17 +157,21 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 								update[property.name] = item[property.name]
 
-								update[property.name].en = `[${translation.translator}:] ${translation.text}`
+								update[property.name][to_language] = `[${translation.translator}:] ${translation.text}`
 								
 							})
 						).catch(console.log)
 
 
 				return 	execute
-						?	dpd.items.put(update)
-							.then( ()=> {
-								stats.translated++
-							})
+						?	await	dpd.items.put(update)
+									.then( () => {
+										stats.translated++
+									})
+									.catch( reason => {
+										console.log(reason)
+										throw reason
+									})
 						:	null
 
 			}).catch(console.log)
