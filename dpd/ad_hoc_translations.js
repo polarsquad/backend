@@ -138,7 +138,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 									return null
 								}
 
-								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, config)
+								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content)
 															.catch( reason =>{
 ////
 
@@ -154,7 +154,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 																throw reason
 
 															})
-															
+
 								update[property.name] = item[property.name]
 
 								update[property.name].en = `[${translation.translator}:] ${translation.text}`
