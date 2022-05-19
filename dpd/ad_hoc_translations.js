@@ -1,10 +1,16 @@
 const icUtils	= require('../ic-utils.js')
 
+function hasAutoTranslation(str){
+	return 	str
+			&& 	str.trim()
+			&&	str.match(/^\s*Google Translat/i) //legacy
+			&&	str.match(/^\[[^\]]*:\]/i)
+}
+
 function isValidFrom(str){
 	return	str 
 			&& 	 str.trim()
-			&&	!str.match(/^\s*Google Translat/i) //legacy
-			&&	!str.match(/^\[[^\]]*:\]/i)
+			&&	!hasAutoTranslation(str)
 }
 
 function isValidTo(str){
@@ -12,7 +18,7 @@ function isValidTo(str){
 }
 
 
-function autoTranslate(dpd, from_language, to_language, execute){
+function autoTranslate(dpd, from_language, to_language, execute, force_retranslate){
 
 	console.log('\n')
 	console.log(`## AT Auto translate, from ${from_language} to ${to_language}`)
@@ -33,8 +39,18 @@ function autoTranslate(dpd, from_language, to_language, execute){
 
 	console.log('## AT Properties ready for autoTranslate: ', auto_translate_properties.map( property => property.name).join(', ') )								
 
+	const stats						=	{ 
+											translated: 		0,
+											skipped:			0,
+											total:				0,
+											neededTranslation:	0
+										}
+
 	dpd.items.get()
 	.then( items => {
+
+
+		stats.total = items.length
 
 		// items that need translations:
 		items =	items.filter( item => {
@@ -49,6 +65,8 @@ function autoTranslate(dpd, from_language, to_language, execute){
 					return translation_possible
 
 				})
+
+		stats.neededTranslation	= items.length
 
 		console.log('## AT Item with translatable content:', items.length)
 
@@ -80,14 +98,36 @@ function autoTranslate(dpd, from_language, to_language, execute){
 								const from_content 	= (item[property.name][from_language] 	|| '').trim()
 								const to_content	= (item[property.name][to_language] 	|| '').trim() 
 
+								if(hasAutoTranslation(to_content) && !force_retranslate){
+
+									stats.skipped++
+
+////
+									console.log(`
+## AT SKIPPING (already auto translated): ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
+   from: ${from_content.slice(0, 20).padEnd(20,' ')}...	to: ${to_content.slice(0, 20)}...
+									`)
+////
+
+
+									return null
+								}
+
+
+
 								if(!execute){									
+
+
 
 ////
 									console.log(`
 ## AT dry run: ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
-   from: ${from_content.slice(0, 20).padEnd(20,'0')}...	to: ${to_content.slice(0, 20)}...
+   from: ${from_content.slice(0, 20).padEnd(20,' ')}...	to: ${to_content.slice(0, 20)}...
 									`)
 ////
+
+
+
 									return null
 								}
 
@@ -115,7 +155,7 @@ function autoTranslate(dpd, from_language, to_language, execute){
 						})
 
 				return 	execute
-						?	dpd.items.put(update)
+						?	dpd.items.put(update).then( stats.translated++ )
 						:	null
 
 			}).catch(console.log)
@@ -125,7 +165,7 @@ function autoTranslate(dpd, from_language, to_language, execute){
 		return p
 
 	})
-	.then(() => console.log('## AT AutoTranslation end.'))
+	.then(() => console.log('## AT AutoTranslation end.\n', stats))
 }
 
 
