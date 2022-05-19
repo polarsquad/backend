@@ -138,26 +138,27 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 									return null
 								}
 
-								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content)
-															.catch( reason =>{
-////
+// 								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content)
+// 															.catch( reason =>{
+// ////
 
-																console.log(`								
-\x1b[31m%s\x1b[0m## AT Translation failed:\x1b[0m
-	${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
-	from: 	${from_content.slice(0, 20)}...
-	to: 	${to_content.slice(0, 20)}...
+// 																console.log(`								
+// \x1b[31m%s\x1b[0m## AT Translation failed:\x1b[0m
+// 	${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
+// 	from: 	${from_content.slice(0, 20)}...
+// 	to: 	${to_content.slice(0, 20)}...
 	
-	reason:	${reason}
-																`)
-////
-																throw reason
+// 	reason:	${reason}
+// 																`)
+// ////
+// 																throw reason
 
-															})
+// 															})
 
 								update[property.name] = item[property.name]
 
-								update[property.name][to_language] = `[${translation.translator}:] ${translation.text}`
+								//update[property.name][to_language] = `[${translation.translator}:] ${translation.text}`
+								update[property.name].en = `[${translation.translator}:] ${translation.text}`
 								
 							})
 						).catch(console.log)
