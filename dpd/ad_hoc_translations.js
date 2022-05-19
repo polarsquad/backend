@@ -158,7 +158,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 								update[property.name] = item[property.name]
 
 								//update[property.name][to_language] = `[${translation.translator}:] ${translation.text}`
-								update[property.name].en = `[${translation.translator}:] ${translation.text}`
+								update[property.name].en = ''
 								
 							})
 						).catch(console.log)
