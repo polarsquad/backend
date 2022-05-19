@@ -22,24 +22,30 @@ fetch.Promise = Promise
 ;['..', __dirname].forEach( start => {
 
 	console.log( "--- Looking for files starting from:", start, '\n' )
+	const c = path.resolve(`${start}/config/config.json`)
 	try{
-		icConfig = icConfig || JSON.parse(require('fs').readFileSync(path.resolve(`${start}/config/config.json`), 'utf8'))	
+		icConfig = icConfig || JSON.parse(require('fs').readFileSync(c, 'utf8'))	
+		console.log('found', c)
 	}catch(e){
-		console.log('Unable to parse config file... at ' + path.resolve(`${start}/config/config.json`) )
+		console.log('Unable to parse config file... at ' + c )
 	}
 
+	const i = path.resolve(`${start}/dpd/public/ic-item-config.js`)
 	try{
-		itemConfig	= itemConfig || require(path.resolve(`${start}/dpd/public/ic-item-config.js`))
+		itemConfig	= itemConfig || require(i)
+		console.log('found', i)		
 	}
 	catch(e){
-		console.log(`Missing ${start}../dpd/public/ic-item-config.js. Please run 'npm run setup' first. \n\n`)	
+		console.log(`Missing ${i}. Please run 'npm run setup' first. \n\n`)	
 	}
 
+	const t = path.resolve(`${start}/dpd/public/translations.json`)
 	try{
-		interfaceTranslationTable	= interfaceTranslationTable || JSON.parse(require('fs').readFileSync(path.resolve(`${start}/dpd/public/translations.json`), 'utf8') )
+		interfaceTranslationTable	= interfaceTranslationTable || JSON.parse(require('fs').readFileSync(t, 'utf8') )
+		console.log('found', t)				
 	}
 	catch(e){
-		console.log('Unable to parse translation file... at ' + path.resolve(`${start}/dpd/public/translations.json` ) )
+		console.log('Unable to parse translation file... at ' + t ) 
 
 	}
 	console.log('\n')

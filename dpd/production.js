@@ -28,7 +28,36 @@ var	server 			= 	deployd({
 
 	clear_items		=	process.argv
 						.map( arg => !!arg.match(/--clear-items/) )
-						.find( arg => !!arg)
+						.find( arg => !!arg),
+
+	auto_translate_dry	=	process.argv
+						.map( arg => !!arg.match(/--auto-translate-dry/) )
+						.find( arg => !!arg),								
+
+	auto_translate	=	process.argv
+						.map( arg => !!arg.match(/--auto-translate/) )
+						.find( arg => !!arg),				
+
+	auto_from		=	(auto_translate || auto_translate_dry)
+						&&
+						process.argv
+						.map( 		arg 	=> arg.match(/from=([a-z]+)/) )
+						.filter( 	match 	=> match)
+						.map( 		match 	=> match[1])
+						[0],				
+
+	auto_to			=	(auto_translate || auto_translate_dry)
+						&&
+						process.argv
+						.map( 		arg 	=> arg.match(/to=([a-zA-Z]+)/) )
+						.filter( 	match 	=> match && match[1])
+						.map(		match	=> match[1])
+						[0]
+
+
+
+
+const {isValidFrom, isValidTo, autoTranslate} = require('./ad_hoc_translations.js')
 
 
 server.listen()
@@ -46,6 +75,8 @@ server.on('listening', function() {
 
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
+
+	if(auto_translate) autoTranslate(dpd, auto_from, auto_to)
 
 })
 

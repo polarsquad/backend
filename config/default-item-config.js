@@ -71,7 +71,8 @@
 			min:			3,
 			max:			120,
 			searchable:		true,
-			translatable:	true
+			translatable:	true,
+			autoTranslate:	true
 		}),
 
 		new Property({
@@ -82,7 +83,8 @@
 			searchable:		true,
 			min:			0,
 			max:			700,
-			translatable:	true
+			translatable:	true,
+			autoTranslate:	true
 		}),
 
 		new Property({
@@ -335,7 +337,8 @@
 							},	
 			defaultValue:	{},
 			searchable:		false,
-			translatable:	true
+			translatable:	true,
+			autoTranslate:	true
 		}),
 
 

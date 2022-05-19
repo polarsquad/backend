@@ -1,0 +1,44 @@
+{
+        "title":                        "---title",
+        "translationSpreadsheetUrl":    "---translationSpreadsheetUrl",
+        "googleTranslateApiKey":        "---googleTranslateApiKey",
+        "deepLApiKey": 			"---deepLApiKey",
+        "frontendUrl":                  "---frontendUrl",
+        "port":                         "2411",
+        "mail": {
+                "host":         "---mail-server",
+                "port":         "---mail-port",
+                "secure":       true,
+                "user":         "---mail-user",
+                "pass":         "---mail-pass",
+                "from":         "---mail-from"
+        },
+
+        "db": {
+                "host":         "---db-host",
+                "port":         "---dv-port",
+                "name":         "---db-name",
+                "credentials": {
+                        "username": "---db-username",
+                        "password": "---db-password"
+                }
+        },
+	"adminMail": "--adminMail",
+	"voiceReader":{
+		"properties": 	[ "title", "brief", "description"],
+		"baseUrl": 	"---voiceReader-baseUrl",
+		"customerId": 	"---voiceReader-customerId"
+	},
+	"suggestions":{
+		"apiKey": "abc",
+		"requireMail": false,
+		"requireApiKeyNew": false,
+		"requireName": false,
+		"sendConfirmation": true
+	},
+        "publicApi":{
+                "port": 3003                
+        }
+
+}
+

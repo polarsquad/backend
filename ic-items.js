@@ -67,6 +67,7 @@
 		this.searchable		=	data.searchable
 		this.project		=	data.project
 		this.translatable	=	data.translatable
+		this.autoTranslate	=	data.autoTranslate
 		this.min			=	data.min
 		this.max			=	data.max
 		this.mandatory		= 	data.mandatory
@@ -127,6 +128,11 @@
 
 								}
 
+		Object.keys(data).forEach( key =>{
+			if( key in this) return;
+
+			console.log('\n\n ----- Unknown property key, please check ic-item.js: ', key,'\n\n')
+		})
 	}
 
 	/* CONFIG */

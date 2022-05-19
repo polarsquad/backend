@@ -1,55 +1,136 @@
-server.on('listening', function() {
-	console.log("Server is listening on "+ config.port)
+const icUtils	= require('../ic-utils.js')
 
-	var dpd = internalClient.build(server)
+function isValidFrom(str){
+	return	str 
+			&& 	 str.trim()
+			&&	!str.match(/^\s*Google Translat/i) //legacy
+			&&	!str.match(/^\[[^\]]*:\]/i)
+}
 
-	
+function isValidTo(str){
+	return !isValidFrom(str)
+}
+
+
+function autoTranslate(dpd, from_language, to_language, execute){
+
+	console.log('\n')
+	console.log(`## AT Auto translate, from ${from_language} to ${to_language}`)
+
+	if(!from_language) 	return console.log("## AT AutoTranslate missing from_language: try paramter e.g.: from=de")
+	if(!to_language) 	return console.log("## AT AutoTranslate missing to_language: try paramter e.g.: to=en")
+
+	if(!icUtils.itemConfig || !icUtils.itemConfig.properties)
+						return console.log('## AT AutoTranslate missing properties! [icUtils.config.properties]')
+
+	const properties 				= 	icUtils.itemConfig.properties
+	const auto_translate_properties	=	properties.filter( property => {
+											if(!property.translatable)								return false
+											if(!property.autoTranslate)								return false
+
+											return true	
+										})
+
+	console.log('## AT Properties ready for autoTranslate: ', auto_translate_properties.map( property => property.name).join(', ') )								
+
 	dpd.items.get()
 	.then( items => {
 
-		console.log(items[0].description.de)
+		// items that need translations:
+		items =	items.filter( item => {
 
-		items = items.filter( item => !item.description || !item.description.en || !item.description.en.trim())
+					const translation_possible	= 	auto_translate_properties.some( property => {
+														if(!(property.name in item) )							return false			
+														if(!isValidFrom(item[property.name][from_language]))	return false
 
-		console.log(items.length)
+														return true	
+													})
 
-		let p = Promise.resolve()
+					return translation_possible
 
-		
+				})
 
-		items.map( item => {
+		console.log('## AT Item with translatable content:', items.length)
 
-			console.log('Translating: '+item.id)
+		if(items.length == 0) console.log('## AT No items have translatable content, check icItemConfig for .translatable and .autoTranslate flags. [both required]')
+
+		let p = Promise.resolve()		
+
+		items.forEach( item => {			
+
+			const applicable_properties = 	auto_translate_properties
+											.filter( property => {
+												if(!(property.name in item) )							return false			
+												if(!isValidFrom(item[property.name][from_language]))	return false
+												if(!isValidTo(item[property.name][to_language]))		return false
+
+												return true	
+											})
+
+			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${applicable_properties.map( property => property.name).join(', ')}`)								
 			
 			p= p.then( async () => {
 
 				let update = {id: item.id}
 
 				await 	Promise.all(
-							icUtils.itemConfig.properties
-							.filter( property_obj => property_obj.translatable)
+							applicable_properties
 							.map( async property => {						
 
-								if(!item[property.name].de || !item[property.name].de.trim()) return null
-								if(item[property.name].en && item[property.name].en.trim()) return null
+								const from_content 	= (item[property.name][from_language] 	|| '').trim()
+								const to_content	= (item[property.name][to_language] 	|| '').trim() 
 
-								let translation = await icUtils.getTranslation('de', 'en', item[property.name].de.trim(), config) 
+								if(!execute){									
+
+////
+									console.log(`
+## AT dry run: ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
+	from: 	${from_content.slice(0, 20)}...
+	to: 	${to_content.slice(0, 20)}...
+									`)
+////
+									return null
+								}
+
+								let translation = 	await icUtils.getTranslation(from_language, to_language, from_content, config) 
 
 								update[property.name] = item[property.name]
 
 								update[property.name].en = `[${translation.translator}:] ${translation.text}`
 								
 							})
-						).catch(console.log)
+						).catch( reason => {
+////
 
-				return dpd.items.put(update)
+							console.log(`								
+## AT Translation failed:
+	${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
+	from: 	${from_content.slice(0, 20)}...
+	to: 	${to_content.slice(0, 20)}...
+	
+	reason:	${reason}
+							`)
+////
+
+
+						})
+
+				return 	execute
+						?	dpd.items.put(update)
+						:	null
 
 			}).catch(console.log)
 
 		})
-		
+
+		return p
 
 	})
+	.then(() => console.log('## AT AutoTranslation end.'))
+}
 
 
-})
+exports.isValidFrom 	= isValidFrom
+exports.isValidTo		= isValidTo
+exports.autoTranslate 	= autoTranslate
+
