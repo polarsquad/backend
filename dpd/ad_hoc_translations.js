@@ -85,8 +85,7 @@ function autoTranslate(dpd, from_language, to_language, execute){
 ////
 									console.log(`
 ## AT dry run: ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]
-	from: 	${from_content.slice(0, 20)}...
-	to: 	${to_content.slice(0, 20)}...
+   from: ${from_content.slice(0, 20).padEnd(20,'0')}...	to: ${to_content.slice(0, 20)}...
 									`)
 ////
 									return null

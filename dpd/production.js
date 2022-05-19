@@ -31,11 +31,11 @@ var	server 			= 	deployd({
 						.find( arg => !!arg),
 
 	auto_translate_dry	=	process.argv
-						.map( arg => !!arg.match(/--auto-translate-dry/) )
+						.map( arg => !!arg.match(/^--auto-translate-dry$/) )
 						.find( arg => !!arg),								
 
 	auto_translate	=	process.argv
-						.map( arg => !!arg.match(/--auto-translate/) )
+						.map( arg => !!arg.match(/^--auto-translate$/) )
 						.find( arg => !!arg),				
 
 	auto_from		=	(auto_translate || auto_translate_dry)
@@ -76,7 +76,8 @@ server.on('listening', function() {
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
-	if(auto_translate) autoTranslate(dpd, auto_from, auto_to)
+	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to)
+	//if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true)
 
 })
 
