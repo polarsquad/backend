@@ -43,10 +43,11 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 	console.log('## AT Properties ready for autoTranslate: ', auto_translate_properties.map( property => property.name).join(', ') )								
 
 	const stats						=	{ 
-											translated: 		0,
-											skipped:			0,
+											translated: 		0,											
 											total:				0,
-											neededTranslation:	0
+											neededTranslation:	0,
+											skippedProperties:	0,
+											checkedProperties:	0
 										}
 
 	dpd.items.get()
@@ -101,9 +102,11 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 								const from_content 	= (item[property.name][from_language] 	|| '').trim()
 								const to_content	= (item[property.name][to_language] 	|| '').trim() 
 
+								stats.checkedProperties++
+
 								if(hasAutoTranslation(to_content) && !force_retranslate){
 
-									stats.skipped++
+									stats.skippedProperties++
 									console.log(`## AT SKIPPING (already auto translated): ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]`)
 
 									return null
