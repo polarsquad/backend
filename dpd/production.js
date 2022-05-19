@@ -3,58 +3,60 @@
 
 process.chdir(__dirname);
 
-var icUtils 		= 	require('../ic-utils.js'),
-	{readFileSync}	=	require('fs'),
-	config			= 	JSON.parse(readFileSync('../config/config.json', 'utf8')),
-	deployd			= 	require('deployd')
+var icUtils 			= 	require('../ic-utils.js'),
+	{readFileSync}		=	require('fs'),
+	config				= 	JSON.parse(readFileSync('../config/config.json', 'utf8')),
+	deployd				= 	require('deployd')
 
-var	server 			= 	deployd({
-							port:	config.port,
-							env: 	'production',
-							db: {
-								host: 	config.db.host,
-								port: 	config.db.port,
-								name: 	config.db.name,
-								credentials: {
-									username: config.db.credentials.username,
-									password: config.db.credentials.password
+var	server 				= 	deployd({
+								port:	config.port,
+								env: 	'production',
+								db: {
+									host: 	config.db.host,
+									port: 	config.db.port,
+									name: 	config.db.name,
+									credentials: {
+										username: config.db.credentials.username,
+										password: config.db.credentials.password
+									}
 								}
-							}
-						}),
-	internalClient	=	require('deployd/lib/internal-client'),
-	import_json		=	process.argv
-						.map( arg => { const matches = arg.match(/import=(.*)/); return matches && matches[1] })
-						.find( arg => !!arg),
+							}),
+	internalClient		=	require('deployd/lib/internal-client'),
+	import_json			=	process.argv
+							.map( arg => { const matches = arg.match(/import=(.*)/); return matches && matches[1] })
+							.find( arg => !!arg),
 
-	clear_items		=	process.argv
-						.map( arg => !!arg.match(/--clear-items/) )
-						.find( arg => !!arg),
+	clear_items			=	process.argv
+							.map( arg => !!arg.match(/--clear-items/) )
+							.find( arg => !!arg),
 
 	auto_translate_dry	=	process.argv
-						.map( arg => !!arg.match(/^--auto-translate-dry$/) )
-						.find( arg => !!arg),								
+							.map( arg => !!arg.match(/^--auto-translate-dry$/) )
+							.find( arg => !!arg),								
 
-	auto_translate	=	process.argv
-						.map( arg => !!arg.match(/^--auto-translate$/) )
-						.find( arg => !!arg),				
+	auto_translate		=	process.argv
+							.map( arg => !!arg.match(/^--auto-translate$/) )
+							.find( arg => !!arg),				
 
-	auto_from		=	(auto_translate || auto_translate_dry)
-						&&
-						process.argv
-						.map( 		arg 	=> arg.match(/from=([a-z]+)/) )
-						.filter( 	match 	=> match)
-						.map( 		match 	=> match[1])
-						[0],				
+	auto_from			=	(auto_translate || auto_translate_dry)
+							&&
+							process.argv
+							.map( 		arg 	=> arg.match(/from=([a-z]+)/) )
+							.filter( 	match 	=> match)
+							.map( 		match 	=> match[1])
+							[0],				
 
-	auto_to			=	(auto_translate || auto_translate_dry)
-						&&
-						process.argv
-						.map( 		arg 	=> arg.match(/to=([a-zA-Z]+)/) )
-						.filter( 	match 	=> match && match[1])
-						.map(		match	=> match[1])
-						[0]
+	auto_to				=	(auto_translate || auto_translate_dry)
+							&&
+							process.argv
+							.map( 		arg 	=> arg.match(/to=([a-zA-Z]+)/) )
+							.filter( 	match 	=> match && match[1])
+							.map(		match	=> match[1])
+							[0],
 
-
+	force_retranslate	=	process.argv
+							.map( arg => !!arg.match(/^--force-retranslate$/) )
+							.find( arg => !!arg)
 
 
 const {isValidFrom, isValidTo, autoTranslate} = require('./ad_hoc_translations.js')
@@ -76,7 +78,7 @@ server.on('listening', function() {
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
-	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to)
+	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to, force_retranslate)
 	//if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true)
 
 })

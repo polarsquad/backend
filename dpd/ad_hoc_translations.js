@@ -43,11 +43,11 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 	console.log('## AT Properties ready for autoTranslate: ', auto_translate_properties.map( property => property.name).join(', ') )								
 
 	const stats						=	{ 
-											translated: 		0,											
-											total:				0,
-											neededTranslation:	0,
-											skippedProperties:	0,
-											checkedProperties:	0
+											total:					0,
+											neededTranslation:		0,
+											partiallySkipped: 		0,											
+											fullySkipped:			0,
+											translated:				0
 										}
 
 	dpd.items.get()
@@ -62,6 +62,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 					const translation_possible	= 	auto_translate_properties.some( property => {
 														if(!(property.name in item) )							return false			
 														if(!isValidFrom(item[property.name][from_language]))	return false
+														if(!isValidTo(item[property.name][to_language]))		return false
 
 														return true	
 													})
@@ -76,9 +77,11 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 		if(items.length == 0) console.log('## AT No items have translatable content, check icItemConfig for .translatable and .autoTranslate flags. [both required]')
 
+
 		let p = Promise.resolve()		
 
 		items.forEach( item => {			
+
 
 			const applicable_properties = 	auto_translate_properties
 											.filter( property => {
@@ -89,30 +92,36 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 												return true	
 											})
 
-			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${applicable_properties.map( property => property.name).join(', ')}`)								
+			const unskipable_properties	=	applicable_properties.filter( property => !hasAutoTranslation(item[property.name][to_language]) )								
+			
+
+			const use_properties		=	force_retranslate
+											?	applicable_properties
+											:	unskipable_properties
+
+			const skipped_properties	=	applicable_properties.filter( property =>  !use_properties.includes(property) )								
+
+	
+			if(use_properties.length == 0) {
+				stats.fullySkipped++
+				console.log(`## AT Skipping (already auto translated): (${item.id}) ${item.title && item.title.slice(0,12)}: ${skipped_properties}`)								
+				return null
+			}
+
+			if(skipped_properties.length > 0) stats.partiallySkipped++
+
+			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${use_properties.map( property => property.name).join(', ')}, skipping: ${skipped_properties}`)								
 			
 			p= p.then( async () => {
 
 				let update = {id: item.id}
 
 				await 	Promise.all(
-							applicable_properties
+							use_properties
 							.map( async property => {						
 
 								const from_content 	= (item[property.name][from_language] 	|| '').trim()
 								const to_content	= (item[property.name][to_language] 	|| '').trim() 
-
-								stats.checkedProperties++
-
-								if(hasAutoTranslation(to_content) && !force_retranslate){
-
-									stats.skippedProperties++
-									console.log(`## AT SKIPPING (already auto translated): ${item.title && item.title.slice(0,12)} (${item.id}) ${from_language} -> ${to_language} [${property.name}]`)
-
-									return null
-								}
-
-
 
 								if(!execute){									
 
@@ -153,8 +162,12 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 						})
 
+
 				return 	execute
-						?	dpd.items.put(update).then( stats.translated++ )
+						?	dpd.items.put(update)
+							.then( ()=> {
+								stats.translated++
+							})
 						:	null
 
 			}).catch(console.log)
