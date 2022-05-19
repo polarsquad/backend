@@ -109,8 +109,6 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 			if(skipped_properties.length > 0) stats.partiallySkipped++
 
-			console.log(`## AT Translating: (${item.id}) ${item.title && item.title.slice(0,12)}: ${use_properties.map( property => property.name).join(', ')}`)								
-			
 			p= p.then( async () => {
 
 				let update = {id: item.id}
@@ -166,10 +164,11 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 				return 	execute
 						?	await	dpd.items.put(update)
 									.then( () => {
+										process.stdout.write('.')
 										stats.translated++
 									})
 									.catch( reason => {
-										console.log(reason)
+										console.log(`\x1b[31m%s\x1b[0m##AT Database update failed:\x1b[0m\n reason: ${reason}`)
 										throw reason
 									})
 						:	null
