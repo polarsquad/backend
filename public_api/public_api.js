@@ -1,4 +1,3 @@
-import	{ readFileSync				}	from 'fs'
 import	{ default as express 		}	from 'express'
 import	{ getLocalDB				}	from '../connect_db.mjs'
 import	{ ItemImporter				}	from './items.js'
@@ -6,6 +5,7 @@ import	{ VoiceReader				}	from './voice-reader.js'
 import	{ ItemExporter				}	from './export.js'
 import	{ Translator				}	from './translations.js'
 import	{ fileURLToPath				}	from 'url'
+import  { config                    }	from '../config/index.js'
 
 import	icUtils							from '../ic-utils.js'
 import	path							from 'path'
@@ -16,8 +16,7 @@ const { mailToAdmin }	=	icUtils
 
 const __dirname 		=	path.dirname(fileURLToPath(import.meta.url))
 const itemConfig		=	await import('./ic-item-config.cjs')
-const config			=	JSON.parse(readFileSync(path.resolve(__dirname, '../config/config.json'), 'utf8'))
-const db 				=	await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password)
+const db 				=	await getLocalDB(config.db.port, config.db.name, config.db.credentials.username, config.db.credentials.password, config.db.host)
 const app				=	express()
 const jsonParser 		=	bodyParser.json()
 const publicApiConfig	=	config.publicApi

@@ -2,7 +2,7 @@
 
 process.chdir(__dirname);
 
-var	config		= 	JSON.parse(require('fs').readFileSync('../config/config.json', 'utf8')),
+var	{config}	= 	require(path.resolve('../config')),
 	deployd		= 	require('deployd'),
 	server 		= 	deployd({
 						port:	config.port,

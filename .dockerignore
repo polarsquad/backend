@@ -1,0 +1,15 @@
+/dump
+/import/*
+!/import/*.mjs
+
+/npm-debug.log
+
+/mongodb/data/**/*
+!/mongodb/data/.gitkeep
+
+/node_modules
+
+/logs
+
+/.git
+

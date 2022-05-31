@@ -2,7 +2,7 @@ import	{ default as mongodb 	}	from 'mongodb'
 
 const 	{ MongoClient } = 	mongodb
 
-export async function getLocalDB(port, name, user, pass){
+export async function getLocalDB(port, name, user, pass, host){
 
 	if(!port) throw "getLocalDB: missing port"
 	if(!name) throw "getLocalDB: missing name"
@@ -10,9 +10,10 @@ export async function getLocalDB(port, name, user, pass){
 	if(!pass) throw "getLocalDB: missing pass"
 
 
-	const 	connect_str	= `mongodb://${user}:${pass}@127.0.0.1:${port}/${name}`
+	const 	connect_str	= `mongodb://${user}:${pass}@${host}:${port}/${name}`
+	const parsedConnectionString = `mongodb://${user}:********@${host}:${port}/${name}`
 
-	process.stdout.write('\nConnecting to: '+connect_str+' ... ')
+	process.stdout.write(`Connecting to: ${parsedConnectionString} ...`)
 
 	return await 	MongoClient.connect(connect_str, { 
 							useNewUrlParser: 	true, 

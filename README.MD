@@ -1,115 +1,199 @@
 # Getting started
 
-Clone this repository and run ``npm install``.
+- Step 1. (Setup NPM) Clone this repository and run `npm install`.
 
 The install deletes two important files -.- Get them back:
 
-```console 
-$ git checkout dpd/node_modules/ic-meta.js 
-$ git checkout dpd/node_modules/ic-actions.js 
+```console
+$ git checkout dpd/node_modules/ic-meta.js
+$ git checkout dpd/node_modules/ic-actions.js
 ```
 
+- Step 2. (Setup database) Spin up the mongodb container to insert a user into it:
 
-Create a folder for database files:
+```
+$ (sudo) docker-compose up
+```
 
-```$ mkdir dpd/data```
+This should start the database locally. Connect to it:
 
-Install mongod, setup a db at dpd/data:
+```
+$ mongo mongodb://localhost:27017
+```
 
-```$ mongod --dbpath=dpd/data ```
+(you should check before starting this that you didn't have another local instance of mongodb running on your computer).
 
-Connect to the db server and add a new database and admin user: For example ```mongo``` (probably in a second terminal window);
-_Replace --USERNAME and --PASSWORD._:
+Then insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
 
 ```
 > use deployd
 switched to db deployd
 > db.createUser({
-...   user: "--USERNAME",
-...   pwd: "--PASSWORD",
-...   roles: [
-...     { role: "dbAdmin", db: "deployd" } 
-...   ]
-... })
+	user: "patrickds",
+	pwd: "test1234",
+	roles: [{ role: "dbAdmin", db: "deployd"}],
+})
 Successfully added user: {
-	"user" : "--USERNAME",
-	"roles" : [
-		{
-			"role" : "dbOwner",
-			"db" : "deployd"
-		}
-	]
-} 
+        "user" : "<YOUR_USERNAME>",
+        "roles" : [
+                {
+                        "role" : "dbAdmin",
+                        "db" : "deployd"
+                }
+        ]
+}
+> db.getUsers() // sanity check
+[
+        {
+                "_id" : "deployd.<YOUR_USERNAME>",
+                "userId" : UUID("f40420c5-1f7c-47f9-ba94-c1d54f12725f"),
+                "user" : "<YOUR_USERNAME>",
+                "db" : "deployd",
+                "roles" : [
+                        {
+                                "role" : "dbAdmin",
+                                "db" : "deployd"
+                        }
+                ],
+                "mechanisms" : [
+                        "SCRAM-SHA-1",
+                        "SCRAM-SHA-256"
+                ]
+        }
+]
 ```
 
-Cancel mongod process.
+Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore, so if you try `db.getUsers()` then, it'll show an empty list. You can try this instead of typing `use deployd` again in this case:
 
-Move/rename config/config_example.json to config/config.json
+```
+db.getUsers({filter: {db: "deployd"}})
+>>> [
+        {
+                "_id" : "deployd.<YOUR_USERNAME>",
+                "userId" : UUID("8d6a92f1-fe66-4523-b637-c0e6e49e6d15"),
+                "user" : "<YOUR_USERNAME>",
+                "db" : "deployd",
+                "roles" : [
+                        {
+                                "role" : "dbAdmin",
+                                "db" : "deployd"
+                        }
+                ],
+                "mechanisms" : [
+                        "SCRAM-SHA-1",
+                        "SCRAM-SHA-256"
+                ]
+        }
+	]
+```
 
-Enter the db credentilas into config.json; choose a port to your liking and host: 127.0.0.1.
+When you're done, exit the shell and proceed to step 3.
 
-Next setup items / database scheme:
+- Step 3. Setting up the configuration files
 
-```console
+* Move/rename config/config_example.json to config/config.json
+
+Enter your database credentials into config/config.json. They should look like this:
+```
+{
+	...,
+	"db": {
+			"host":         "localhost",
+			"port":         "27017",
+			"name":         "deployd",
+			"credentials": {
+					"username": "<YOUR_USERNAME>",
+					"password": "<YOUR_PASSWORD>"
+			}
+	},
+	...,
+}
+```
+Note that this file is ignored, so you won't see changes in your repository.
+
+* Run the following script, which updates the items setup and the database scheme:
+
+```
 $ npm run setup -- config/default-item-config.js
 ```
 
-## Check if everything works:
+- Step 4. (Launching backend servers) 
 
+* Start the database container:
 
-Start the server: 
+```
+$ (sudo) docker-compose up -d
+```
 
+You can check that the database is working properly by trying to connect to it: 
+```
+$ mongo mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@localhost:27017/deployd
+```
+To make sure you are properly connected, you can try running the DB command `db.getUsers()` and get the same output as earlier.
+
+* Start the backend servers:
 ```
 $ npm start
 ```
-
-Open ```127.0.0.1:2413``` in your browser (or use whatever port you changed the config to).
-
-It should simply say 'works'.
-
-
-stop the server:
-
+To test that it works, write the following command in your terminal:
 ```
-$ npm stop
+$ curl localhost:2413
 ```
-
----
-
-
-Alternatively (to see output like errors logs):
-
-``` console
-$ npm run prestart
-$ node dpd/production.js
+It should return the following HTML document:
+```
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+        works
+</body>
+</html>
 ```
 
+* To stop the servers:
+```
+$ npm run stop-production
+$ npm run stop-public-api
+```
 
-## Enter dashboard
+* To stop the database:
+```
+$ sudo docker-compose down
+```
+
+- Step 5. (Enter dashboard)
 
 In order to see the dashboard you need a key. To get the key, you need the deployd command line interface.
-Install it globally like this: `` npm install deployd-cli -g ``
 
-If you haven't generated a key yet, go to the dpd sub folder and run ```dpd keygen```; you should only do this once, otherwise the key will be overwritten.
+* Install the deployd CLI globally: 
+```
+$ npm install deployd-cli -g
+```
 
-First time:
-```console
+* Generate a DPD key 
+
+If you have created a key already, follow those instead to re-use the previously generated key:
+
+```
+$ cd dpd && dpd showkey && cd ..
+```
+
+If you haven't generated a key yet, running the above commands will generate the following console output:
+```
+No key file found. Run the following to create one:
+
+dpd keygen
+
+```
+so follow these instructions instead:
+```
 $ cd dpd
 $ mkdir .dpd	#skip if you have done this before
 $ dpd keygen    #skip if you have done this before
 $ dpd showkey
 ```
 
-If you have created a key already:
+* Visualize the dashboard
 
-```
-$ cd dpd
-$ dpd showkey
-```
-
-
-Open ```127.0.0.1:2413/dashboard``` in your browser (adjust port if you changed config.json)
-
-Enter the key from above :)
-
-
+Open `localhost:2413/dashboard` (with the servers running, see Step 4 if necessary) in your browser and enter the key in the output of dpd keygen in the field displayed in the browser. This should give you access to the dashboard.
