@@ -20,9 +20,10 @@
 	},
 	"scripts": {
 		"setup": "node setup.js",
-		"prestart": "mongod --dbpath=dpd/data --auth --port $(node config.js db.port) --fork --logpath /dev/null",
-		"start": "forever start dpd/production.js; forever start public_api/public_api.js",
-		"stop": "forever stop dpd/production.js; forever stop public_api/public_api.js; mongod --dbpath dpd/data --shutdown",
+		"start-production": "forever start dpd/production.js",
+		"start-public-api": "forever start public_api/public_api.js",
+		"stop-production": "forever stop dpd/production.js",
+		"stop-public-api": "forever stop public_api/public_api.js",
 		"mongodump": "mongodump --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
 		"mongorestore": "mongorestore --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
 		"postinstall": "cd dpd && npm install"

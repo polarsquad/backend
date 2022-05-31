@@ -94,7 +94,6 @@ When you're done, exit the shell and proceed to step 3.
 * Move/rename config/config_example.json to config/config.json
 
 Enter your database credentials into config/config.json. They should look like this:
-
 ```
 {
 	...,
@@ -110,40 +109,57 @@ Enter your database credentials into config/config.json. They should look like t
 	...,
 }
 ```
-
 Note that this file is ignored, so you won't see changes in your repository.
 
-- Run the following script, which updates the items setup and the database scheme:
+* Run the following script, which updates the items setup and the database scheme:
 
 ```
 $ npm run setup -- config/default-item-config.js
 ```
 
-## Check if everything works:
+- Step 4. (Launch) 
 
-Start the server:
+* Start the database container:
 
+```
+$ (sudo) docker-compose up -d
+```
+
+You can check that the database is working properly by trying to connect to it: 
+```
+$ mongo mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@localhost:27017/deployd
+```
+To make sure you are properly connected, you can try running the DB command `db.getUsers()` and get the same output as earlier.
+
+* Start the backend servers:
 ```
 $ npm start
 ```
-
-Open `127.0.0.1:2413` in your browser (or use whatever port you changed the config to).
-
-It should simply say 'works'.
-
-stop the server:
-
+To test that it works, write the following command in your terminal:
 ```
-$ npm stop
+$ curl localhost:2413
+```
+It should return the following HTML document:
+```
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+        works
+</body>
+</html>
 ```
 
----
+* To stop the servers:
+```
+$ npm run stop-production
+$ npm run stop-public-api
+```
 
-Alternatively (to see output like errors logs):
-
-```console
-$ npm run prestart
-$ node dpd/production.js
+* To stop the database:
+```
+$ sudo docker-compose down
 ```
 
 ## Enter dashboard
