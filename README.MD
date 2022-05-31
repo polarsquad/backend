@@ -117,7 +117,7 @@ Note that this file is ignored, so you won't see changes in your repository.
 $ npm run setup -- config/default-item-config.js
 ```
 
-- Step 4. (Launch) 
+- Step 4. (Launching backend servers) 
 
 * Start the database container:
 
@@ -162,29 +162,38 @@ $ npm run stop-public-api
 $ sudo docker-compose down
 ```
 
-## Enter dashboard
+- Step 5. (Enter dashboard)
 
 In order to see the dashboard you need a key. To get the key, you need the deployd command line interface.
-Install it globally like this: `npm install deployd-cli -g`
 
-If you haven't generated a key yet, go to the dpd sub folder and run `dpd keygen`; you should only do this once, otherwise the key will be overwritten.
+* Install the deployd CLI globally: 
+```
+$ npm install deployd-cli -g
+```
 
-First time:
+* Generate a DPD key 
 
-```console
+If you have created a key already, follow those instead to re-use the previously generated key:
+
+```
+$ cd dpd && dpd showkey && cd ..
+```
+
+If you haven't generated a key yet, running the above commands will generate the following console output:
+```
+No key file found. Run the following to create one:
+
+dpd keygen
+
+```
+so follow these instructions instead:
+```
 $ cd dpd
 $ mkdir .dpd	#skip if you have done this before
 $ dpd keygen    #skip if you have done this before
 $ dpd showkey
 ```
 
-If you have created a key already:
+* Visualize the dashboard
 
-```
-$ cd dpd
-$ dpd showkey
-```
-
-Open `127.0.0.1:2413/dashboard` in your browser (adjust port if you changed config.json)
-
-Enter the key from above :)
+Open `localhost:2413/dashboard` (with the servers running, see Step 4 if necessary) in your browser and enter the key in the output of dpd keygen in the field displayed in the browser. This should give you access to the dashboard.
