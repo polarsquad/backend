@@ -11,8 +11,9 @@ export async function getLocalDB(port, name, user, pass, host){
 
 
 	const 	connect_str	= `mongodb://${user}:${pass}@${host}:${port}/${name}`
+	const parsedConnectionString = `mongodb://${user}:********@${host}:${port}/${name}`
 
-	process.stdout.write('\nConnecting to: '+connect_str+' ... ')
+	process.stdout.write(`Connecting to: ${parsedConnectionString} ...`)
 
 	return await 	MongoClient.connect(connect_str, { 
 							useNewUrlParser: 	true, 

@@ -7,7 +7,6 @@ ENV NODE_ENV $NODE_ENV
 COPY --chown=node ./ /app
 
 # Install required system packages and dependencies
-
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/main' >> /etc/apk/repositories && \
     echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/community' >> /etc/apk/repositories && \
     apk update && \

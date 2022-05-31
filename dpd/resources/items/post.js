@@ -5,6 +5,7 @@ cancelUnless(
 	"You are not authorized. Unregistered users can only submit suggestions.", 401
 )
 
+var {config} = require(process.cwd()+'/../config')
 var icUtils = require(process.cwd()+'/../ic-utils.js'),
 	self = this
 
@@ -24,7 +25,7 @@ delete this.apiKeyUsed
 
 if(this.state == 'suggestion') {
 
-	const sConfig 			= 	icUtils.config.suggestions
+	const sConfig 			= 	config.suggestions
 	const apiKey			=	sConfig && sConfig.apiKey || undefined
 	const sendConfirmation	= 	sConfig && sConfig.sendConfirmation && suggestionMeta.mail
 	const requireApiKey		= 	this.proposalFor

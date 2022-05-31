@@ -2,10 +2,6 @@
 /import/*
 !/import/*.mjs
 
-/config/*
-!/config/config.json
-!/config/default-item-config.js
-!/config/.gitkeep 
 /npm-debug.log
 
 /mongodb/data/**/*

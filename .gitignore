@@ -3,12 +3,7 @@
 /import/*
 !/import/*.mjs
 
-/config/*
-!/config/default-item-config.js
-!/config/config_example.json
 /npm-debug.log
-
-!/config/.gitkeep 
 
 /dpd/data
 /mongodb/data/**/*
@@ -31,3 +26,5 @@
 
 migrate-infocompass.js
 data.json
+
+.env
