@@ -20,8 +20,8 @@
 	},
 	"scripts": {
 		"setup": "node setup.js",
-		"start-production": "forever start dpd/production.js",
-		"start-public-api": "forever start public_api/public_api.js",
+		"start-production": "forever start -o logs/production.log -e logs/production-error.log dpd/production.js",
+		"start-public-api": "forever start -o logs/public_api.log -e logs/public_api-error.log public_api/public_api.js",
 		"stop-production": "forever stop dpd/production.js",
 		"stop-public-api": "forever stop public_api/public_api.js",
 		"mongodump": "mongodump --host 127.0.0.1:$(node config.js db.port) --username=$(node config.js db.credentials.username) --password=$(node config.js db.credentials.password) --db=$(node config.js db.name)",
