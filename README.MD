@@ -91,13 +91,31 @@ When you're done, exit the shell and proceed to step 3.
 
 - Step 3. Setting up the configuration files
 
-Move/rename config/config_example.json to config/config.json
+* Move/rename config/config_example.json to config/config.json
 
-Enter the db credentilas into config.json; choose a port to your liking and host: 127.0.0.1.
+Enter your database credentials into config/config.json. They should look like this:
 
-Next setup items / database scheme:
+```
+{
+	...,
+	"db": {
+			"host":         "localhost",
+			"port":         "27017",
+			"name":         "deployd",
+			"credentials": {
+					"username": "<YOUR_USERNAME>",
+					"password": "<YOUR_PASSWORD>"
+			}
+	},
+	...,
+}
+```
 
-```console
+Note that this file is ignored, so you won't see changes in your repository.
+
+- Run the following script, which updates the items setup and the database scheme:
+
+```
 $ npm run setup -- config/default-item-config.js
 ```
 
