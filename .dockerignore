@@ -11,5 +11,9 @@
 /mongodb/data/**/*
 !/mongodb/data/.gitkeep
 
+/node_modules
+
 /logs
+
+/.git
 

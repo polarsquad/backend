@@ -17,3 +17,12 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/main' >> /etc/apk/repositori
 USER node
 
 WORKDIR /app
+
+RUN npm install
+
+RUN cp ./dpd/ic-actions.js /app/dpd/node_modules/ic-actions.js && \
+    rm ./dpd/ic-actions.js && \
+    cp ./dpd/ic-meta.js /app/dpd/node_modules/ic-meta.js && \
+    rm ./dpd/ic-meta.js
+
+RUN npm run setup -- config/default-item-config.js
