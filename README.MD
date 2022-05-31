@@ -26,17 +26,47 @@ $ mongo mongodb://localhost:27017
 Then insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
 
 ```
-db.createUser({
-	user: "<YOUR_USERNAME>",
-	pwd: "<YOUR_PASSWORD>",
+> use deployd
+switched to db deployd
+> db.createUser({
+	user: "patrickds",
+	pwd: "test1234",
 	roles: [{ role: "dbAdmin", db: "deployd"}],
 })
+Successfully added user: {
+        "user" : "<YOUR_USERNAME>",
+        "roles" : [
+                {
+                        "role" : "dbAdmin",
+                        "db" : "deployd"
+                }
+        ]
+}
+> db.getUsers() // sanity check
+[
+        {
+                "_id" : "deployd.<YOUR_USERNAME>",
+                "userId" : UUID("f40420c5-1f7c-47f9-ba94-c1d54f12725f"),
+                "user" : "<YOUR_USERNAME>",
+                "db" : "deployd",
+                "roles" : [
+                        {
+                                "role" : "dbAdmin",
+                                "db" : "deployd"
+                        }
+                ],
+                "mechanisms" : [
+                        "SCRAM-SHA-1",
+                        "SCRAM-SHA-256"
+                ]
+        }
+]
 ```
 
-To make sure your user has been correctly created, look at the list of users:
+Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore, so if you try `db.getUsers()` then, it'll show an empty list. You can try this instead of typing `use deployd` again in this case:
 
 ```
-db.getUsers()
+db.getUsers({filter: {db: "deployd"}})
 >>> [
         {
                 "_id" : "deployd.<YOUR_USERNAME>",
@@ -57,7 +87,9 @@ db.getUsers()
 	]
 ```
 
-You should see the same output (with the field <YOUR_USERNAME> being replaced by what you previously inserted). When everything is working, exit the shell.
+When you're done, exit the shell and proceed to step 3.
+
+- Step 3. Setting up the configuration files
 
 Move/rename config/config_example.json to config/config.json
 
