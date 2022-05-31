@@ -1,8 +1,25 @@
 version: "3.8"
 services:
+  # MongoDB
   mongo:
     image: mongo
     ports:
       - 27017:27017
     volumes:
       - ./mongodb/data:/data/db
+  # Production API
+  node_production:
+    build: .
+    ports:
+      - 2413:2413
+    depends_on:
+      - mongo
+    command: ["node", "dpd/production.js"]
+  # # Public API
+  # node_public_api:
+  #   build: .
+  #   ports:
+  #     - 3003:3003
+  #   depends_on:
+  #     - mongo
+  #   command: ["node", "public_api/public_api.js"]
