@@ -2,13 +2,6 @@
 
 - Step 1. (Setup NPM) Clone this repository and run `npm install`.
 
-The install deletes two important files... replace them by our version:
-
-```console
-$ cp dpd/ic-meta.js dpd/node_modules/ic-meta.js
-$ cp dpd/ic-actions.js dpd/node_modules/ic-actions.js
-```
-
 - Step 2. (Setup database) Spin up the mongodb container to insert a user into it (the mongo option in the docker-compose command to start only the database):
 
 ```

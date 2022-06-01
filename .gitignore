@@ -11,7 +11,7 @@
 /dpd/.dpd
 /dpd/resources/items/config.json
 /dpd/public
-/dpd/node_modules/*/
+/dpd/node_modules/**/*
 
 /logs
 
