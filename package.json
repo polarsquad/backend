@@ -25,7 +25,7 @@
 		"start-public-api": "forever start -o logs/public_api.log -e logs/public_api-error.log public_api/public_api.js",
 		"stop-production": "forever stop dpd/production.js",
 		"stop-public-api": "forever stop public_api/public_api.js",
-		"postinstall": "cd dpd && npm install"
+		"postinstall": "cd dpd && npm install && cp ic-meta.js node_modules/ic-meta.js && cp ic-actions.js node_modules/ic-actions.js"
 	},
 	"repository": {
 		"type": "git",

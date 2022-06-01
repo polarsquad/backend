@@ -1,18 +1,15 @@
 # Getting started
 
-- Step 1. (Setup NPM) Clone this repository and run `npm install`.
+## Step 1. (Setup NPM)
 
-The install deletes two important files -.- Get them back:
+Clone this repository and run `npm install`.
 
-```console
-$ git checkout dpd/node_modules/ic-meta.js
-$ git checkout dpd/node_modules/ic-actions.js
-```
+## Step 2. (Setup database)
 
-- Step 2. (Setup database) Spin up the mongodb container to insert a user into it:
+Spin up the mongodb container to insert a user into it (the mongo option in the docker-compose command to start only the database):
 
 ```
-$ (sudo) docker-compose up
+$ (sudo) docker-compose up -d mongo 
 ```
 
 This should start the database locally. Connect to it:
@@ -21,16 +18,16 @@ This should start the database locally. Connect to it:
 $ mongo mongodb://localhost:27017
 ```
 
-(you should check before starting this that you didn't have another local instance of mongodb running on your computer).
+(You should check before starting this that you didn't have another local instance of mongodb running on your computer, otherwise there will be a conflict on the port.)
 
-Then insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
+Then, insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
 
 ```
 > use deployd
 switched to db deployd
 > db.createUser({
-	user: "patrickds",
-	pwd: "test1234",
+	user: "<YOUR_USERNAME>",
+	pwd: "<YOUR_PASSWORD>",
 	roles: [{ role: "dbAdmin", db: "deployd"}],
 })
 Successfully added user: {
@@ -63,78 +60,40 @@ Successfully added user: {
 ]
 ```
 
-Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore, so if you try `db.getUsers()` then, it'll show an empty list. You can try this instead of typing `use deployd` again in this case:
+Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore if you connect via `mongo mongodb://localhost:27017`, so if you try `db.getUsers()` then, it'll show an empty list. You need to type `use deployd` again before running `db.getUsers()`.
 
+When you're done, exit the shell and proceed to step 3. You can check that the database is working properly by trying to connect to it using authentication: 
 ```
-db.getUsers({filter: {db: "deployd"}})
->>> [
-        {
-                "_id" : "deployd.<YOUR_USERNAME>",
-                "userId" : UUID("8d6a92f1-fe66-4523-b637-c0e6e49e6d15"),
-                "user" : "<YOUR_USERNAME>",
-                "db" : "deployd",
-                "roles" : [
-                        {
-                                "role" : "dbAdmin",
-                                "db" : "deployd"
-                        }
-                ],
-                "mechanisms" : [
-                        "SCRAM-SHA-1",
-                        "SCRAM-SHA-256"
-                ]
-        }
-	]
+$ mongo mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@localhost:27017/deployd
 ```
+This connects to the deployd mongoDB database, so no need to type `use deployd` again. To make sure you are properly connected, you can try running the mongo shell command `db.getUsers()` and get the same output as earlier.
 
-When you're done, exit the shell and proceed to step 3.
+## Step 3. Setting up the configuration files
 
-- Step 3. Setting up the configuration files
-
-* Move/rename config/config_example.json to config/config.json
-
-Enter your database credentials into config/config.json. They should look like this:
+* Enter your database credentials in the .env file under DB_USERNAME and DB_PASSWORD:
 ```
-{
-	...,
-	"db": {
-			"host":         "localhost",
-			"port":         "27017",
-			"name":         "deployd",
-			"credentials": {
-					"username": "<YOUR_USERNAME>",
-					"password": "<YOUR_PASSWORD>"
-			}
-	},
-	...,
-}
+DB_USERNAME=<YOUR_USERNAME>
+DB_PASSWORD=<YOUR_PASSWORD>
 ```
-Note that this file is ignored, so you won't see changes in your repository.
 
 * Run the following script, which updates the items setup and the database scheme:
-
 ```
 $ npm run setup -- config/default-item-config.js
 ```
 
-- Step 4. (Launching backend servers) 
+## Step 4. (Launching backend servers in development) 
 
 * Start the database container:
-
 ```
-$ (sudo) docker-compose up -d
+$ (sudo) docker-compose up -d mongo
 ```
-
-You can check that the database is working properly by trying to connect to it: 
-```
-$ mongo mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@localhost:27017/deployd
-```
-To make sure you are properly connected, you can try running the DB command `db.getUsers()` and get the same output as earlier.
 
 * Start the backend servers:
 ```
-$ npm start
+$ npm run start-production
+$ npm run start-public-api
 ```
+
 To test that it works, write the following command in your terminal:
 ```
 $ curl localhost:2413
@@ -150,6 +109,7 @@ It should return the following HTML document:
 </body>
 </html>
 ```
+(or look at in in your browser and see a blank page with the word "works" in it).
 
 * To stop the servers:
 ```
@@ -173,7 +133,7 @@ $ npm install deployd-cli -g
 
 * Generate a DPD key 
 
-If you have created a key already, follow those instead to re-use the previously generated key:
+If you have created a key already, use this command to re-use the previously generated key:
 
 ```
 $ cd dpd && dpd showkey && cd ..
@@ -192,6 +152,7 @@ $ cd dpd
 $ mkdir .dpd	#skip if you have done this before
 $ dpd keygen    #skip if you have done this before
 $ dpd showkey
+$ cd ..
 ```
 
 * Visualize the dashboard

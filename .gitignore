@@ -11,12 +11,10 @@
 /dpd/.dpd
 /dpd/resources/items/config.json
 /dpd/public
-/dpd/node_modules/*/
-
-!/dpd/node_modules/*.js
-!/dpd/node_modules/*.js
+/dpd/node_modules/**/*
 
 /logs
+!/logs/.gitkeep
 
 /public_api/node_modules
 #/public_api/import/*
