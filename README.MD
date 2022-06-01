@@ -22,8 +22,8 @@ Then insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSW
 > use deployd
 switched to db deployd
 > db.createUser({
-	user: "patrickds",
-	pwd: "test1234",
+	user: "<YOUR_USERNAME>",
+	pwd: "<YOUR_PASSWORD>",
 	roles: [{ role: "dbAdmin", db: "deployd"}],
 })
 Successfully added user: {
