@@ -9,10 +9,10 @@ $ git checkout dpd/node_modules/ic-meta.js
 $ git checkout dpd/node_modules/ic-actions.js
 ```
 
-- Step 2. (Setup database) Spin up the mongodb container to insert a user into it:
+- Step 2. (Setup database) Spin up the mongodb container to insert a user into it (the mongo option in the docker-compose command to start only the database):
 
 ```
-$ (sudo) docker-compose up
+$ (sudo) docker-compose up -d mongo 
 ```
 
 This should start the database locally. Connect to it:
@@ -21,7 +21,7 @@ This should start the database locally. Connect to it:
 $ mongo mongodb://localhost:27017
 ```
 
-(you should check before starting this that you didn't have another local instance of mongodb running on your computer).
+(you should check before starting this that you didn't have another local instance of mongodb running on your computer, otherwise there will be a conflict on the port).
 
 Then insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
 
@@ -63,29 +63,7 @@ Successfully added user: {
 ]
 ```
 
-Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore, so if you try `db.getUsers()` then, it'll show an empty list. You can try this instead of typing `use deployd` again in this case:
-
-```
-db.getUsers({filter: {db: "deployd"}})
->>> [
-        {
-                "_id" : "deployd.<YOUR_USERNAME>",
-                "userId" : UUID("8d6a92f1-fe66-4523-b637-c0e6e49e6d15"),
-                "user" : "<YOUR_USERNAME>",
-                "db" : "deployd",
-                "roles" : [
-                        {
-                                "role" : "dbAdmin",
-                                "db" : "deployd"
-                        }
-                ],
-                "mechanisms" : [
-                        "SCRAM-SHA-1",
-                        "SCRAM-SHA-256"
-                ]
-        }
-	]
-```
+Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore if you connect via `mongo mongodb://localhost:27017`, so if you try `db.getUsers()` then, it'll show an empty list. You need to type `use deployd` again before running `db.getUsers()`.
 
 When you're done, exit the shell and proceed to step 3.
 
