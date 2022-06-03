@@ -26,8 +26,8 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 	console.log('\n')
 	console.log(`## AT Auto translate, from ${from_language} to ${to_language}`)
 
-	if(skipDeepL) 	console.log('##AT skipping DeepL')
-	if(skipGoogle)	console.log('##AT skipping GoogleTranslate')
+	if(skipDeepL) 	console.log('## AT skipping DeepL')
+	if(skipGoogle)	console.log('## AT skipping GoogleTranslate')
 
 	if(!from_language) 	return console.log("## AT AutoTranslate missing from_language: try paramter e.g.: from=de")
 	if(!to_language) 		return console.log("## AT AutoTranslate missing to_language: try paramter e.g.: to=en")
@@ -183,8 +183,8 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 	})
 	.then(() => {
-		if(skipDeepL) 	console.log('##AT skipped DeepL')
-		if(skipGoogle)	console.log('##AT skipped GoogleTranslate')
+		if(skipDeepL) 	console.log('## AT skipped DeepL')
+		if(skipGoogle)	console.log('## AT skipped GoogleTranslate')
 		console.log('## AT AutoTranslation end.\n', stats)
 	})
 }
