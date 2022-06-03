@@ -182,11 +182,15 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 		return p
 
 	})
-	.then(() => console.log('## AT AutoTranslation end.\n', stats))
+	.then(() => {
+		if(skipDeepL) 	console.log('##AT skipped DeepL')
+		if(skipGoogle)	console.log('##AT skipped GoogleTranslate')
+		console.log('## AT AutoTranslation end.\n', stats)
+	})
 }
 
 
-exports.isValidFrom 	= isValidFrom
-exports.isValidTo		= isValidTo
+exports.isValidFrom 		= isValidFrom
+exports.isValidTo			= isValidTo
 exports.autoTranslate 	= autoTranslate
 
