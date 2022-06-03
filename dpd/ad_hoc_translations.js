@@ -140,7 +140,8 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 								}
 
 								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, undefined, skipDeepL, skipGoogle)
-															.catch( reason =>{
+																		.then( () => console.log('translation worked'))
+																		.catch( reason =>{
 ////
 
 																console.log(`								
@@ -152,9 +153,9 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 	reason:	${reason}
 																`)
 ////
-																throw reason
+																			throw reason
 
-															})
+																		})
 
 								update[property.name] = item[property.name]
 
