@@ -139,7 +139,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 									return null
 								}
 
-								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, null, skipDeepL, skipGoogle)
+								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, undefined, skipDeepL, skipGoogle)
 															.catch( reason =>{
 ////
 

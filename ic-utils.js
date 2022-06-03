@@ -116,6 +116,18 @@ exports.getGoogleTranslation = function(from, to, text, config){
 
 	if(!config.googleTranslateApiKey) Promise.reject('missing google translation api key.')
 
+	console.log('GoogleTranslate'
+				'https://translation.googleapis.com/language/translate/v2', 
+				{
+					qs:{
+						key:	config.googleTranslateApiKey,
+						q:		text,
+						source:	from,
+						target:	to
+					},
+					json: true
+				})
+
 	return 	Promise.resolve(request.get(
 				'https://translation.googleapis.com/language/translate/v2', 
 				{
