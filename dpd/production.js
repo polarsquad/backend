@@ -56,11 +56,11 @@ var	server 				= 	deployd({
 
 	force_retranslate	=	process.argv
 							.map( arg => !!arg.match(/^--force-retranslate$/) )
-							.find( arg => !!arg)
+							.find( arg => !!arg),
 
 	skip_deepl			=	process.argv
 							.map( arg => !!arg.match(/^--skip-deepl$/) )
-							.find( arg => !!arg)
+							.find( arg => !!arg),
 
 	skip_google			=	process.argv
 							.map( arg => !!arg.match(/^--skip-google$/) )
