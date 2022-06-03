@@ -76,7 +76,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 
 		stats.neededTranslation	= items.length
 
-		console.log('## AT Item with translatable content:', items.length)
+		console.log('## AT Items with translatable content:', items.length)
 
 		if(items.length == 0) console.log('## AT No items have translatable content, check icItemConfig for .translatable and .autoTranslate flags. [both required]')
 
@@ -182,11 +182,14 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 		return p
 
 	})
-	.then(() => {
-		if(skipDeepL) 	console.log('## AT skipped DeepL')
-		if(skipGoogle)	console.log('## AT skipped GoogleTranslate')
-		console.log('## AT AutoTranslation end.\n', stats)
-	})
+	.then(
+		() => {
+			if(skipDeepL) 	console.log('## AT skipped DeepL')
+			if(skipGoogle)	console.log('## AT skipped GoogleTranslate')
+			console.log('## AT AutoTranslation end.\n', stats)
+		},
+		console.error
+	)
 }
 
 
