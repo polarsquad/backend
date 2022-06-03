@@ -92,7 +92,7 @@ exports.get = function(url){
 
 
 
-exports.getTranslation = function(from, to ,text, config){
+exports.getTranslation = function(from, to ,text, config, skipDeepL, skipGoogle){
 
 	config = config || icConfig
 
@@ -101,8 +101,13 @@ exports.getTranslation = function(from, to ,text, config){
 	if(!text) return Promise.resolve({message:"Missing text."})
 
 	return 	Promise.reject()
-			.catch( () => exports.getDeepLTranslation(from, to, text, config))
-			.catch( () => exports.getGoogleTranslation(from, to, text, config))
+			.catch( () => 	skipDeepL
+							?	Promise.reject('skipDeepL')
+							:	exports.getDeepLTranslation(from, to, text, config))
+
+			.catch( () => 	skipGoogle
+							?	Promise.reject('skipGoogle')
+							:	exports.getGoogleTranslation(from, to, text, config))
 }
 
 exports.getGoogleTranslation = function(from, to, text, config){

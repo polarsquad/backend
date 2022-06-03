@@ -58,6 +58,13 @@ var	server 				= 	deployd({
 							.map( arg => !!arg.match(/^--force-retranslate$/) )
 							.find( arg => !!arg)
 
+	skip_deepl			=	process.argv
+							.map( arg => !!arg.match(/^--skip-deepl$/) )
+							.find( arg => !!arg)
+
+	skip_google			=	process.argv
+							.map( arg => !!arg.match(/^--skip-google$/) )
+							.find( arg => !!arg)						
 
 const {isValidFrom, isValidTo, autoTranslate} = require('./ad_hoc_translations.js')
 
@@ -78,8 +85,8 @@ server.on('listening', function() {
 	resubmissionCheck(dpd)
 	setInterval(resubmissionCheck, 1000*60*60*12, dpd)
 
-	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to, false, 	force_retranslate)
-	if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true,	force_retranslate)
+	if(auto_translate_dry) 	autoTranslate(dpd, auto_from, auto_to, false, 	force_retranslate, skip_deepl, skip_google)
+	if(auto_translate) 		autoTranslate(dpd, auto_from, auto_to, true,	force_retranslate, skip_deepl, skip_google)
 
 })
 

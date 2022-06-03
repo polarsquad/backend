@@ -21,21 +21,24 @@ function isValidTo(str){
 }
 
 
-function autoTranslate(dpd, from_language, to_language, execute, force_retranslate){
+function autoTranslate(dpd, from_language, to_language, execute, force_retranslate, skipDeepL, skipGoogle){
 
 	console.log('\n')
 	console.log(`## AT Auto translate, from ${from_language} to ${to_language}`)
 
+	if(skipDeepL) 	console.lof('##AT skipping DeepL')
+	if(skipGoogle)	console.lof('##AT skipping GoogleTranslate')
+
 	if(!from_language) 	return console.log("## AT AutoTranslate missing from_language: try paramter e.g.: from=de")
-	if(!to_language) 	return console.log("## AT AutoTranslate missing to_language: try paramter e.g.: to=en")
+	if(!to_language) 		return console.log("## AT AutoTranslate missing to_language: try paramter e.g.: to=en")
 
 	if(!icUtils.itemConfig || !icUtils.itemConfig.properties)
-						return console.log('## AT AutoTranslate missing properties! [icUtils.config.properties]')
+								return console.log('## AT AutoTranslate missing properties! [icUtils.config.properties]')
 
 	const properties 				= 	icUtils.itemConfig.properties
 	const auto_translate_properties	=	properties.filter( property => {
 											if(!property.translatable)								return false
-											if(!property.autoTranslate)								return false
+											if(!property.autoTranslate)							return false
 
 											return true	
 										})
@@ -136,7 +139,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 									return null
 								}
 
-								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content)
+								let translation = 	await 	icUtils.getTranslation(from_language, to_language, from_content, skipDeepL, skipGoogle)
 															.catch( reason =>{
 ////
 
@@ -164,7 +167,6 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 				return 	execute
 						?	await	dpd.items.put(update)
 									.then( () => {
-										process.stdout.write('.')
 										stats.translated++
 									})
 									.catch( reason => {
