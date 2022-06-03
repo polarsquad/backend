@@ -114,6 +114,8 @@ exports.getGoogleTranslation = function(from, to, text, config){
 
 	config = config || icConfig
 
+	console.log('Translating with googleTranslate:', from, ' => ', to, '\"'+text.substr(0,20)+'\"\n')	
+
 	if(!config.googleTranslateApiKey) Promise.reject('missing google translation api key.')
 
 	return 	Promise.resolve(request.get(
