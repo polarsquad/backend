@@ -163,7 +163,7 @@ function autoTranslate(dpd, from_language, to_language, execute, force_retransla
 							})
 						).catch(console.log)
 
-				consol.log(update)
+				console.log(update)
 
 				return 	execute
 						?	await	dpd.items.put(update)
