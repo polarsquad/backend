@@ -12,6 +12,8 @@ services:
     image: infocompass_backend
     ports:
       - 2413:2413
+    env_file: 
+      - .env-docker
     depends_on:
       - mongo
     command: ["node", "dpd/production.js"]
@@ -20,6 +22,12 @@ services:
     image: infocompass_backend
     ports:
       - 3003:3003
+    env_file: 
+      - .env-docker
     depends_on:
       - mongo
     command: ["node", "public_api/public_api.js"]
+  frontend:
+    image: infocompass_frontend
+    ports:
+      - 8080:80

@@ -1,6 +1,4 @@
-require('dotenv').config({
-    path: "../.env"
-})
+require('dotenv').config()
 
 const booleanEnvVar = (env_variable, default_value) => (
     env_variable 
