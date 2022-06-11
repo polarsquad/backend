@@ -3,7 +3,7 @@ var Resource	= require('deployd/lib/resource'),
 	path 		= require('path'),
 	util 		= require('util'),
 	icUtils		= require(path.resolve('../ic-utils.js')),
-	icConfig	= icUtils.config
+	icConfig	= require(path.resolve('../config/config.json'))
 
 
 function ActionResource() {
