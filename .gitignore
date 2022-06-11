@@ -6,6 +6,8 @@
 /npm-debug.log
 
 /dpd/data
+/mongodb/data/**/*
+!/mongodb/data/.gitkeep
 /dpd/.dpd
 /dpd/resources/items/config.json
 /dpd/public
