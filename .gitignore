@@ -3,21 +3,18 @@
 /import/*
 !/import/*.mjs
 
-/config/*
-!/config/default-item-config.js
-!/config/config_example.json
 /npm-debug.log
 
-!/config/.gitkeep 
-
 /dpd/data
+/mongodb/data/**/*
+!/mongodb/data/.gitkeep
 /dpd/.dpd
 /dpd/resources/items/config.json
 /dpd/public
-/dpd/node_modules/*/
+/dpd/node_modules/**/*
 
-!/dpd/node_modules/*.js
-!/dpd/node_modules/*.js
+/logs
+!/logs/.gitkeep
 
 /public_api/node_modules
 #/public_api/import/*
@@ -27,3 +24,4 @@
 
 migrate-infocompass.js
 data.json
+.env

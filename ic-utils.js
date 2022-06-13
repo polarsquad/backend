@@ -5,61 +5,57 @@ const path			= require('path')
 const request		= require('request-promise')
 const fetch			= require('node-fetch')
 const Promise		= require('bluebird')
-const fs			= require('fs')
-
-let	icConfig		= undefined
-let	itemConfig		= undefined
-
-let	interfaceTranslationTable = undefined
+const fs 			= require('fs')
+const {config}		= require('./config/index.js')
 
 let	adminMessages 		= []
 let	lastAdminMessage	= undefined
 
 fetch.Promise = Promise
 
+// Config file
+let	icConfig		= config
+exports.config = icConfig
 
-
-;['..', __dirname].forEach( start => {
-
-	console.log( "--- Looking for files starting from:", start, '\n' )
-	const c = path.resolve(`${start}/config/config.json`)
-	try{
-		icConfig = icConfig || JSON.parse(require('fs').readFileSync(c, 'utf8'))	
-		console.log('found', c)
-	}catch(e){
-		console.log('Unable to parse config file... at ' + c )
+// IC Item Config
+let	itemConfig		= undefined
+const icItemConfigRelativePath = "dpd/public/ic-item-config.js"
+for (const start of ['..', __dirname]) {
+	const icItemConfigAbsolutePath = path.resolve(`${start}/${icItemConfigRelativePath}`)
+	if (fs.existsSync(icItemConfigAbsolutePath)) {
+		itemConfig	= require(icItemConfigAbsolutePath)
+		console.log('found', `${start}/${icItemConfigRelativePath}`)		
+		break;
 	}
+}
 
-	const i = path.resolve(`${start}/dpd/public/ic-item-config.js`)
-	try{
-		itemConfig	= itemConfig || require(i)
-		console.log('found', i)		
-	}
-	catch(e){
-		console.log(`Missing ${i}. Please run 'npm run setup' first. \n\n`)	
-	}
-
-	const t = path.resolve(`${start}/dpd/public/translations.json`)
-	try{
-		interfaceTranslationTable	= interfaceTranslationTable || JSON.parse(require('fs').readFileSync(t, 'utf8') )
-		console.log('found', t)				
-	}
-	catch(e){
-		console.log('Unable to parse translation file... at ' + t ) 
-
-	}
-	console.log('\n')
-})
-
-
-icConfig 					= icConfig || {}
-itemConfig					= itemConfig || {}
-interfaceTranslationTable	= interfaceTranslationTable || {}
+if (!itemConfig) {
+	console.log(`Missing itemConfig at "${icItemConfigRelativePath}". Please run 'npm run setup' first. \n\n`)	
+	itemConfig = {}
+}
 
 exports.itemConfig = itemConfig
 
+// Translations
+let	interfaceTranslationTable = undefined
+const translationsRelativePath = "dpd/public/translations.json"
+try {
+	for (const start of ['..', __dirname]) {
+		const translationsAbsolutePath = path.resolve(`${start}/${translationsRelativePath}`)
+		if (fs.existsSync(translationsAbsolutePath)) {
+			interfaceTranslationTable	= JSON.parse(fs.readFileSync(translationsAbsolutePath, 'utf8') )
+			console.log('found', `${start}/${translationsRelativePath}`)
+			break;				
+		}
+	}
+} catch (error) {
+	console.log(`Unable to parse translation file... at ${translationsRelativePath}`) 
+}
 
-exports.config = icConfig
+if (!interfaceTranslationTable) {
+	console.log(`Unable to parse translation file... at ${translationsRelativePath}`) 
+	interfaceTranslationTable = {}
+}
 
 //replace with fetch:
 exports.get = function(url){
@@ -178,8 +174,7 @@ exports.mail = async function(to, subject, content, config, bcc){
 
 	if(typeof bcc == 'string') bcc = [bcc]
 
-	var config = config || this.config
-
+	config = config || icConfig
 
 	var transporter = nodemailer.createTransport({
 		host: 	config.mail.host,
@@ -210,7 +205,6 @@ exports.mail = async function(to, subject, content, config, bcc){
 
 exports.mailToAdmin = async function(content, config){
 
-
 	config = config || icConfig
 
 	if(!config.adminMail){
@@ -220,7 +214,7 @@ exports.mailToAdmin = async function(content, config){
 
 	content && adminMessages.push(content)
 
-	const delay = 1000 * 60 * 10
+	const delay = 1000 * 60 * 10 // 10 minutes
 
 	if(lastAdminMessage - Date.now() < delay) {		
 		setTimeout( () => exports.mailToAdmin(null, config), delay + 1)
@@ -229,19 +223,14 @@ exports.mailToAdmin = async function(content, config){
 
 	lastAdminMessage = Date.now()
 
-
-
 	const adminMails = 	Array.isArray(config.adminMail)
 	 					?	config.adminMail
 	 					:	[config.adminMail]
 
-
 	await 	Promise.any( adminMails.map( 
 				email 	=> 	exports.mail(
 								email, 
-
 								`InfoCompass Error(s) [${adminMessages.length}]: `+config.title, 
-
 								adminMessages
 								.map( (content, index) => `**(${index})**:\n ${content}`)
 								.join('\n\n'),
@@ -250,7 +239,6 @@ exports.mailToAdmin = async function(content, config){
 			))
 
 	adminMessages = []
-
 }
 
 
@@ -293,8 +281,6 @@ exports.diff = function(property, old_value, new_value, key){
 	
 	return true
 }
-
-
 
 exports.mailBodyChanges = function(suggestion, target, lang){
 
@@ -619,8 +605,6 @@ exports.updateInterfaceTranslations = async function(sheet_id, api_key) {
 	interfaceTranslationTable = {}
 
 	sheets.forEach( sheet => {
-
-
 		const title 		= sheet && sheet.properties && sheet.properties.title
 
 		if(!title) throw "updateInterfaceTranslations: Missing sheet title."
