@@ -8,7 +8,7 @@ var query   	= ctx.query,
 	response	= this
 
 
-
+var {config} = require(process.cwd()+'/../config')
 var	icItemConfig  = require(process.cwd()+'/public/ic-item-config.js')
 
 keys = keys.filter( key => icItemConfig.properties.find( prop => prop.name == key) )
@@ -128,12 +128,12 @@ dpd.items.get({})
 
 
 	items.forEach( item => {
-		item.link = icConfig.frontendUrl+'/item/'+item.id
+		item.link = config.frontendUrl+'/item/'+item.id
 	})
 
 	if(format =='CSV'){
 		ctx.res.setHeader('Content-Type', 'text/csv; charset=utf-8')
-		ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (icUtils.config.title||'ic').toLowerCase()+"_items.csv\"")
+		ctx.res.setHeader('content-disposition', "attachment; filename=\"" + (config.title||'ic').toLowerCase()+"_items.csv\"")
 
 		console.log('CSV', items.length, keys.length)
 
