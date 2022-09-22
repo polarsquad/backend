@@ -1,9 +1,42 @@
-version: "3.8"
+# docker-compose for local dev environment
+# version: "3.8"
 services:
   # MongoDB
   mongo:
-    image: mongo
+    image: bitnami/mongodb
     ports:
       - 27017:27017
-    volumes:
-      - ./mongodb/data:/data/db
+    # Uncomment in case you would like to persist your DB locally
+    # volumes:
+      # - ./mongodb/data:/data/db
+    environment:
+      - MONGODB_ROOT_PASSWORD=secret
+      - MONGODB_USERNAME=deployd
+      - MONGODB_PASSWORD=secret
+      - MONGODB_DATABASE=deployd
+  # Production API
+  dpd_production:
+    image: infocompassde/infocompass-dpd:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: Dockerfile # base image
+    ports:
+      - 2413:2413
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    command: ["node", "dpd/production.js"]
+  # # Public API
+  public_api:
+    image: infocompassde/infocompass-public-api:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: Dockerfile # base image
+    ports:
+      - 3003:3003
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    command: ["node", "public_api/public_api.js"]
