@@ -25,3 +25,5 @@
 migrate-infocompass.js
 data.json
 .env
+
+mongodb/*
