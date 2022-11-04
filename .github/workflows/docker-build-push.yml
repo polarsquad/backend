@@ -3,10 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - 'ci-pipeline'
-  pull_request_target:
-    types:
-      - closed     
+      - 'master'
 
 jobs:
   docker:
