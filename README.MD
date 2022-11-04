@@ -6,90 +6,22 @@
 
 ## Step 2. (Setup database)
 
-- Spin up the mongodb container to insert a user into it (the mongo option in the docker-compose command to start only the database):
+- Install and connect locally to your MongoDB instance
 
-```
-$ (sudo) docker-compose up -d mongo 
-```
-
-This should start the database locally. Connect to it:
-
-```
-$ mongo mongodb://localhost:27017
-```
-
-You should check before starting this that you didn't have another local instance of mongodb running on your computer, otherwise there will be a conflict on the port. If that happens to you, either shutdown your local mongoDB database or change the port in the .env file provided in this repository *and* in the docker-compose.yml file like this:
-
-```
-version: "3.8"
-services:
-# MongoDB
-mongo:
-image: mongo
-ports:
-- <YOUR_NEW_DB_PORT>:27017    ### Modify this line here.
-volumes:
-- ./mongodb/data:/data/db
-```
-
-- Insert a user in your database (replace the <YOUR_USERNAME> and <YOUR_PASSWORD> fields before copy-pasting in your mongo shell):
-
-```
-> use deployd
-switched to db deployd
-> db.createUser({
-        user: "<YOUR_USERNAME>",
-        pwd: "<YOUR_PASSWORD>",
-        roles: [{ role: "dbAdmin", db: "deployd"}],
-})
-Successfully added user: {
-        "user" : "<YOUR_USERNAME>",
-        "roles" : [
-                {
-                        "role" : "dbAdmin",
-                        "db" : "deployd"
-                }
-        ]
-}
-> db.getUsers() // sanity check
-[
-        {
-                "_id" : "deployd.<YOUR_USERNAME>",
-                "userId" : UUID("f40420c5-1f7c-47f9-ba94-c1d54f12725f"),
-                "user" : "<YOUR_USERNAME>",
-                "db" : "deployd",
-                "roles" : [
-                        {
-                                "role" : "dbAdmin",
-                                "db" : "deployd"
-                        }
-                ],
-                "mechanisms" : [
-                        "SCRAM-SHA-1",
-                        "SCRAM-SHA-256"
-                ]
-        }
-]
-```
-
-Note that if you exited the database, and then connected to it again, you won't be using the "deployd" database anymore if you connect via `mongo mongodb://localhost:27017`, so if you try `db.getUsers()` then, it'll show an empty list. You need to type `use deployd` again before running `db.getUsers()`.
-
-- You can check that the database is working properly by trying to connect to it using authentication: 
-
-```
-$ mongo mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@localhost:27017/deployd
-```
-
-This connects to the deployd mongoDB database, so no need to type `use deployd` again. To make sure you are properly connected, you can try running the mongo shell command `db.getUsers()` and get the same output as earlier.
+- Create default user and database
 
 ## Step 3. Setting up the configuration files
 
-- Make a copy of .env.example and rename it ".env" so that you can inject environment variables into the backend process. Enter your database credentials in the .env file under DB_USERNAME and DB_PASSWORD:
+- Make a copy of ".env.template" and rename it ".env" so that you can inject environment variables into the backend services.
+
+Enter your database credentials in the .env file under DB_USERNAME and DB_PASSWORD:
 
 ```
 DB_USERNAME=<YOUR_USERNAME>
 DB_PASSWORD=<YOUR_PASSWORD>
 ```
+
+### Important: Never commit in this .env file: Credentials or sensitive data related to production environment. Platform adminstrators should handle this part securily for you!!!
 
 - Run the following script, which updates the items setup and the database scheme:
 
@@ -97,13 +29,9 @@ DB_PASSWORD=<YOUR_PASSWORD>
 $ npm run setup -- config/default-item-config.js
 ```
 
-## Step 4. (Launching backend servers in development) 
+## Step 4. (Launching backend servers in development)
 
-- Start the database container (if not already running):
-
-```
-$ (sudo) docker-compose up -d mongo
-```
+- Make sure your MongoDB instance is running and configured like in previous steps
 
 - Start the backend servers:
 
@@ -138,12 +66,6 @@ It should return the following HTML document:
 ```
 $ npm run stop-production
 $ npm run stop-public-api
-```
-
-- To stop the database:
-
-```
-$ sudo docker-compose down
 ```
 
 ## Step 5. (Enter dashboard)
@@ -186,3 +108,84 @@ $ cd ..
 - Visualize the dashboard
 
 Open `localhost:2413/dashboard` (with the servers running, see Step 4 if necessary) in your browser and enter the key in the output of dpd keygen in the field displayed in the browser. This should give you access to the dashboard.
+
+# Docker Setup
+
+## Prerequisites
+* [docker](https://docs.docker.com/get-docker/)
+* [docker-compose](https://docs.docker.com/compose/install/)
+
+
+## User guide
+
+### Step-1 Review the .env file and adjust your parameters
+
+```shell
+# Generic
+PRODUCTION_API_PORT=2413
+PUBLIC_API_PORT=3003
+
+# Mail delivery system
+MAIL_IS_SECURE=true
+
+
+# Database connection default docker-compose local dev environment
+DB_HOST=mongo
+DB_PORT=27017
+DB_NAME=deployd
+DB_USERNAME=deployd
+DB_PASSWORD=secret
+
+# Voice reader
+VOICE_READER_BASE_URL="--voiceReader-baseUrl"
+VOICE_READER_CUSTOMER_ID="--voiceReader-customerId"
+
+# Suggestions
+SUGGESTIONS_REQUIRE_MAIL=true
+SUGGESTIONS_REQUIRE_API_KEY="new"
+SUGGESTIONS_REQUIRE_NAME=true
+SUGGESTIONS_SEND_CONFIRMATION=true
+```
+
+PS: The default values are mostly compatible with local dev environment.
+
+For more details please contact the dev teams regarding these env-vars.
+
+
+### Step-2 Build locally and test the backend with docker-compose
+
+```shell
+# --build option is to skip cache usage
+# you can append -d daemon mode to run the containers in the background
+docker-compose up --build
+```
+
+PS: By default the backend is accessible from localhost.
+
+Feel free to adjust docker-compose and .env files or create new ones in case you would like
+to use different ports and run multiple backend instances at the same environment.
+
+### Clean up
+```shell
+# The down cmd stops containers and removes containers,
+# networks, volumes, and images created by up
+docker-compose down
+```
+
+# CI/CD Pipelines
+At the moment we are using community github-actions for building and pushing
+docker images to docker-hub repository [infocompass](https://hub.docker.com/u/infocompassde)
+
+## Prerequisites
+These secrets must be configured at the organization level or the repository itself:
+
+| Themes      | Value |
+| ----------- | ----------- |
+|DOCKERHUB_USERNAME | infocompass |
+|DOCKERHUB_TOKEN | #To get from dockerhub account admin |
+
+## User guide
+
+* By default the pipeline will build and ship the default theme docker image (automatically triggered once merged to the master branch)
+
+* The docker images tagging will be done using the git revision number.
